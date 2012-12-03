@@ -1,0 +1,64 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        	http://www.springframework.org/schema/security
+           	http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+
+	<http auto-config="false" use-expressions="true">
+		<intercept-url pattern="/j_spring_security_user_check"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/index.xhtml" access="permitAll" />
+		<intercept-url pattern="/javax.faces.resource/**"
+			access="permitAll" />
+		<intercept-url pattern="/css/**" access="permitAll" />
+		<intercept-url pattern="/js/**" access="permitAll" />
+		<intercept-url pattern="**/resources/**" access="permitAll" />
+		<intercept-url pattern="/resources/**" access="permitAll" />
+		<intercept-url pattern="/error/**" access="permitAll" />
+		<intercept-url pattern="/user_profile/**" access="hasRole('ROLE_USER')" />
+		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/**" access="permitAll" />
+
+		<form-login login-processing-url="/j_spring_security_user_check"
+			login-page="/index.xhtml" always-use-default-target="true"
+			authentication-failure-url="/index.xhtml?error=true"
+			authentication-success-handler-ref="myLibAppAuthenticationSuccessHandler" />
+
+		<logout invalidate-session="true" logout-url="/logout"
+			logout-success-url="/index.xhtml" />
+	</http>
+
+	<authentication-manager>
+		<authentication-provider user-service-ref="userDetailsService"/>
+	</authentication-manager>
+
+	<beans:bean id="myLibAppAuthenticationSuccessHandler"
+		class="com.orcun.mylibapp.security.MyLibAppAuthenticationSuccessHandler">
+		<beans:property name="defaultTargetUrl" value="/user_profile/index.xhtml"  />
+	</beans:bean>
+
+	<!-- <authentication-manager>
+		<authentication-provider user-service-ref="userDetailsService"/>
+	</authentication-manager> -->
+	
+	<!-- <authentication-manager>
+	   <authentication-provider>
+		<jdbc-user-service data-source-ref="DataSource"
+ 
+		   users-by-username-query="
+		      select username,password, enabled 
+		      from company where username=?" 
+ 
+		   authorities-by-username-query="
+		      select c.username, r.role from company as c, roles as r,user_roles as ur 
+		      where c.username = ur.username and r.id=ur.role_id and c.username =?  " 
+ 
+		/>
+	   </authentication-provider>
+	</authentication-manager>
+ -->
+
+</beans:beans>
