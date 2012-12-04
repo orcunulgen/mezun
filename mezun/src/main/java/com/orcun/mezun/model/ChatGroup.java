@@ -1,19 +1,27 @@
 package com.orcun.mezun.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+
 @Entity
-@Table(name="hobby")
-public class Hobby implements Serializable {
+@Table(name="chat_group")
+public class ChatGroup implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -21,15 +29,16 @@ public class Hobby implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="hobby_name",nullable=false,length=200)
-	private String hobbyName;
-	
-	@Column(name="experience_level",nullable=false)
-	private Integer experienceLevel;
+	@Column(name="group_name",nullable=false,length=200)
+	private String groupName;
 	
 	@ManyToOne
-	@JoinColumn(name="skill_id")
-    private Skill skill;
+	@JoinColumn(name="chat_list_id")
+    private ChatList chatList;
+	
+	@OneToMany(mappedBy="chatGroup",fetch= FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
+    private List<ChatPerson> chatPerson=new ArrayList<ChatPerson>();
 
 	public Long getId() {
 		return id;
@@ -39,28 +48,28 @@ public class Hobby implements Serializable {
 		this.id = id;
 	}
 
-	public String getHobbyName() {
-		return hobbyName;
+	public String getGroupName() {
+		return groupName;
 	}
 
-	public void setHobbyName(String hobbyName) {
-		this.hobbyName = hobbyName;
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
 	}
 
-	public Integer getExperienceLevel() {
-		return experienceLevel;
+	public ChatList getChatList() {
+		return chatList;
 	}
 
-	public void setExperienceLevel(Integer experienceLevel) {
-		this.experienceLevel = experienceLevel;
+	public void setChatList(ChatList chatList) {
+		this.chatList = chatList;
 	}
 
-	public Skill getSkill() {
-		return skill;
+	public List<ChatPerson> getChatPerson() {
+		return chatPerson;
 	}
 
-	public void setSkill(Skill skill) {
-		this.skill = skill;
+	public void setChatPerson(List<ChatPerson> chatPerson) {
+		this.chatPerson = chatPerson;
 	}
 
 	@Override
@@ -79,7 +88,7 @@ public class Hobby implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Hobby other = (Hobby) obj;
+		ChatGroup other = (ChatGroup) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -87,6 +96,4 @@ public class Hobby implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
 }

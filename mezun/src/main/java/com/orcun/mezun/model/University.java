@@ -1,19 +1,22 @@
 package com.orcun.mezun.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="hobby")
-public class Hobby implements Serializable {
+@Table(name="university")
+public class University implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -21,15 +24,14 @@ public class Hobby implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="hobby_name",nullable=false,length=200)
-	private String hobbyName;
+	@Column(name="university_name",nullable=false,length=200)
+	private String universityName;
 	
-	@Column(name="experience_level",nullable=false)
-	private Integer experienceLevel;
+	@OneToOne(fetch=FetchType.LAZY)
+	private City city;
 	
-	@ManyToOne
-	@JoinColumn(name="skill_id")
-    private Skill skill;
+	@OneToMany(mappedBy="university",fetch=FetchType.LAZY)
+	private List<Faculty> faculties=new ArrayList<Faculty>();
 
 	public Long getId() {
 		return id;
@@ -39,28 +41,28 @@ public class Hobby implements Serializable {
 		this.id = id;
 	}
 
-	public String getHobbyName() {
-		return hobbyName;
+	public String getUniversityName() {
+		return universityName;
 	}
 
-	public void setHobbyName(String hobbyName) {
-		this.hobbyName = hobbyName;
+	public void setUniversityName(String universityName) {
+		this.universityName = universityName;
 	}
 
-	public Integer getExperienceLevel() {
-		return experienceLevel;
+	public City getCity() {
+		return city;
 	}
 
-	public void setExperienceLevel(Integer experienceLevel) {
-		this.experienceLevel = experienceLevel;
+	public void setCity(City city) {
+		this.city = city;
 	}
 
-	public Skill getSkill() {
-		return skill;
+	public List<Faculty> getFaculties() {
+		return faculties;
 	}
 
-	public void setSkill(Skill skill) {
-		this.skill = skill;
+	public void setFaculties(List<Faculty> faculties) {
+		this.faculties = faculties;
 	}
 
 	@Override
@@ -79,7 +81,7 @@ public class Hobby implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Hobby other = (Hobby) obj;
+		University other = (University) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -89,4 +91,5 @@ public class Hobby implements Serializable {
 	}
 	
 	
+
 }
