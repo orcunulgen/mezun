@@ -1,0 +1,10 @@
+mappingi yaptýðýmýz classdaki üye alanlardan bir tanesi sql cümleciklerinin içinde geçen özel bir 
+ifadeye karþýlýk geliyorsa eðer ,hibernate create ederken ilgili entity için bir sql çalýþtýrýyor
+
+ama bu sql ile oluþan table daki üye alanlardan birisine verilen isim sql cümlelerinin içinde geçen
+bir isim olduðu için sorgu çalýþtýrýlmýþ gibi görünse de çalýþtýrýlmýyor .
+
+
+örneðin class da where diye bir üye alanýmýz varsa bu class ý create ederken hibernate console da 
+hata göstermiyor o tablo oluþmuþ gibi görünüyor ama aslýnda veritabanýnda oluþmuyor 
+
