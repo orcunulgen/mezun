@@ -6,17 +6,18 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import com.orcun.mezun.model.enums.ContentType;
 
 
 @Entity
@@ -35,9 +36,9 @@ public class PostHistory implements Serializable{
 	@Column(name="published_date",nullable=false)
 	private Date publishedDate=new Date();
 	
-	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="content_type_id")
-	private ContentType contentType;
+	@Enumerated(EnumType.STRING)
+	@Column(name="content_type")
+	private ContentType contentType=ContentType.TEXT;
 	
 	@Column(name="content_id",nullable=false)
 	private Long contentID;
