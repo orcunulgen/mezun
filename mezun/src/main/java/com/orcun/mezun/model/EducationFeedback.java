@@ -1,47 +1,37 @@
 package com.orcun.mezun.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-
 @Entity
-@Table(name="skill")
-public class Skill implements Serializable{
-	
-	
+@Table(name="education_feedback")
+public class EducationFeedback implements Serializable{
+
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@ManyToOne(cascade=CascadeType.ALL)
 	@OnDelete(action=OnDeleteAction.CASCADE)
-	private User user;
+	@JoinColumn(name="education_info_id")
+	private EducationInfo educationInfo;
 	
-	@OneToMany(mappedBy="skill",fetch= FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
-    private List<Certification> certificates=new ArrayList<Certification>();
-	
-	@OneToMany(mappedBy="skill",fetch= FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
-    private List<Hobby> hobbies=new ArrayList<Hobby>();
+	@Column(name="feedback_text",nullable=false,length=200)
+	private String feedbackText;
 
 	public Long getId() {
 		return id;
@@ -51,28 +41,20 @@ public class Skill implements Serializable{
 		this.id = id;
 	}
 
-	public User getUser() {
-		return user;
+	public EducationInfo getEducationInfo() {
+		return educationInfo;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setEducationInfo(EducationInfo educationInfo) {
+		this.educationInfo = educationInfo;
 	}
 
-	public List<Certification> getCertificates() {
-		return certificates;
+	public String getFeedbackText() {
+		return feedbackText;
 	}
 
-	public void setCertificates(List<Certification> certificates) {
-		this.certificates = certificates;
-	}
-
-	public List<Hobby> getHobbies() {
-		return hobbies;
-	}
-
-	public void setHobbies(List<Hobby> hobbies) {
-		this.hobbies = hobbies;
+	public void setFeedbackText(String feedbackText) {
+		this.feedbackText = feedbackText;
 	}
 
 	@Override
@@ -91,7 +73,7 @@ public class Skill implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Skill other = (Skill) obj;
+		EducationFeedback other = (EducationFeedback) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -99,8 +81,6 @@ public class Skill implements Serializable{
 			return false;
 		return true;
 	}
-
-		
 	
 
 }

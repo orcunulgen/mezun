@@ -3,14 +3,17 @@ package com.orcun.mezun.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name="certification")
@@ -40,9 +43,9 @@ public class Certification implements Serializable {
 	@Column(name="file_path",nullable=true,length=200)
 	private String filePath;
 	
-	@ManyToOne
-	@JoinColumn(name="skill_id")
-	private Skill skill;
+	@ManyToOne(cascade=CascadeType.ALL)
+	@OnDelete(action=OnDeleteAction.CASCADE)
+	private User user;
 
 	public Long getId() {
 		return id;
@@ -100,12 +103,13 @@ public class Certification implements Serializable {
 		this.filePath = filePath;
 	}
 
-	public Skill getSkill() {
-		return skill;
+	
+	public User getUser() {
+		return user;
 	}
 
-	public void setSkill(Skill skill) {
-		this.skill = skill;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override

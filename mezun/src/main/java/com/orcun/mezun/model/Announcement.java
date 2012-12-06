@@ -6,18 +6,18 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.orcun.mezun.model.enums.AnnouncementType;
 
 @Entity
 @Table(name="announcement")
@@ -41,8 +41,8 @@ public class Announcement implements Serializable {
 	@Column(name="poster_path",nullable=true,length=200)
 	private String posterPath;
 	
-	@Enumerated(EnumType.STRING)
-	@Column(name="announcement_type",length=200)
+	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="announcement_type_id")
 	private AnnouncementType announcementType;
 	
 	@ManyToOne(cascade=CascadeType.ALL)

@@ -1,27 +1,22 @@
 package com.orcun.mezun.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-
 @Entity
-@Table(name="education_info")
-public class EducationInfo implements Serializable{
+@Table(name="area_of_interest")
+public class AreaOfInterest implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -29,18 +24,11 @@ public class EducationInfo implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="education_level_id")
-	private EducationLevel educationLevel;
+	@Column(name="area_of_interest_name",nullable=false,length=200)
+	private String areaOfInterestName;
 	
-	@Column(name="start_date",nullable=false)
-	private Date startDate=new Date();
-	
-	@Column(name="end_date",nullable=true)
-	private Date endDate=new Date();
-	
-	@OneToOne(fetch=FetchType.LAZY)
-	private University university;
+	@Column(name="experience_level",nullable=false)
+	private Integer experienceLevel;
 	
 	@ManyToOne(cascade=CascadeType.ALL)
 	@OnDelete(action=OnDeleteAction.CASCADE)
@@ -54,38 +42,23 @@ public class EducationInfo implements Serializable{
 		this.id = id;
 	}
 
-	public EducationLevel getEducationLevel() {
-		return educationLevel;
+	public String getAreaOfInterestName() {
+		return areaOfInterestName;
 	}
 
-	public void setEducationLevel(EducationLevel educationLevel) {
-		this.educationLevel = educationLevel;
+	public void setAreaOfInterestName(String areaOfInterestName) {
+		this.areaOfInterestName = areaOfInterestName;
 	}
 
-	public Date getStartDate() {
-		return startDate;
+	public Integer getExperienceLevel() {
+		return experienceLevel;
 	}
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
+	public void setExperienceLevel(Integer experienceLevel) {
+		this.experienceLevel = experienceLevel;
 	}
 
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	public University getUniversity() {
-		return university;
-	}
-
-	public void setUniversity(University university) {
-		this.university = university;
-	}
-
+	
 	public User getUser() {
 		return user;
 	}
@@ -110,7 +83,7 @@ public class EducationInfo implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		EducationInfo other = (EducationInfo) obj;
+		AreaOfInterest other = (AreaOfInterest) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -118,5 +91,6 @@ public class EducationInfo implements Serializable{
 			return false;
 		return true;
 	}
-
+	
+	
 }
