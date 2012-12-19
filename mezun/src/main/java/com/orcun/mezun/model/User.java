@@ -40,6 +40,9 @@ public class User implements Serializable,UserDetails{
 	@Column(name="surname",nullable=true,length=200)
 	private String surname;
 	
+	@Column(name="birthdayYear",nullable=false)
+	private Integer birthdayYear;
+	
 	@Column(name="registered_date",nullable=false)
 	private Date registeredDate=new Date();
 	
@@ -81,6 +84,12 @@ public class User implements Serializable,UserDetails{
 	}
 	public void setSurname(String surname) {
 		this.surname = surname;
+	}
+	public Integer getBirthdayYear() {
+		return birthdayYear;
+	}
+	public void setBirthdayYear(Integer birthdayYear) {
+		this.birthdayYear = birthdayYear;
 	}
 	public Date getRegisteredDate() {
 		return registeredDate;
