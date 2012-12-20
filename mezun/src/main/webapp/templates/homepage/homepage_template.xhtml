@@ -1,0 +1,35 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>Mezun Bilgi Sistemi</title>
+	<h:outputStylesheet library="css" name="style.css" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</h:head>
+
+<h:body>
+	<div class="body_panel">
+
+		<div class="header_panel">
+			<div class="logo"></div>
+			<div class="menu">
+				<p:menubar>
+					<p:menuitem value="Anasayfa" url="/index.xhtml" />
+					<p:menuitem value="Üye Ol" url="/sign_up.xhtml" />
+					<p:menuitem value="Sisteme Giriş" url="/login.xhtml" />
+				</p:menubar>
+			</div>
+
+		</div>
+
+		<div class="main_panel">
+			<ui:insert name="main_container" />
+		</div>
+
+		<div class="footer_panel"></div>
+
+	</div>
+</h:body>
+</html>
