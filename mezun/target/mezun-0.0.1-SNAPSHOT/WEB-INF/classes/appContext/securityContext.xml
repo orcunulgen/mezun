@@ -18,14 +18,14 @@
 		<intercept-url pattern="**/resources/**" access="permitAll" />
 		<intercept-url pattern="/resources/**" access="permitAll" />
 		<intercept-url pattern="/error/**" access="permitAll" />
-		<intercept-url pattern="/user_profile/**" access="hasRole('ROLE_USER')" />
+		<intercept-url pattern="/user_profile/**" access="hasRole('ROLE_STUDENT') or hasRole('ROLE_ALUMNI')" />
 		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/**" access="permitAll" />
 
 		<form-login login-processing-url="/j_spring_security_user_check"
-			login-page="/index.xhtml" always-use-default-target="true"
-			authentication-failure-url="/index.xhtml?error=true"
-			authentication-success-handler-ref="myLibAppAuthenticationSuccessHandler" />
+			login-page="/login.xhtml" always-use-default-target="true"
+			authentication-failure-url="/login.xhtml?error=true"
+			authentication-success-handler-ref="mezunAuthenticationSuccessHandler" />
 
 		<logout invalidate-session="true" logout-url="/logout"
 			logout-success-url="/index.xhtml" />
@@ -35,8 +35,8 @@
 		<authentication-provider user-service-ref="userDetailsService"/>
 	</authentication-manager>
 
-	<beans:bean id="myLibAppAuthenticationSuccessHandler"
-		class="com.orcun.mylibapp.security.MyLibAppAuthenticationSuccessHandler">
+	<beans:bean id="mezunAuthenticationSuccessHandler"
+		class="com.orcun.mezun.security.MezunAuthenticationSuccessHandler">
 		<beans:property name="defaultTargetUrl" value="/user_profile/index.xhtml"  />
 	</beans:bean>
 

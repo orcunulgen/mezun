@@ -1,0 +1,254 @@
+package com.orcun.mezun.view.user;
+
+import java.io.IOException;
+import java.io.Serializable;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+
+import org.primefaces.event.SelectEvent;
+import org.primefaces.model.mindmap.DefaultMindmapNode;
+import org.primefaces.model.mindmap.MindmapNode;
+import org.springframework.security.core.context.SecurityContext;
+
+import com.orcun.mezun.model.User;
+
+@ManagedBean
+@ViewScoped
+public class ProfileSettingsView implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	private MindmapNode root;
+
+	private MindmapNode selectedNode;
+
+	private User loggedUser;
+
+	public ProfileSettingsView() {
+
+		/*
+		 * ClassPathXmlApplicationContext appContext = new
+		 * ClassPathXmlApplicationContext( new
+		 * String[]{"appContext/appContext-mezun.xml"
+		 * ,"appContext/securityContext.xml"});
+		 */
+
+		root = new DefaultMindmapNode(getLoggedUser().getName() + " "
+				+ loggedUser.getSurname(), "", "FFCC00", false);
+
+		// CV
+		MindmapNode cv = new DefaultMindmapNode("Özgeçmişim", "", "6e9ebf",
+				true);
+
+		MindmapNode personalInfo = new DefaultMindmapNode("Kişisel Bilgilerim",
+				"", "6e9ebf", true);
+		MindmapNode eduInfo = new DefaultMindmapNode("Eğitim Bilgilerim", "",
+				"6e9ebf", true);
+		MindmapNode jobExperience = new DefaultMindmapNode("İş Tecrübelerim",
+				"", "6e9ebf", true);
+		MindmapNode additionalInfo = new DefaultMindmapNode("Ek Bilgiler", "",
+				"6e9ebf", true);
+
+		MindmapNode classicalCV = new DefaultMindmapNode("Klasik CV", "",
+				"6e9ebf", true);
+
+		// Skills
+		MindmapNode skills = new DefaultMindmapNode("Yetkinliklerim", "",
+				"6e9ebf", true);
+
+		MindmapNode certifications = new DefaultMindmapNode("Sertifikalarım",
+				"", "6e9ebf", true);
+		MindmapNode areaOfInterest = new DefaultMindmapNode("İlgi Alanlarım",
+				"", "6e9ebf", true);
+
+		// interactions
+		MindmapNode chatList = new DefaultMindmapNode("Kişi Listem", "",
+				"6e9ebf", true);
+		MindmapNode photos = new DefaultMindmapNode("Fotoğraflarım", "",
+				"6e9ebf", true);
+		MindmapNode events = new DefaultMindmapNode("Etkinliklerim", "",
+				"6e9ebf", true);
+		MindmapNode announcements = new DefaultMindmapNode("Duyurularım", "",
+				"6e9ebf", true);
+		MindmapNode posts = new DefaultMindmapNode("Gönderilerim", "",
+				"6e9ebf", true);
+
+		MindmapNode contactInfo = new DefaultMindmapNode("İletişim Bilgilerim",
+				"", "6e9ebf", true);
+		
+		root.addNode(cv);
+
+		cv.addNode(personalInfo);
+		cv.addNode(eduInfo);
+		cv.addNode(jobExperience);
+		cv.addNode(additionalInfo);
+		cv.addNode(classicalCV);
+
+		root.addNode(skills);
+		skills.addNode(certifications);
+		skills.addNode(areaOfInterest);
+
+		root.addNode(chatList);
+		root.addNode(photos);
+		root.addNode(events);
+		root.addNode(announcements);
+		root.addNode(posts);
+		
+		root.addNode(contactInfo);
+
+	}
+
+	public MindmapNode getRoot() {
+		return root;
+	}
+
+	public MindmapNode getSelectedNode() {
+		return selectedNode;
+	}
+
+	public void setSelectedNode(MindmapNode selectedNode) {
+		this.selectedNode = selectedNode;
+	}
+
+	public User getLoggedUser() {
+
+		SecurityContext securityContext = (SecurityContext) FacesContext
+				.getCurrentInstance().getExternalContext().getSessionMap()
+				.get("SPRING_SECURITY_CONTEXT");
+
+		this.loggedUser = (User) securityContext.getAuthentication()
+				.getPrincipal();
+
+		return loggedUser;
+	}
+
+	public void onNodeSelect(SelectEvent event) throws IOException {
+
+		MindmapNode node = (MindmapNode) event.getObject();
+
+		if (node.getChildren().isEmpty()) {
+			Object label = node.getLabel();
+
+			if (label.equals("Kişisel Bilgilerim")) {
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								"personal_info.xhtml?user="
+										+ getLoggedUser().getTcno());
+			} else if (label.equals("Eğitim Bilgilerim")) {
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								"educational_info.xhtml?user="
+										+ getLoggedUser().getTcno());
+			} else if (label.equals("İletişim Bilgilerim")) {
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								"contact_info.xhtml?user="
+										+ getLoggedUser().getTcno());
+			} else if (label.equals("İş Tecrübelerim")) {
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								"job_experience.xhtml?user="
+										+ getLoggedUser().getTcno());
+			} else if (label.equals("Ek Bilgiler")) {
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								"additional_info.xhtml?user="
+										+ getLoggedUser().getTcno());
+			} else if (label.equals("Klasik CV")) {
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								"classical_cv.xhtml?user="
+										+ getLoggedUser().getTcno());
+			} else if (label.equals("Sertifikalarım")) {
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								"certification.xhtml?user="
+										+ getLoggedUser().getTcno());
+			} else if (label.equals("İlgi Alanlarım")) {
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								"area_of_interest.xhtml?user="
+										+ getLoggedUser().getTcno());
+			} else if (label.equals("Kişi Listem")) {
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								"chat_list.xhtml?user="
+										+ getLoggedUser().getTcno());
+			} else if (label.equals("Fotoğraflarım")) {
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								"photo.xhtml?user=" + getLoggedUser().getTcno());
+			} else if (label.equals("Etkinliklerim")) {
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								"event.xhtml?user=" + getLoggedUser().getTcno());
+			} else if (label.equals("Duyurularım")) {
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								"announcement.xhtml?user="
+										+ getLoggedUser().getTcno());
+			} else if (label.equals("Gönderilerim")) {
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								"post.xhtml?user=" + getLoggedUser().getTcno());
+			}
+
+		}
+
+	}
+
+	public void checkURL() throws IOException {
+
+		HttpServletRequest request = (HttpServletRequest) FacesContext
+				.getCurrentInstance().getExternalContext().getRequest();
+		String userParameter = request.getParameter("user");
+
+		if (userParameter == null || userParameter.equals("")) {
+
+			FacesContext
+					.getCurrentInstance()
+					.getExternalContext()
+					.redirect(
+							"profile_settings.xhtml?user="
+									+ getLoggedUser().getTcno());
+
+		} else if (!userParameter.equals(getLoggedUser().getTcno().toString())) {
+			FacesContext
+					.getCurrentInstance()
+					.getExternalContext()
+					.redirect(
+							"profile_settings.xhtml?user="
+									+ getLoggedUser().getTcno());
+
+		}
+	}
+}

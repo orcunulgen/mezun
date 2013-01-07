@@ -1,0 +1,48 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:view encoding="UTF-8" contentType="text/html">
+	<h:head>
+		<title>Mezun Bilgi Sistemi</title>
+		<h:outputStylesheet library="css" name="style.css" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	</h:head>
+
+	<h:body>
+		<div class="body_panel">
+
+			<div class="header_panel">
+				<div class="logo"></div>
+				<div class="menu">
+					<p:menubar>
+						<p:menuitem value="Anasayfa" url="/user_profile/index.xhtml" />
+						<!-- <p:submenu label="Profil Düzenle">
+							<p:menuitem value="Kitap Ekle"
+								url="add_book.xhtml?faces-redirect=true" />
+							<p:menuitem value="Tüm Kitaplar"
+								url="list_book.xhtml?faces-redirect=true" />
+						</p:submenu>
+						 -->
+						<p:menuitem value="Profilim"
+							url="/user_profile/showcase/index.xhtml?user=#{showCaseView.loggedUser.tcno}" />
+						<p:menuitem value="Hesap Ayarları"
+							url="/user_profile/profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+						<p:menuitem value="Çıkış" url="/logout" />
+					</p:menubar>
+				</div>
+
+			</div>
+
+			<div class="main_panel">
+				<ui:insert name="main_container" />
+			</div>
+
+			<div class="footer_panel"></div>
+
+		</div>
+	</h:body>
+</f:view>
+</html>

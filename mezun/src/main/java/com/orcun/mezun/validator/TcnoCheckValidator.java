@@ -11,6 +11,8 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
+import com.orcun.mezun.util.StringConvertUtil;
+
 import tr.gov.nvi.tckimlik.WS.KPSPublicSoapProxy;
 
 @FacesValidator("tcnoCheckValidator")
@@ -19,7 +21,7 @@ public class TcnoCheckValidator implements Validator {
 	public void validate(FacesContext context, UIComponent component, Object obj)
 			throws ValidatorException {
 
-		Long tcno = stringToLong(obj.toString());
+		Long tcno = StringConvertUtil.stringToLong(obj.toString());
 
 		UIInput name_input = (UIInput) context.getViewRoot().findComponent(
 				"form_sign_up_panel:form_name");
@@ -53,37 +55,26 @@ public class TcnoCheckValidator implements Validator {
 						birthdayYear)) {
 					FacesMessage fm = new FacesMessage(
 							FacesMessage.SEVERITY_INFO,
-							"TC kimlik numarasý doðrulanamadý",
-							"Lütfen isim,soyisim,doðum yýlý ve tc kimlik numarasý alanlarýný kontrol ediniz");
+							"TC kimlik numarasÄ± doÄŸrulanamadÄ±",
+							"LÃ¼tfen isim,soyisim,doÄŸum yÄ±lÄ± ve tc kimlik numarasÄ± alanlarÄ±nÄ± kontrol ediniz");
 					throw new ValidatorException(fm);
 				}
 
 			} catch (RemoteException e) {
 				e.printStackTrace();
 				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
-						"Baðlantý hatasý", "TC kimlik numarasý sorgulanamýyor.");
+						"BaÄŸlantÄ± hatasÄ±", "TC kimlik numarasÄ± sorgulanamÄ±yor.");
 				throw new ValidatorException(fm);
 			}
 
 		} else {
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"TC kimlik numarasý geçerli deðil",
-					"Lütfen geçerli bir TC kimlik numarasý giriniz.");
+					"TC kimlik numarasÄ± geÃ§erli deÄŸil",
+					"LÃ¼tfen geÃ§erli bir TC kimlik numarasÄ± giriniz.");
 			throw new ValidatorException(fm);
 		}
 
 	}
 
-	public Long stringToLong(String str) {
-		Long result = null;
-		try {
-			result = Long.valueOf(str);
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-			return null;
-		}
-		return result;
-
-	}
 
 }

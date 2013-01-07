@@ -48,6 +48,10 @@ public class SignUpService{
 			return false;
 		}
 	}
+	
+	public Role getRoleInfo(String role){
+		return signUpDAO.getRoleInfo(role);
+	}
 
 	public List<Role> getRoles() {
 		return signUpDAO.getRoles();

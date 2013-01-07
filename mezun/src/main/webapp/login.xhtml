@@ -1,0 +1,39 @@
+<ui:composition template="/templates/homepage/homepage_template.xhtml" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	
+ 	<ui:define name="main_container">
+		
+
+		<h:form id="form_login_panel" prependId="false">
+    	<div class="login_panel">
+    	 	<p:growl id="login_panel_messages" showDetail="true"/>
+    	 	<p:outputPanel style="text-align:center;color: red; font-weight: bold;"
+				rendered="#{not empty param['error']}">
+				Geçersiz kullanıcı adı veya şifre.Lütfen yeniden deneyiniz.
+			</p:outputPanel>
+    		<p:fieldset legend="Kullanıcı Girişi">
+    			<h:panelGrid columns="3">
+    				<h:outputLabel for="j_username" value="Email Adresiniz :" />
+					<h:inputText id="j_username" required="true" 
+					requiredMessage="Lütfen email adresinizi giriniz."  />
+					<p:message for="j_username" display="icon" />
+					<h:outputLabel for="j_password" value="Şifre :" />
+					<h:inputSecret id="j_password" required="true" 
+					requiredMessage="Lütfen şifre giriniz."  />
+					<p:message for="j_password" display="icon"/>
+					
+					<p:commandButton value="Giriş" action="#{loginView.login}" update="login_panel_messages" ajax="false"/>    
+					<p:commandLink  action="sign_up.xhtml?faces-redirect=true" value="Yeni Üye Kaydı" ajax="false" immediate="true"/>  
+        			 
+    	  		</h:panelGrid>
+			</p:fieldset>  
+      	</div>
+      	</h:form>
+      	
+</ui:define>
+</ui:composition>

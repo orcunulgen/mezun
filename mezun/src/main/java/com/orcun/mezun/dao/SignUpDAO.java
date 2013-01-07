@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,5 +65,11 @@ public class SignUpDAO{
 	@SuppressWarnings("unchecked")
 	public List<Role> getRoles() {
 		return getSession().createCriteria(Role.class).list();
+	}
+
+	public Role getRoleInfo(String role) {
+		return (Role) getSession().createCriteria(Role.class).
+				add(Restrictions.eq("role", role))
+				.uniqueResult();
 	}
 }

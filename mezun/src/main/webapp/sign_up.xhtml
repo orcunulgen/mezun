@@ -6,11 +6,11 @@
 	xmlns:p="http://primefaces.org/ui">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-
 	<ui:define name="main_container">
 		<h:outputStylesheet library="css" name="sign_up.css" />
 
-		<h:form id="form_sign_up_panel" enctype="multipart/form-data">
+		<h:form id="form_sign_up_panel" enctype="multipart/form-data"
+			prependId="false">
 			<div class="sign_up">
 				<p:growl id="form_sign_up_messages" showDetail="true" />
 				<p:fieldset legend="Yeni Üye Kayıt Formu">
@@ -23,13 +23,9 @@
 							<p:column>
 								<p:inputText id="form_name" value="#{signUpView.user.name}"
 									required="true" requiredMessage="Lütfen isminizi giriniz.">
-									<p:ajax event="blur" update="form_sign_up_messages" />
 								</p:inputText>
 							</p:column>
-						</p:row>
 
-
-						<p:row>
 							<p:column>
 								<h:outputLabel for="form_surname" value="Soyisim" />
 							</p:column>
@@ -37,10 +33,56 @@
 								<p:inputText id="form_surname"
 									value="#{signUpView.user.surname}" required="true"
 									requiredMessage="Lütfen soyisminizi giriniz.">
+								</p:inputText>
+							</p:column>
+
+
+						</p:row>
+
+
+						<p:row>
+							<p:column>
+								<h:outputLabel for="form_password" value="Şifre" />
+							</p:column>
+							<p:column>
+								<p:password id="form_password"
+									value="#{signUpView.user.password}" required="true"
+									requiredMessage="Lütfen şifre giriniz."
+									validatorMessage="Şifreniz eşleşmiyor.Lütfen yeniden deneyiniz."
+									match="form_confirm_password" />
+							</p:column>
+
+							<p:column>
+								<h:outputLabel for="form_confirm_password" value="Şifre Tekrarı" />
+							</p:column>
+							<p:column>
+								<p:password id="form_confirm_password"
+									value="#{signUpView.user.password}" />
+							</p:column>
+						</p:row>
+
+
+						<p:row>
+							<p:column>
+								<h:outputLabel for="form_email" value="E-Mail" />
+							</p:column>
+							<p:column>
+								<p:inputText id="form_email" validator="emailValidator"
+									value="#{signUpView.user.email}" required="true"
+									requiredMessage="Lütfen e-mail adresi giriniz.">
 									<p:ajax event="blur" update="form_sign_up_messages" />
 								</p:inputText>
 							</p:column>
+
+							<p:column>
+								<h:outputLabel for="form_confirm_email" value="E-Mail Tekrarı" />
+							</p:column>
+							<p:column>
+								<p:inputText id="form_confirm_email"
+									value="#{signUpView.user.email}" />
+							</p:column>
 						</p:row>
+
 
 						<p:row>
 							<p:column>
@@ -53,29 +95,25 @@
 									<f:selectItem itemLabel="Doğum yılınızı seçiniz..." />
 									<f:selectItems value="#{signUpView.birthdayYears}"
 										var="birthdayYear" itemValue="#{birthdayYear}" />
-									<p:ajax event="blur" update="form_sign_up_messages" />
 								</p:selectOneMenu>
 							</p:column>
-						</p:row>
 
-						<p:row>
 							<p:column>
 								<h:outputLabel for="form_tcno" value="TC kimlik numarası" />
 							</p:column>
 							<p:column>
 								<p:inputMask id="form_tcno" value="#{signUpView.user.tcno}"
 									mask="99999999999" required="true"
-									requiredMessage="Lütfen TC kimlik numaranızı giriniz."
-									validator="tcnoCheckValidator">
+									requiredMessage="Lütfen TC kimlik numaranızı giriniz.">
 									<p:ajax event="blur" update="form_sign_up_messages" />
 								</p:inputMask>
 							</p:column>
 						</p:row>
 
 						<p:row>
-							<p:column colspan="2">
+							<p:column colspan="4">
 								<p:commandButton value="Kaydet" action="#{signUpView.saveUser}"
-									ajax="true" update="form_sign_up_messages" />
+									ajax="false" update="form_sign_up_messages" />
 							</p:column>
 						</p:row>
 					</p:panelGrid>

@@ -1,39 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
   <display-name>mezun</display-name>
-  <servlet>
-    <servlet-name>Faces Servlet</servlet-name>
-    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Faces Servlet</servlet-name>
-    <url-pattern>*.xhtml</url-pattern>
-  </servlet-mapping>
-  <context-param>
-    <param-name>contextConfigLocation</param-name>
-    <!-- <param-value>classpath*:/appContext/appContext-*.xml,classpath*:/appContext/securityContext.xml</param-value>-->
-    <param-value>classpath*:/appContext/appContext-*.xml</param-value>
-  </context-param>
-  <listener>
-    <listener-class>
-    	  org.springframework.web.context.ContextLoaderListener
-  	  </listener-class>
-  </listener>
-  <listener>
-    <listener-class>
-    	  org.springframework.web.context.request.RequestContextListener
-  	  </listener-class>
-  </listener>
-  <welcome-file-list>
-    <welcome-file>index.xhtml</welcome-file>
-  </welcome-file-list>
-  <context-param>
-    <param-name>javax.faces.PROJECT_STAGE</param-name>
-    <param-value>Production</param-value>
-  </context-param>
+  
+  	<servlet>
+  	 	<servlet-name>Faces Servlet</servlet-name>
+    	<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+  	</servlet>
+  
+  	<servlet-mapping>
+    	<servlet-name>Faces Servlet</servlet-name>
+    	<url-pattern>*.xhtml</url-pattern>
+	</servlet-mapping>
+ 
+  	<context-param>
+    	<param-name>org.apache.myfaces.SERIALIZE_STATE_IN_SESSION</param-name>
+    	<param-value>false</param-value>
+	</context-param>
+
+	<context-param>
+    	<param-name>javax.faces.PROJECT_STAGE</param-name>
+    	<param-value>Production</param-value>
+  	</context-param>
+	
+	 <context-param>
+   		<param-name>contextConfigLocation</param-name>
+   		<param-value>classpath*:/appContext/appContext-*.xml,classpath*:/appContext/securityContext.xml</param-value>
+   		<!-- <param-value>classpath*:/appContext/appContext-*.xml</param-value> -->
+ 	</context-param>
+ 
+ 	<listener>
+ 	  <listener-class>
+ 	  	  org.springframework.web.context.ContextLoaderListener
+ 		  </listener-class>
+ 	</listener>
+ 
+ 	<listener>
+ 	  <listener-class>
+ 	  	  org.springframework.web.context.request.RequestContextListener
+ 	 </listener-class>
+ 	</listener>
+ 
+ 	<welcome-file-list>
+    	<welcome-file>index.xhtml</welcome-file>
+  	</welcome-file-list>
+  
+  
   
   <!-- Spring Security -->
-  <!--   <filter>
+  <filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
@@ -44,14 +58,16 @@
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
-   -->
+ 
   <!-- primeface fileupload config -->
-  <filter>
-    <filter-name>PrimeFaces FileUpload Filter</filter-name>
-    <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>PrimeFaces FileUpload Filter</filter-name>
-    <servlet-name>Faces Servlet</servlet-name>
-  </filter-mapping>
+  
+  	<filter>
+  	  <filter-name>PrimeFaces FileUpload Filter</filter-name>
+  	  <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+  	</filter>
+  	<filter-mapping>
+    	<filter-name>PrimeFaces FileUpload Filter</filter-name>
+    	<servlet-name>Faces Servlet</servlet-name>
+  	</filter-mapping>
+  
 </web-app>
