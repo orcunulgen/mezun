@@ -18,7 +18,7 @@
 				<div class="logo"></div>
 				<div class="menu">
 					<p:menubar>
-						<p:menuitem value="Anasayfa" url="/index.xhtml" />
+						<p:menuitem value="Anasayfa" url="/user_profile/index.xhtml" />
 						<!-- <p:submenu label="Profil Düzenle">
 							<p:menuitem value="Kitap Ekle"
 								url="add_book.xhtml?faces-redirect=true" />
@@ -26,7 +26,10 @@
 								url="list_book.xhtml?faces-redirect=true" />
 						</p:submenu>
 						 -->
-						 <p:menuitem value="Profil Ayarları" url="/profile_settings.xhtml" />
+						<p:menuitem value="Profilim"
+							url="/user_profile/showcase/index.xhtml?user=#{showCaseView.loggedUser.tcno}" />
+						<p:menuitem value="Hesap Ayarları"
+							url="/user_profile/profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
 						<p:menuitem value="Çıkış" url="/logout" />
 					</p:menubar>
 				</div>

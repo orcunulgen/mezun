@@ -85,9 +85,9 @@ public class SignUpView implements Serializable {
 				user.setRoles(userRoles);
 				
 				getSignUpService().addUser(user);
-				return ("login");
+				return ("login.xhtml?faces-redirect=true");
 			}else{
-				return("fail");
+				return("fail.xhtml?faces-redirect=true");
 			}
 			
 			
@@ -95,7 +95,7 @@ public class SignUpView implements Serializable {
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}
-		return ("fail");
+		return ("fail.xhtml?faces-redirect=true");
 	}
 
 	public boolean checkUserTcno(User user) {
