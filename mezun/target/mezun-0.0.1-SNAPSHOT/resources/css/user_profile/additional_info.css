@@ -1,0 +1,13 @@
+.additional_info {
+	height: auto;
+	width: 100%;
+	margin: 10px auto;
+}
+
+.additional_info #addInfoPanelGrid {
+	width: 100%;
+}
+
+.additional_info textarea {
+	width: 100%;
+}

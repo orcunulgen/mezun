@@ -32,6 +32,9 @@ public class JobExperience implements Serializable{
 	@Column(name="company_name",nullable=false,length=200)
 	private String companyName;
 	
+	@Column(name="description",nullable=false,length=200)
+	private String description;
+	
 	@Column(name="start_date",nullable=false)
 	private Date startDate=new Date();
 	
@@ -75,6 +78,14 @@ public class JobExperience implements Serializable{
 
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Date getStartDate() {

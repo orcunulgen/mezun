@@ -4,13 +4,17 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
+import com.orcun.mezun.model.AdditionalInfo;
 import com.orcun.mezun.model.User;
+import com.orcun.mezun.service.user.AdditionalInfoService;
 
 @ManagedBean
 @ViewScoped
@@ -19,7 +23,11 @@ public class AdditionalInfoView implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private User loggedUser;
+	
+	private AdditionalInfo additionalInfo;
 
+	@ManagedProperty(value = "#{additionalInfoService}")
+	private AdditionalInfoService additionalInfoService;
 
 	public User getLoggedUser() {
 		SecurityContext securityContext = (SecurityContext) FacesContext
@@ -33,6 +41,33 @@ public class AdditionalInfoView implements Serializable {
 
 	}
 	
+	public AdditionalInfo getAdditionalInfo() {
+		if(additionalInfo == null){
+			additionalInfo = new AdditionalInfo();
+		}
+		
+		if(additionalInfo.getUser()==null){
+			if (getAdditionalInfoService().findAdditionalInfoByUser(getLoggedUser()) != null) {
+				setAdditionalInfo(getAdditionalInfoService().findAdditionalInfoByUser(getLoggedUser()));
+			}	
+		}
+		
+		
+		return additionalInfo;
+	}
+
+	public void setAdditionalInfo(AdditionalInfo additionalInfo) {
+		this.additionalInfo = additionalInfo;
+	}
+
+	public AdditionalInfoService getAdditionalInfoService() {
+		return additionalInfoService;
+	}
+
+	public void setAdditionalInfoService(AdditionalInfoService additionalInfoService) {
+		this.additionalInfoService = additionalInfoService;
+	}
+
 	public void checkURL() throws IOException{
 		
 		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -48,6 +83,20 @@ public class AdditionalInfoView implements Serializable {
 			.redirect("personal_info.xhtml?user="+getLoggedUser().getTcno());
 			
 		}
+	}
+	
+	public String saveAdditionalInfo() {
+		try {
+			if (getAdditionalInfoService().findAdditionalInfoByUser(getLoggedUser()) != null) {
+				getAdditionalInfoService().updateAdditionalInfo(getAdditionalInfo());
+			} else {
+				getAdditionalInfo().setUser(getLoggedUser());
+				getAdditionalInfoService().addAdditionalInfo(getAdditionalInfo());
+			}
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+		}
+		return ("additional_info.xhtml?faces-redirect=true&user="+getLoggedUser().getTcno());
 	}
 
 }

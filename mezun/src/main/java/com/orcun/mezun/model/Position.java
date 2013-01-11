@@ -63,6 +63,9 @@ public class Position implements Serializable{
 		return true;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return Long.toString(this.id);
+	}
 
 }
