@@ -41,8 +41,8 @@ public class JobExperienceService {
 		return getJobExperienceDAO().allCountries();
 	}
 
-	public List<City> allCities() {
-		return getJobExperienceDAO().allCities();
+	public List<City> allCities(Country country) {
+		return getJobExperienceDAO().allCities(country);
 	}
 
 	public List<Position> allPositions() {

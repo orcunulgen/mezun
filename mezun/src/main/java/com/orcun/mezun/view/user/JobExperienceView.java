@@ -38,19 +38,16 @@ public class JobExperienceView implements Serializable {
 
 	private JobExperience jobExperience;
 
-	private Country country;
 	private List<Country> countries = new ArrayList<Country>();
 
-	private City city;
-	private List<City> cities = new ArrayList<City>();
+	private List<City> jobAddCities = new ArrayList<City>();
+	
+	private List<City> jobUpdateCities = new ArrayList<City>();
 
-	private Position position;
 	private List<Position> positions = new ArrayList<Position>();
 
-	private Sector sector;
 	private List<Sector> sectors = new ArrayList<Sector>();
 
-	private WorkingType workingType;
 	private List<WorkingType> workingTypes = new ArrayList<WorkingType>();
 
 	private List<JobExperience> jobExperiences = new ArrayList<JobExperience>();
@@ -62,7 +59,7 @@ public class JobExperienceView implements Serializable {
 	@PostConstruct
 	public void init() {
 		countries = jobExperienceService.allCountries();
-		cities = jobExperienceService.allCities();
+		//cities = jobExperienceService.allCities();
 		positions = jobExperienceService.allPositions();
 		sectors = jobExperienceService.allSectors();
 		workingTypes = jobExperienceService.allWorkingTypes();
@@ -93,13 +90,6 @@ public class JobExperienceView implements Serializable {
 		this.jobExperience = jobExperience;
 	}
 
-	public Country getCountry() {
-		return country;
-	}
-
-	public void setCountry(Country country) {
-		this.country = country;
-	}
 
 	public List<Country> getCountries() {
 		return countries;
@@ -109,28 +99,20 @@ public class JobExperienceView implements Serializable {
 		this.countries = countries;
 	}
 
-	public City getCity() {
-		return city;
+	public List<City> getJobAddCities() {
+		return jobAddCities;
 	}
 
-	public void setCity(City city) {
-		this.city = city;
+	public void setJobAddCities(List<City> jobAddCities) {
+		this.jobAddCities = jobAddCities;
 	}
 
-	public List<City> getCities() {
-		return cities;
+	public List<City> getJobUpdateCities() {
+		return jobUpdateCities;
 	}
 
-	public void setCities(List<City> cities) {
-		this.cities = cities;
-	}
-
-	public Position getPosition() {
-		return position;
-	}
-
-	public void setPosition(Position position) {
-		this.position = position;
+	public void setJobUpdateCities(List<City> jobUpdateCities) {
+		this.jobUpdateCities = jobUpdateCities;
 	}
 
 	public List<Position> getPositions() {
@@ -141,28 +123,12 @@ public class JobExperienceView implements Serializable {
 		this.positions = positions;
 	}
 
-	public Sector getSector() {
-		return sector;
-	}
-
-	public void setSector(Sector sector) {
-		this.sector = sector;
-	}
-
 	public List<Sector> getSectors() {
 		return sectors;
 	}
 
 	public void setSectors(List<Sector> sectors) {
 		this.sectors = sectors;
-	}
-
-	public WorkingType getWorkingType() {
-		return workingType;
-	}
-
-	public void setWorkingType(WorkingType workingType) {
-		this.workingType = workingType;
 	}
 
 	public List<WorkingType> getWorkingTypes() {
@@ -197,7 +163,18 @@ public class JobExperienceView implements Serializable {
 			JobExperienceService jobExperienceService) {
 		this.jobExperienceService = jobExperienceService;
 	}
-
+	
+	public void initSelectedJobEx(JobExperience selectedJobExperience){
+		this.selectedJobExperience=selectedJobExperience;
+		updateJobChangeCountry();
+	}
+	
+	public void addJobChangeCountry(){
+		jobAddCities=getJobExperienceService().allCities(getJobExperience().getCountry());
+	}
+	public void updateJobChangeCountry(){
+		jobUpdateCities=getJobExperienceService().allCities(getSelectedJobExperience().getCountry());
+	}
 	public void checkURL() throws IOException {
 
 		HttpServletRequest request = (HttpServletRequest) FacesContext
@@ -242,6 +219,56 @@ public class JobExperienceView implements Serializable {
 				getJobExperience().setUser(getLoggedUser());
 				getJobExperience().setRegisteredDate(registeredDate);
 				getJobExperienceService().addJobExperience(getJobExperience());
+
+				/*
+				 * FacesMessage fm = new
+				 * FacesMessage(FacesMessage.SEVERITY_ERROR,
+				 * "Kaydınız tamamlandı.", "");
+				 * 
+				 * FacesContext.getCurrentInstance().addMessage(null, fm);
+				 */
+
+				/*
+				 * FacesContext.getCurrentInstance().getExternalContext()
+				 * .getFlash().setKeepMessages(true);
+				 */
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								"job_experience.xhtml?user="
+										+ getLoggedUser().getTcno());
+
+			} else {
+				FacesMessage fm = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR,
+						"Başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
+						"Lütfen yeniden deneyiniz.");
+				FacesContext.getCurrentInstance().addMessage(null, fm);
+
+			}
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	public void updateJobExperience() throws IOException {
+		try {
+
+			int differenceStartEnd = Days.daysBetween(
+					new DateTime(getSelectedJobExperience().getStartDate()),
+					new DateTime(getSelectedJobExperience().getEndDate())).getDays();
+
+			Date registeredDate = new Date();
+
+			int differenceStartRegister = Days.daysBetween(
+					new DateTime(getSelectedJobExperience().getStartDate()),
+					new DateTime(registeredDate)).getDays();
+
+			if (differenceStartEnd > 0 && differenceStartRegister > 0) {
+
+				getJobExperienceService().updateJobExperience(getSelectedJobExperience());
 
 				/*
 				 * FacesMessage fm = new

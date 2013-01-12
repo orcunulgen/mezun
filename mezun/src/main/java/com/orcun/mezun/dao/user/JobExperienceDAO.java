@@ -55,8 +55,8 @@ public class JobExperienceDAO{
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<City> allCities() {
-		return getSession().createCriteria(City.class).list();
+	public List<City> allCities(Country country) {
+		return getSession().createCriteria(City.class).add(Restrictions.eq("country", country)).list();
 	}
 
 	@SuppressWarnings("unchecked")
