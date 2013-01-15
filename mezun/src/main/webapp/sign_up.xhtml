@@ -8,10 +8,10 @@
 
 	<ui:define name="main_container">
 		<h:outputStylesheet library="css" name="sign_up.css" />
+		<div class="sign_up">
+			<h:form id="form_sign_up_panel" enctype="multipart/form-data"
+				prependId="false">
 
-		<h:form id="form_sign_up_panel" enctype="multipart/form-data"
-			prependId="false">
-			<div class="sign_up">
 				<p:growl id="form_sign_up_messages" showDetail="true" />
 				<p:fieldset legend="Yeni Üye Kayıt Formu">
 					<p:panelGrid>
@@ -118,7 +118,8 @@
 						</p:row>
 					</p:panelGrid>
 				</p:fieldset>
-			</div>
-		</h:form>
+
+			</h:form>
+		</div>
 	</ui:define>
 </ui:composition>

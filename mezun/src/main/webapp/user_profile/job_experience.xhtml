@@ -19,15 +19,19 @@
 				<p:dataTable var="jobExperienceList"
 					value="#{jobExperienceView.jobExperiences}" paginator="true"
 					rows="10">
-					<p:column style="width:4%">
+					<p:column style="width:15%">
 						<f:facet name="header">
-							<h:outputText value="Detaylar" />
+							<h:outputText value="İşlemler" />
 						</f:facet>
 						<p:commandButton id="selectButton"
 							actionListener="#{jobExperienceView.initSelectedJobEx(jobExperienceList)}"
 							update=":job_ex_dialog_form"
 							oncomplete="jobExperienceUpdateDialog.show()"
 							icon="ui-icon-search" title="View">
+						</p:commandButton>
+						<p:commandButton id="deleteButton"
+							actionListener="#{jobExperienceView.deleteSelectedJobEx(jobExperienceList)}"
+							icon="ui-icon-close" title="Delete">
 						</p:commandButton>
 					</p:column>
 					<p:column headerText="Şirketin İsmi">
@@ -54,7 +58,7 @@
 				</p:dataTable>
 			</h:form>
 
-			<p:dialog header="İş Tecrübeleri"
+			<p:dialog header="İş Tecrübesi Ayrıntıları"
 				widgetVar="jobExperienceUpdateDialog" resizable="false"
 				id="jobExperienceUpdateDlg" showEffect="fade" modal="true">
 				<h:form id="job_ex_dialog_form">
@@ -141,7 +145,7 @@
 
 					</h:panelGrid>
 					<p:commandButton action="#{jobExperienceView.updateJobExperience}"
-						value="Kaydet" ajax="true" update=":job_ex_dialog_form" />
+						value="Kaydet" ajax="true" icon="ui-icon-disk" update=":job_ex_dialog_form" />
 				</h:form>
 			</p:dialog>
 
@@ -234,7 +238,7 @@
 
 					</h:panelGrid>
 					<p:commandButton action="#{jobExperienceView.addJobExperience}"
-						value="Ekle" ajax="true" update=":dialog_job_experience_add_form" />
+						value="Ekle" ajax="true" icon="ui-icon-disk" update=":dialog_job_experience_add_form" />
 				</h:form>
 			</p:dialog>
 		</div>

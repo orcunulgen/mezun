@@ -80,5 +80,11 @@ public class JobExperienceDAO{
 				.add(Restrictions.eq("user", loggedUser)).list();
 	}
 	
+	public void deleteJobExperience(JobExperience selectedJobExperience) {
+		getSession().createSQLQuery("delete from job_experience where id = :id") 
+	    .setParameter("id", selectedJobExperience.getId())
+	    .executeUpdate();
+	}
+	
 	
 }

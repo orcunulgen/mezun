@@ -64,25 +64,37 @@ public class JobExperienceView implements Serializable {
 		sectors = jobExperienceService.allSectors();
 		workingTypes = jobExperienceService.allWorkingTypes();
 		jobExperiences=jobExperienceService.allJobExperience(getLoggedUser());
-	}
-
-	public User getLoggedUser() {
-		SecurityContext securityContext = (SecurityContext) FacesContext
-				.getCurrentInstance().getExternalContext().getSessionMap()
-				.get("SPRING_SECURITY_CONTEXT");
-
-		this.loggedUser = (User) securityContext.getAuthentication()
-				.getPrincipal();
-
-		return loggedUser;
-
-	}
-
-	public JobExperience getJobExperience() {
+		
 		if (jobExperience == null) {
 			jobExperience = new JobExperience();
 
 		}
+	}
+	
+	public void initSelectedJobEx(JobExperience selectedJobExperience){
+		this.selectedJobExperience=selectedJobExperience;
+		updateJobChangeCountry();
+	}
+	
+	public void deleteSelectedJobEx(JobExperience selectedJobExperience) throws IOException {
+		initSelectedJobEx(selectedJobExperience);
+		try {
+			getJobExperienceService().deleteJobExperience(
+					getSelectedJobExperience());
+			
+			FacesContext.getCurrentInstance()
+			.getExternalContext()
+			.redirect(
+					"job_experience.xhtml?user="
+							+ getLoggedUser().getTcno());
+
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public JobExperience getJobExperience() {
+		
 		return jobExperience;
 	}
 
@@ -164,17 +176,25 @@ public class JobExperienceView implements Serializable {
 		this.jobExperienceService = jobExperienceService;
 	}
 	
-	public void initSelectedJobEx(JobExperience selectedJobExperience){
-		this.selectedJobExperience=selectedJobExperience;
-		updateJobChangeCountry();
-	}
-	
 	public void addJobChangeCountry(){
 		jobAddCities=getJobExperienceService().allCities(getJobExperience().getCountry());
 	}
 	public void updateJobChangeCountry(){
 		jobUpdateCities=getJobExperienceService().allCities(getSelectedJobExperience().getCountry());
 	}
+	
+	public User getLoggedUser() {
+		SecurityContext securityContext = (SecurityContext) FacesContext
+				.getCurrentInstance().getExternalContext().getSessionMap()
+				.get("SPRING_SECURITY_CONTEXT");
+
+		this.loggedUser = (User) securityContext.getAuthentication()
+				.getPrincipal();
+
+		return loggedUser;
+
+	}
+	
 	public void checkURL() throws IOException {
 
 		HttpServletRequest request = (HttpServletRequest) FacesContext

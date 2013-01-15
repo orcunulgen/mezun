@@ -60,5 +60,9 @@ public class JobExperienceService {
 	public List<JobExperience> allJobExperience(User loggedUser) {
 		return getJobExperienceDAO().allJobExperience(loggedUser);
 	}
-
+	
+	public void deleteJobExperience(JobExperience selectedJobExperience) {
+		getJobExperienceDAO().deleteJobExperience(selectedJobExperience);
+		
+	}
 }
