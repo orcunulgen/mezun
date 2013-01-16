@@ -24,6 +24,9 @@ public class AreaOfInterest implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(name="area_of_interest_title",nullable=false,length=200)
+	private String areaOfInterestTitle;
+	
 	@Column(name="area_of_interest_name",nullable=false,length=200)
 	private String areaOfInterestName;
 	
@@ -40,6 +43,14 @@ public class AreaOfInterest implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getAreaOfInterestTitle() {
+		return areaOfInterestTitle;
+	}
+
+	public void setAreaOfInterestTitle(String areaOfInterestTitle) {
+		this.areaOfInterestTitle = areaOfInterestTitle;
 	}
 
 	public String getAreaOfInterestName() {
