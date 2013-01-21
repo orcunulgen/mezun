@@ -8,9 +8,122 @@
 	<!-- <f:metadata>
 		<f:event type="preRenderView" listener="#{personalInfoView.checkURL}" />
 	</f:metadata> -->
-	
-	<ui:define name="main_container">
 
+	<ui:define name="main_container">
+		<h:outputStylesheet library="css" name="personal_info.css" />
+		<div class="personal_info">
+			<h:form id="form_personal_info_panel" enctype="multipart/form-data"
+				prependId="false">
+
+				<p:growl id="form_personal_info_messages" showDetail="true" />
+				<p:fieldset legend="Üyelik Bilgileri">
+					<p:panelGrid>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel for="form_name" value="İsim" />
+							</p:column>
+							<p:column>
+								<p:inputText id="form_name" value="#{personalInfoView.loggedUser.name}"
+									required="true" requiredMessage="Lütfen isminizi giriniz.">
+								</p:inputText>
+							</p:column>
+
+							<p:column>
+								<h:outputLabel for="form_surname" value="Soyisim" />
+							</p:column>
+							<p:column>
+								<p:inputText id="form_surname"
+									value="#{personalInfoView.loggedUser.surname}" required="true"
+									requiredMessage="Lütfen soyisminizi giriniz.">
+								</p:inputText>
+							</p:column>
+
+
+						</p:row>
+
+
+						<p:row>
+							<p:column>
+								<h:outputLabel for="form_password" value="Şifre" />
+							</p:column>
+							<p:column>
+								<p:password id="form_password"
+									value="#{personalInfoView.loggedUser.password}" required="true"
+									requiredMessage="Lütfen şifre giriniz."
+									validatorMessage="Şifreniz eşleşmiyor.Lütfen yeniden deneyiniz."
+									match="form_confirm_password" />
+							</p:column>
+
+							<p:column>
+								<h:outputLabel for="form_confirm_password" value="Şifre Tekrarı" />
+							</p:column>
+							<p:column>
+								<p:password id="form_confirm_password"
+									value="#{personalInfoView.loggedUser.password}" />
+							</p:column>
+						</p:row>
+
+
+						<p:row>
+							<p:column>
+								<h:outputLabel for="form_email" value="E-Mail" />
+							</p:column>
+							<p:column>
+								<p:inputText id="form_email" validator="emailValidator"
+									value="#{personalInfoView.loggedUser.email}" required="true"
+									requiredMessage="Lütfen e-mail adresi giriniz.">
+									<p:ajax event="blur" update="form_personal_info_messages" />
+								</p:inputText>
+							</p:column>
+
+							<p:column>
+								<h:outputLabel for="form_confirm_email" value="E-Mail Tekrarı" />
+							</p:column>
+							<p:column>
+								<p:inputText id="form_confirm_email"
+									value="#{personalInfoView.loggedUser.email}" />
+							</p:column>
+						</p:row>
+
+
+						<p:row>
+							<p:column>
+								<h:outputLabel for="form_birthday_year" value="Doğum yılı" />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu id="form_birthday_year" required="true"
+									requiredMessage="Lütfen doğum yılınızı seçiniz."
+									value="#{personalInfoView.loggedUser.birthdayYear}">
+									<f:selectItem itemLabel="Doğum yılınızı seçiniz..." />
+									<f:selectItems value="#{personalInfoView.birthdayYears}"
+										var="birthdayYear" itemValue="#{birthdayYear}" />
+								</p:selectOneMenu>
+							</p:column>
+
+							<p:column>
+								<h:outputLabel for="form_tcno" value="TC kimlik numarası" />
+							</p:column>
+							<p:column>
+								<p:inputMask id="form_tcno" value="#{personalInfoView.loggedUser.tcno}"
+									mask="99999999999" required="true"
+									requiredMessage="Lütfen TC kimlik numaranızı giriniz.">
+									<p:ajax event="blur" update="form_personal_info_messages" />
+								</p:inputMask>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column colspan="4">
+								<p:commandButton value="Kaydet" action="#{personalInfoView.updateUser}"
+									ajax="false" update="form_personal_info_messages" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:fieldset>
+
+			</h:form>
+		</div>
 
 	</ui:define>
 </ui:composition>
