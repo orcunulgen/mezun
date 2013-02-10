@@ -28,6 +28,9 @@ public class PersonalInfoView implements Serializable {
 
 	private User loggedUser;
 	
+	private String confirmEmail;
+	private String confirmPassword;
+	
 	private List<Integer> birthdayYears = new ArrayList<Integer>();
 	
 	@ManagedProperty(value = "#{personalInfoService}")
@@ -74,6 +77,22 @@ public class PersonalInfoView implements Serializable {
 	
 	public void setLoggedUser(User loggedUser) {
 		this.loggedUser = loggedUser;
+	}
+
+	public String getConfirmEmail() {
+		return confirmEmail;
+	}
+
+	public void setConfirmEmail(String confirmEmail) {
+		this.confirmEmail = confirmEmail;
+	}
+
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
 	}
 
 	public void checkURL() throws IOException{

@@ -28,6 +28,8 @@ public class EmailValidator implements Validator {
 	public void validate(FacesContext context, UIComponent component, Object obj)
 			throws ValidatorException {
 
+		String formName=(String) component.getAttributes().get("formName"); 
+		
 		pattern = Pattern.compile(EMAIL_PATTERN);
 
 		// [\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]
@@ -42,7 +44,7 @@ public class EmailValidator implements Validator {
 		}
 
 		UIInput email_confirm_input = (UIInput) context.getViewRoot()
-				.findComponent("form_sign_up_panel:form_confirm_email");
+				.findComponent(formName+":form_confirm_email");
 		if (email_confirm_input.getSubmittedValue() != null) {
 			String email_confirm = (String) email_confirm_input
 					.getSubmittedValue().toString();

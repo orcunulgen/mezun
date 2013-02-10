@@ -60,11 +60,10 @@
 							</p:column>
 							<p:column>
 								<p:password id="form_confirm_password"
-									value="#{personalInfoView.loggedUser.password}" />
+									value="#{personalInfoView.confirmPassword}" />
 							</p:column>
 						</p:row>
-
-
+						
 						<p:row>
 							<p:column>
 								<h:outputLabel for="form_email" value="E-Mail" />
@@ -74,6 +73,7 @@
 									value="#{personalInfoView.loggedUser.email}" required="true"
 									requiredMessage="Lütfen e-mail adresi giriniz.">
 									<p:ajax event="blur" update="form_personal_info_messages" />
+									<f:attribute name="formName" value="form_personal_info_panel" />
 								</p:inputText>
 							</p:column>
 
@@ -82,10 +82,11 @@
 							</p:column>
 							<p:column>
 								<p:inputText id="form_confirm_email"
-									value="#{personalInfoView.loggedUser.email}" />
+									value="#{personalInfoView.confirmEmail}" />
 							</p:column>
 						</p:row>
 
+						
 
 						<p:row>
 							<p:column>
@@ -115,7 +116,7 @@
 
 						<p:row>
 							<p:column colspan="4">
-								<p:commandButton value="Kaydet" action="#{personalInfoView.updateUser}"
+								<p:commandButton value="Kaydet" action="#{personalInfoView.updatePersonalInfo}"
 									ajax="false" update="form_personal_info_messages" />
 							</p:column>
 						</p:row>

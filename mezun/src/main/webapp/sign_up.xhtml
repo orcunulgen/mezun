@@ -71,6 +71,7 @@
 									value="#{signUpView.user.email}" required="true"
 									requiredMessage="Lütfen e-mail adresi giriniz.">
 									<p:ajax event="blur" update="form_sign_up_messages" />
+									<f:attribute name="formName" value="form_sign_up_panel" />
 								</p:inputText>
 							</p:column>
 

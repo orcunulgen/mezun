@@ -8,9 +8,130 @@
 	<!-- <f:metadata>
 		<f:event type="preRenderView" listener="#{personalInfoView.checkURL}" />
 	</f:metadata> -->
-	
-	<ui:define name="main_container">
 
+	<ui:define name="main_container">
+		<h:outputStylesheet library="css"
+			name="user_profile/event.css" />
+		<div class="event">
+
+			<h:form id="list_event_form">
+				<p:growl id="list_event_messages" showDetail="true" />
+				<p:dataTable var="eventList"
+					value="#{eventView.events}" paginator="true"
+					rows="10">
+					<p:column style="width:15%">
+						<f:facet name="header">
+							<h:outputText value="İşlemler" />
+						</f:facet>
+						<p:commandButton id="selectButton"
+							actionListener="#{eventView.initSelectedEvent(eventList)}"
+							update=":event_dialog_form"
+							oncomplete="eventUpdateDialog.show()"
+							icon="ui-icon-search" title="View">
+						</p:commandButton>
+						<p:commandButton id="deleteButton"
+							actionListener="#{eventView.deleteSelectedEvent(eventList)}"
+							icon="ui-icon-close" title="Delete">
+						</p:commandButton>
+					</p:column>
+					<p:column headerText="Etkinlik İsmi">
+						<h:outputText value="#{eventList.title}" />
+					</p:column>
+					<p:column headerText="Başlangıç Tarihi">
+						<h:outputText value="#{eventList.startDate}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Bitiş Tarihi">
+						<h:outputText value="#{eventList.endDate}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Etkinliğin Eklendiği Tarih">
+						<h:outputText value="#{eventList.registeredDate}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+
+			<p:dialog header="Etkinliğin Ayrıntıları"
+				widgetVar="eventUpdateDialog" resizable="false"
+				id="eventUpdateDlg" showEffect="fade" modal="true">
+				<h:form id="event_dialog_form">
+					<p:growl id="selected_event_dialog_messages" />
+					<h:panelGrid id="event_detail_display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="Etkinlik İsmi :" />
+						<p:inputText
+							value="#{eventView.selectedEvent.title}"
+							required="true" requiredMessage="Lütfen etkinlik ismi giriniz." />
+
+						<h:outputText value="Açıklama :" />
+						<p:inputTextarea
+							value="#{eventView.selectedEvent.description}"
+							rows="5" cols="50" maxlength="100" autoResize="false"
+							required="true"
+							requiredMessage="Lütfen etkinliğin detaylarını açıklayınız." />
+
+						<h:outputText value="Başlangıç Tarihi :" />
+						<p:calendar
+							value="#{eventView.selectedEvent.startDate}"
+							showOn="button" />
+
+						<h:outputText value="Bitiş Tarihi :" />
+						<p:calendar
+							value="#{eventView.selectedEvent.endDate}"
+							showOn="button" />
+
+					</h:panelGrid>
+					<p:commandButton action="#{eventView.updateEvent}"
+						value="Kaydet" ajax="true" icon="ui-icon-disk"
+						update=":event_dialog_form" />
+				</h:form>
+			</p:dialog>
+
+
+
+
+			<p:commandButton value="Yeni Etkinlik Ekle" type="button"
+				onclick="eventAddDialog.show()" />
+			<p:dialog header="Etkinlik Ekle"
+				widgetVar="eventAddDialog" resizable="false"
+				id="eventAddDlg" showEffect="fade" modal="true">
+				<h:form id="dialog_event_add_form">
+					<p:growl id="event_add_messages" />
+					<h:panelGrid id="event_add_display" columns="2"
+						cellpadding="4" style="margin:0 auto;">
+
+						<h:outputText value="Etkinlik İsmi :" />
+						<p:inputText
+							value="#{eventView.event.title}"
+							required="true" requiredMessage="Lütfen etkinlik ismi giriniz." />
+
+						<h:outputText value="Açıklama :" />
+						<p:inputTextarea id="form_add_description"
+							value="#{eventView.event.description}" rows="5"
+							cols="50" maxlength="100" autoResize="false" required="true"
+							requiredMessage="Lütfen etkinlik detaylarını açıklayınız." />
+
+						<h:outputText value="Başlangıç Tarihi :" />
+						<p:calendar value="#{eventView.event.startDate}"
+							showOn="button" />
+
+						<h:outputText value="Bitiş Tarihi :" />
+						<p:calendar value="#{eventView.event.endDate}"
+							showOn="button" />
+
+					</h:panelGrid>
+					<p:commandButton action="#{eventView.addEvent}"
+						value="Ekle" ajax="true" icon="ui-icon-disk"
+						update=":dialog_event_add_form" />
+				</h:form>
+			</p:dialog>
+		</div>
 
 	</ui:define>
 </ui:composition>
