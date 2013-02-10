@@ -63,4 +63,9 @@ public class AnnouncementType implements Serializable{
 		return true;
 	}
 	
+	@Override
+	public String toString() {
+		return Long.toString(this.id);
+	}
+	
 }

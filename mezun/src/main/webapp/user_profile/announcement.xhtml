@@ -8,9 +8,124 @@
 	<!-- <f:metadata>
 		<f:event type="preRenderView" listener="#{personalInfoView.checkURL}" />
 	</f:metadata> -->
-	
-	<ui:define name="main_container">
 
+	<ui:define name="main_container">
+		<h:outputStylesheet library="css"
+			name="user_profile/announcement.css" />
+		<div class="announcement">
+
+			<h:form id="list_announcement_form">
+				<p:growl id="list_announcement_messages" showDetail="true" />
+				<p:dataTable var="announcementList"
+					value="#{announcementView.announcements}" paginator="true"
+					rows="10">
+					<p:column style="width:15%">
+						<f:facet name="header">
+							<h:outputText value="İşlemler" />
+						</f:facet>
+						<p:commandButton id="selectButton"
+							actionListener="#{announcementView.initSelectedAnnouncement(announcementList)}"
+							update=":announcement_dialog_form"
+							oncomplete="announcementUpdateDialog.show()"
+							icon="ui-icon-search" title="View">
+						</p:commandButton>
+						<p:commandButton id="deleteButton"
+							actionListener="#{announcementView.deleteSelectedAnnouncement(announcementList)}"
+							icon="ui-icon-close" title="Delete">
+						</p:commandButton>
+					</p:column>
+					<p:column headerText="Duyuru Başlığı">
+						<h:outputText value="#{announcementList.title}" />
+					</p:column>
+					<p:column headerText="Açıklama">
+						<h:outputText value="#{announcementList.description}" />
+					</p:column>
+					<p:column headerText="Duyuru Tipi">
+						<h:outputText value="#{announcementList.announcementType.announcementType}" />
+					</p:column>
+
+
+				</p:dataTable>
+			</h:form>
+
+			<p:dialog header="Duyuru Ayrıntıları"
+				widgetVar="announcementUpdateDialog" resizable="false"
+				id="announcementUpdateDlg" showEffect="fade" modal="true">
+				<h:form id="announcement_dialog_form">
+					<p:growl id="selected_announcement_dialog_messages" />
+					<h:panelGrid id="announcement_detail_display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="Duyuru Başlığı :" />
+						<p:inputText
+							value="#{announcementView.selectedAnnouncement.title}"
+							required="true" requiredMessage="Lütfen duyuru başlığı giriniz." />
+
+						<h:outputText value="Açıklama :" />
+						<p:inputTextarea
+							value="#{announcementView.selectedAnnouncement.description}"
+							rows="5" cols="50" maxlength="100" autoResize="false"
+							required="true"
+							requiredMessage="Lütfen duyuru detaylarını açıklayınız." />
+
+						<h:outputText value="Duyuru Tipi :" />
+						<p:selectOneMenu validator="announcementTypeValidator"
+							converter="announcementTypeConverter"
+							value="#{announcementView.selectedAnnouncement.announcementType}">
+							<f:selectItem itemValue="0" itemLabel="Lütfen duyuru tipini seçiniz" />
+							<f:selectItems value="#{announcementView.announcementTypes}"
+								var="announcementType" itemValue="#{announcementType}"
+								itemLabel="#{announcementType.announcementType}" />
+						</p:selectOneMenu>
+
+					</h:panelGrid>
+					<p:commandButton action="#{announcementView.updateAnnouncement}"
+						value="Kaydet" ajax="true" icon="ui-icon-disk"
+						update=":announcement_dialog_form" />
+				</h:form>
+			</p:dialog>
+
+
+
+
+			<p:commandButton value="Yeni Duyuru Ekle" type="button"
+				onclick="announcementAddDialog.show()" />
+			<p:dialog header="Duyuru Ekle"
+				widgetVar="announcementAddDialog" resizable="false"
+				id="announcementAddDlg" showEffect="fade" modal="true">
+				<h:form id="dialog_announcement_add_form">
+					<p:growl id="announcement_add_messages" />
+					<h:panelGrid id="announcement_add_display" columns="2"
+						cellpadding="4" style="margin:0 auto;">
+
+						<h:outputText value="Duyuru Başlığı :" />
+						<p:inputText
+							value="#{announcementView.announcement.title}"
+							required="true" requiredMessage="Lütfen duyuru başlığı giriniz." />
+
+						<h:outputText value="Açıklama :" />
+						<p:inputTextarea id="form_add_description"
+							value="#{announcementView.announcement.description}" rows="5"
+							cols="50" maxlength="100" autoResize="false" required="true"
+							requiredMessage="Lütfen duyuru detaylarını açıklayınız." />
+
+						<h:outputText value="Duyuru Tipi :" />
+						<p:selectOneMenu validator="announcementTypeValidator"
+							converter="announcementTypeConverter" id="form_add_announcement_announcement_type"
+							value="#{announcementView.announcement.announcementType}">
+							<f:selectItem itemValue="0" itemLabel="Lütfen duyuru tipi seçiniz" />
+							<f:selectItems value="#{announcementView.announcementTypes}"
+								var="announcementType" itemValue="#{announcementType}"
+								itemLabel="#{announcementType.announcementType}" />
+						</p:selectOneMenu>
+
+					</h:panelGrid>
+					<p:commandButton action="#{announcementView.addAnnouncement}"
+						value="Ekle" ajax="true" icon="ui-icon-disk"
+						update=":dialog_announcement_add_form" />
+				</h:form>
+			</p:dialog>
+		</div>
 
 	</ui:define>
 </ui:composition>
