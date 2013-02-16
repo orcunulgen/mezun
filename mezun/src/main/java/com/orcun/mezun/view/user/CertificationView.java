@@ -162,7 +162,7 @@ public class CertificationView implements Serializable {
 			} else {
 				FacesMessage fm = new FacesMessage(
 						FacesMessage.SEVERITY_ERROR,
-						"Başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
+						"Sertifikanın alındığı tarih geçmiş zamana ait olmalıdır.",
 						"Lütfen yeniden deneyiniz.");
 				FacesContext.getCurrentInstance().addMessage(null, fm);
 
@@ -198,7 +198,7 @@ public class CertificationView implements Serializable {
 			} else {
 				FacesMessage fm = new FacesMessage(
 						FacesMessage.SEVERITY_ERROR,
-						"Başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
+						"Sertifikanın alındığı tarih geçmiş zamana ait olmalıdır.",
 						"Lütfen yeniden deneyiniz.");
 				FacesContext.getCurrentInstance().addMessage(null, fm);
 
