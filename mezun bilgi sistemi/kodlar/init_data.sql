@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Anamakine: localhost
--- Üretim Zamanı: 16 Ocak 2013 saat 17:58:00
+-- Üretim Zamanı: 16 Şubat 2013 saat 17:41:03
 -- Sunucu sürümü: 5.1.41
 -- PHP Sürümü: 5.3.1
 
@@ -19,8 +19,28 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Veritabanı: `mezun`
 --
 
-
 -- --------------------------------------------------------
+
+--
+-- Tablo yapısı: `announcement_type`
+--
+
+CREATE TABLE IF NOT EXISTS `announcement_type` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `announcement_type` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Tablo döküm verisi `announcement_type`
+--
+
+INSERT INTO `announcement_type` (`id`, `announcement_type`) VALUES
+(1, 'Haber'),
+(2, 'Duyuru'),
+(3, 'İş İlanı'),
+(4, 'Staj İlanı');
+
 
 --
 -- Tablo yapısı: `country`
@@ -31,6 +51,8 @@ CREATE TABLE IF NOT EXISTS `country` (
   `country_name` varchar(200) NOT NULL,
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
 
 --
 -- Tablo döküm verisi `country`
@@ -276,6 +298,8 @@ INSERT INTO `country` (`code`, `country_name`) VALUES
 ('ZAF', 'South Africa'),
 ('ZMB', 'Zambia'),
 ('ZWE', 'Zimbabwe');
+
+
 -- --------------------------------------------------------
 
 --
@@ -4380,6 +4404,47 @@ INSERT INTO `city` (`id`, `city_name`, `country_code`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Tablo yapısı: `education_level`
+--
+
+CREATE TABLE IF NOT EXISTS `education_level` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `education_level` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Tablo döküm verisi `education_level`
+--
+
+INSERT INTO `education_level` (`id`, `education_level`) VALUES
+(1, 'Lisans'),
+(2, 'Yüksek Lisans'),
+(3, 'Doktora');
+
+-- --------------------------------------------------------
+
+--
+-- Tablo yapısı: `education_type`
+--
+
+CREATE TABLE IF NOT EXISTS `education_type` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `education_type` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Tablo döküm verisi `education_type`
+--
+
+INSERT INTO `education_type` (`id`, `education_type`) VALUES
+(1, '1.Öğretim'),
+(2, '2.Öğretim');
+
+-- --------------------------------------------------------
+
+--
 -- Tablo yapısı: `position`
 --
 
@@ -4457,3 +4522,8 @@ INSERT INTO `working_type` (`id`, `working_type`) VALUES
 (2, 'Yarı Zamanlı'),
 (3, 'Stajyer'),
 (4, 'Gönüllü');
+
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

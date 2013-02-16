@@ -42,6 +42,12 @@ public class EducationInfo implements Serializable{
 	@OneToOne(fetch=FetchType.LAZY)
 	private University university;
 	
+	@OneToOne(fetch=FetchType.LAZY)
+	private Faculty faculty;
+	
+	@OneToOne(fetch=FetchType.LAZY)
+	private Department department;
+	
 	@ManyToOne(cascade=CascadeType.ALL)
 	@OnDelete(action=OnDeleteAction.CASCADE)
 	private User user;
@@ -84,6 +90,22 @@ public class EducationInfo implements Serializable{
 
 	public void setUniversity(University university) {
 		this.university = university;
+	}
+
+	public Faculty getFaculty() {
+		return faculty;
+	}
+
+	public void setFaculty(Faculty faculty) {
+		this.faculty = faculty;
+	}
+
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
 	}
 
 	public User getUser() {
