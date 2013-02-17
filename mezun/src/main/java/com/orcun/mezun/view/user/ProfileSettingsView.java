@@ -40,14 +40,21 @@ public class ProfileSettingsView implements Serializable {
 				+ loggedUser.getSurname(), "", "FFCC00", false);
 
 		// CV
-		MindmapNode cv = new DefaultMindmapNode("Özgeçmişim", "", "6e9ebf",
-				true);
+		MindmapNode cv = new DefaultMindmapNode("Özgeçmiş", "", "6e9ebf", true);
 
-		MindmapNode personalInfo = new DefaultMindmapNode("Kişisel Bilgilerim",
+		MindmapNode personalInfo = new DefaultMindmapNode("Kişisel Bilgiler",
 				"", "6e9ebf", true);
-		MindmapNode eduInfo = new DefaultMindmapNode("Eğitim Bilgilerim", "",
+
+		MindmapNode eduInfo = new DefaultMindmapNode("Eğitim Bilgileri", "",
 				"6e9ebf", true);
-		MindmapNode jobExperience = new DefaultMindmapNode("İş Tecrübelerim",
+		MindmapNode university = new DefaultMindmapNode("Üniversite", "",
+				"6e9ebf", true);
+		MindmapNode highschool = new DefaultMindmapNode("Lise", "", "6e9ebf",
+				true);
+		MindmapNode foreignLanguage = new DefaultMindmapNode("Yabancı Dil", "",
+				"6e9ebf", true);
+
+		MindmapNode jobExperience = new DefaultMindmapNode("İş Tecrübeleri",
 				"", "6e9ebf", true);
 		MindmapNode additionalInfo = new DefaultMindmapNode("Ek Bilgiler", "",
 				"6e9ebf", true);
@@ -56,33 +63,36 @@ public class ProfileSettingsView implements Serializable {
 				"6e9ebf", true);
 
 		// Skills
-		MindmapNode skills = new DefaultMindmapNode("Yetkinliklerim", "",
+		MindmapNode skills = new DefaultMindmapNode("Yetkinlikler", "",
 				"6e9ebf", true);
 
-		MindmapNode certifications = new DefaultMindmapNode("Sertifikalarım",
-				"", "6e9ebf", true);
-		MindmapNode areaOfInterest = new DefaultMindmapNode("İlgi Alanlarım",
+		MindmapNode certifications = new DefaultMindmapNode("Sertifikalar", "",
+				"6e9ebf", true);
+		MindmapNode areaOfInterest = new DefaultMindmapNode("İlgi Alanları",
 				"", "6e9ebf", true);
 
 		// interactions
-		MindmapNode chatList = new DefaultMindmapNode("Kişi Listem", "",
+		MindmapNode chatList = new DefaultMindmapNode("Kişi Listesi", "",
 				"6e9ebf", true);
-		MindmapNode photos = new DefaultMindmapNode("Fotoğraflarım", "",
+		MindmapNode photos = new DefaultMindmapNode("Fotoğraflar", "",
 				"6e9ebf", true);
-		MindmapNode events = new DefaultMindmapNode("Etkinliklerim", "",
+		MindmapNode events = new DefaultMindmapNode("Etkinlikler", "",
 				"6e9ebf", true);
-		MindmapNode announcements = new DefaultMindmapNode("Duyurularım", "",
+		MindmapNode announcements = new DefaultMindmapNode("Duyurular", "",
 				"6e9ebf", true);
-		MindmapNode posts = new DefaultMindmapNode("Gönderilerim", "",
-				"6e9ebf", true);
+		MindmapNode posts = new DefaultMindmapNode("Gönderiler", "", "6e9ebf",
+				true);
 
-		MindmapNode contactInfo = new DefaultMindmapNode("İletişim Bilgilerim",
+		MindmapNode contactInfo = new DefaultMindmapNode("İletişim Bilgileri",
 				"", "6e9ebf", true);
-		
+
 		root.addNode(cv);
 
 		cv.addNode(personalInfo);
 		cv.addNode(eduInfo);
+		eduInfo.addNode(university);
+		eduInfo.addNode(highschool);
+		eduInfo.addNode(foreignLanguage);
 		cv.addNode(jobExperience);
 		cv.addNode(additionalInfo);
 		cv.addNode(classicalCV);
@@ -96,7 +106,7 @@ public class ProfileSettingsView implements Serializable {
 		root.addNode(events);
 		root.addNode(announcements);
 		root.addNode(posts);
-		
+
 		root.addNode(contactInfo);
 
 	}
@@ -139,12 +149,26 @@ public class ProfileSettingsView implements Serializable {
 						.redirect(
 								"personal_info.xhtml?user="
 										+ getLoggedUser().getTcno());
-			} else if (label.equals("Eğitim Bilgilerim")) {
+			} else if (label.equals("Üniversite")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"educational_info.xhtml?user="
+								"university.xhtml?user="
+										+ getLoggedUser().getTcno());
+			} else if (label.equals("Lise")) {
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								"highschool.xhtml?user="
+										+ getLoggedUser().getTcno());
+			} else if (label.equals("Yabancı Dil")) {
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								"foreign_language.xhtml?user="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("İletişim Bilgilerim")) {
 				FacesContext

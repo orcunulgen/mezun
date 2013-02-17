@@ -39,13 +39,13 @@ public class EducationInfo implements Serializable{
 	@Column(name="end_date",nullable=true)
 	private Date endDate=new Date();
 	
-	@OneToOne(fetch=FetchType.LAZY)
+	@OneToOne(fetch=FetchType.EAGER)
 	private University university;
 	
-	@OneToOne(fetch=FetchType.LAZY)
+	@OneToOne(fetch=FetchType.EAGER)
 	private Faculty faculty;
 	
-	@OneToOne(fetch=FetchType.LAZY)
+	@OneToOne(fetch=FetchType.EAGER)
 	private Department department;
 	
 	@ManyToOne(cascade=CascadeType.ALL)

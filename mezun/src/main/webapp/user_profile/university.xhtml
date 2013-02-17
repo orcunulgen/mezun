@@ -1,0 +1,213 @@
+<ui:composition template="/templates/user/user_profile_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<!-- <f:metadata>
+		<f:event type="preRenderView" listener="#{personalInfoView.checkURL}" />
+	</f:metadata> -->
+
+	<ui:define name="main_container">
+		<h:outputStylesheet library="css" name="user_profile/university.css" />
+		<div class="university">
+
+			<h:form id="list_university_form">
+				<p:growl id="list_university_messages" showDetail="true" />
+				<p:dataTable var="educationInfoList"
+					value="#{educationInfoView.educations}" paginator="true" rows="10">
+					<p:column style="width:15%">
+						<f:facet name="header">
+							<h:outputText value="İşlemler" />
+						</f:facet>
+						<p:commandButton id="selectButton"
+							actionListener="#{educationInfoView.initSelectedEducationInfo(educationInfoList)}"
+							update=":university_dialog_form"
+							oncomplete="universityUpdateDialog.show()" icon="ui-icon-search"
+							title="View">
+						</p:commandButton>
+						<p:commandButton id="deleteButton"
+							actionListener="#{educationInfoView.deleteSelectedEducationInfo(educationInfoList)}"
+							icon="ui-icon-close" title="Delete">
+						</p:commandButton>
+					</p:column>
+					<p:column headerText="Üniversitenin İsmi">
+						<h:outputText value="#{educationInfoList.university.universityName}" />
+					</p:column>
+					<p:column headerText="Bölüm">
+						<h:outputText value="#{educationInfoList.department.departmentName}" />
+					</p:column>
+					<p:column headerText="Başlangıç Tarihi">
+						<h:outputText value="#{educationInfoList.startDate}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Bitiş Tarihi">
+						<h:outputText value="#{educationInfoList.endDate}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Eğitim Seviyesi">
+						<h:outputText
+							value="#{educationInfoList.educationLevel.educationLevel}" />
+					</p:column>
+
+
+				</p:dataTable>
+			</h:form>
+
+			<p:dialog header="Eğitim Ayrıntıları"
+				widgetVar="universityUpdateDialog" resizable="false"
+				id="universityUpdateDlg" showEffect="fade" modal="true">
+				<h:form id="university_dialog_form">
+					<p:growl id="selected_university_dialog_messages" />
+					<h:panelGrid id="university_detail_display" columns="2"
+						cellpadding="4" style="margin:0 auto;">
+
+						<h:outputText value="Üniversite :" />
+						<p:selectOneMenu validator="universityValidator"
+							converter="universityConverter"
+							value="#{educationInfoView.selectedEducationInfo.university}">
+							<f:selectItem itemValue="0"
+								itemLabel="Lütfen bir üniversite seçiniz" />
+							<f:selectItems value="#{educationInfoView.universities}"
+								var="university" itemValue="#{university}"
+								itemLabel="#{university.universityName}" />
+							<p:ajax
+								listener="#{educationInfoView.updateUniversityChangeFaculty}"
+								event="change" update="form_update_university_faculty form_update_faculty_department" />
+						</p:selectOneMenu>
+
+						<h:outputText value="Fakülte :" />
+						<p:selectOneMenu validator="facultyValidator"
+							converter="facultyConverter" id="form_update_university_faculty"
+							value="#{educationInfoView.selectedEducationInfo.faculty}">
+							<f:selectItem itemValue="0"
+								itemLabel="Lütfen bir fakülte seçiniz" />
+							<f:selectItems value="#{educationInfoView.universityUpdateFaculties}" var="faculty"
+								itemValue="#{faculty}" itemLabel="#{faculty.facultyName}" />
+							<p:ajax
+								listener="#{educationInfoView.updateFacultyChangeDepartment}"
+								event="change" update="form_update_faculty_department" />
+						</p:selectOneMenu>
+
+						<h:outputText value="Bölüm :" />
+						<p:selectOneMenu validator="departmentValidator"
+							converter="departmentConverter"
+							id="form_update_faculty_department"
+							value="#{educationInfoView.selectedEducationInfo.department}">
+							<f:selectItem itemValue="0" itemLabel="Lütfen bir bölüm seçiniz" />
+							<f:selectItems value="#{educationInfoView.facultyUpdateDepartments}"
+								var="department" itemValue="#{department}"
+								itemLabel="#{department.departmentName}" />
+						</p:selectOneMenu>
+
+						<h:outputText value="Başlangıç Tarihi :" />
+						<p:calendar value="#{educationInfoView.selectedEducationInfo.startDate}"
+							showOn="button" />
+
+						<h:outputText value="Bitiş Tarihi :" />
+						<p:calendar value="#{educationInfoView.selectedEducationInfo.endDate}"
+							showOn="button" />
+
+						<h:outputText value="Eğitim Seviyesi :" />
+						<p:selectOneMenu validator="educationLevelValidator"
+							converter="educationLevelConverter"
+							value="#{educationInfoView.selectedEducationInfo.educationLevel}">
+							<f:selectItem itemValue="0"
+								itemLabel="Lütfen eğitim seviyesi seçiniz." />
+							<f:selectItems value="#{educationInfoView.educationLevels}"
+								var="educationLevel" itemValue="#{educationLevel}"
+								itemLabel="#{educationLevel.educationLevel}" />
+						</p:selectOneMenu>
+
+					</h:panelGrid>
+					<p:commandButton action="#{educationInfoView.updateEducationInfo}"
+						value="Kaydet" ajax="true" icon="ui-icon-disk"
+						update=":university_dialog_form" />
+				</h:form>
+			</p:dialog>
+
+
+
+
+			<p:commandButton value="Yeni Üniversite Ekle" type="button"
+				onclick="universityAddDialog.show()" />
+			<p:dialog header="Üniversite Ekle" widgetVar="universityAddDialog"
+				resizable="false" id="universityAddDlg" showEffect="fade"
+				modal="true">
+				<h:form id="dialog_university_add_form">
+					<p:growl id="university_add_messages" />
+					<h:panelGrid id="university_add_display" columns="2"
+						cellpadding="4" style="margin:0 auto;">
+
+						<h:outputText value="Üniversite :" />
+						<p:selectOneMenu validator="universityValidator"
+							converter="universityConverter"
+							value="#{educationInfoView.educationInfo.university}">
+							<f:selectItem itemValue="0"
+								itemLabel="Lütfen bir üniversite seçiniz" />
+							<f:selectItems value="#{educationInfoView.universities}"
+								var="university" itemValue="#{university}"
+								itemLabel="#{university.universityName}" />
+							<p:ajax
+								listener="#{educationInfoView.addUniversityChangeFaculty}"
+								event="change" update="form_add_university_faculty form_add_faculty_department" />
+						</p:selectOneMenu>
+
+						<h:outputText value="Fakülte :" />
+						<p:selectOneMenu validator="facultyValidator"
+							converter="facultyConverter" id="form_add_university_faculty"
+							value="#{educationInfoView.educationInfo.faculty}">
+							<f:selectItem itemValue="0"
+								itemLabel="Lütfen bir fakülte seçiniz" />
+							<f:selectItems value="#{educationInfoView.universityAddFaculties}" var="faculty"
+								itemValue="#{faculty}" itemLabel="#{faculty.facultyName}" />
+							<p:ajax
+								listener="#{educationInfoView.addFacultyChangeDepartment}"
+								event="change" update="form_add_faculty_department" />
+						</p:selectOneMenu>
+
+						<h:outputText value="Bölüm :" />
+						<p:selectOneMenu validator="departmentValidator"
+							converter="departmentConverter"
+							id="form_add_faculty_department"
+							value="#{educationInfoView.educationInfo.department}">
+							<f:selectItem itemValue="0" itemLabel="Lütfen bir bölüm seçiniz" />
+							<f:selectItems value="#{educationInfoView.facultyAddDepartments}"
+								var="department" itemValue="#{department}"
+								itemLabel="#{department.departmentName}" />
+						</p:selectOneMenu>
+
+						<h:outputText value="Başlangıç Tarihi :" />
+						<p:calendar value="#{educationInfoView.educationInfo.startDate}"
+							showOn="button" />
+
+						<h:outputText value="Bitiş Tarihi :" />
+						<p:calendar value="#{educationInfoView.educationInfo.endDate}"
+							showOn="button" />
+
+						<h:outputText value="Eğitim Seviyesi :" />
+						<p:selectOneMenu validator="educationLevelValidator"
+							converter="educationLevelConverter"
+							value="#{educationInfoView.educationInfo.educationLevel}">
+							<f:selectItem itemValue="0"
+								itemLabel="Lütfen eğitim seviyesi seçiniz." />
+							<f:selectItems value="#{educationInfoView.educationLevels}"
+								var="educationLevel" itemValue="#{educationLevel}"
+								itemLabel="#{educationLevel.educationLevel}" />
+						</p:selectOneMenu>
+
+					</h:panelGrid>
+					<p:commandButton action="#{educationInfoView.addEducationInfo}"
+						value="Ekle" ajax="true" icon="ui-icon-disk"
+						update=":dialog_university_add_form" />
+				</h:form>
+			</p:dialog>
+		</div>
+
+
+	</ui:define>
+</ui:composition>

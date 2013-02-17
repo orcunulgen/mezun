@@ -91,5 +91,10 @@ public class Faculty implements Serializable {
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+		return Long.toString(this.id);
+	}
 
 }
