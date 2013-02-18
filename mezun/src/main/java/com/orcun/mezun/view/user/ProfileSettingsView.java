@@ -49,7 +49,7 @@ public class ProfileSettingsView implements Serializable {
 				"6e9ebf", true);
 		MindmapNode university = new DefaultMindmapNode("Üniversite", "",
 				"6e9ebf", true);
-		MindmapNode highschool = new DefaultMindmapNode("Lise", "", "6e9ebf",
+		MindmapNode highSchool = new DefaultMindmapNode("Lise", "", "6e9ebf",
 				true);
 		MindmapNode foreignLanguage = new DefaultMindmapNode("Yabancı Dil", "",
 				"6e9ebf", true);
@@ -91,7 +91,7 @@ public class ProfileSettingsView implements Serializable {
 		cv.addNode(personalInfo);
 		cv.addNode(eduInfo);
 		eduInfo.addNode(university);
-		eduInfo.addNode(highschool);
+		eduInfo.addNode(highSchool);
 		eduInfo.addNode(foreignLanguage);
 		cv.addNode(jobExperience);
 		cv.addNode(additionalInfo);
@@ -161,7 +161,7 @@ public class ProfileSettingsView implements Serializable {
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"highschool.xhtml?user="
+								"high_school.xhtml?user="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("Yabancı Dil")) {
 				FacesContext

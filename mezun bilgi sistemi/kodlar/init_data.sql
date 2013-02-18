@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Anamakine: localhost
--- Üretim Zamanı: 16 Şubat 2013 saat 17:41:03
+-- Üretim Zamanı: 18 Şubat 2013 saat 21:03:03
 -- Sunucu sürümü: 5.1.41
 -- PHP Sürümü: 5.3.1
 
@@ -21,19 +21,6 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 -- --------------------------------------------------------
 
---
--- Tablo yapısı: `announcement_type`
---
-
-CREATE TABLE IF NOT EXISTS `announcement_type` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `announcement_type` varchar(200) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
-
---
--- Tablo döküm verisi `announcement_type`
---
 
 INSERT INTO `announcement_type` (`id`, `announcement_type`) VALUES
 (1, 'Haber'),
@@ -41,23 +28,7 @@ INSERT INTO `announcement_type` (`id`, `announcement_type`) VALUES
 (3, 'İş İlanı'),
 (4, 'Staj İlanı');
 
-
---
--- Tablo yapısı: `country`
---
-
-CREATE TABLE IF NOT EXISTS `country` (
-  `code` varchar(255) NOT NULL,
-  `country_name` varchar(200) NOT NULL,
-  PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 -- --------------------------------------------------------
-
---
--- Tablo döküm verisi `country`
---
-
 INSERT INTO `country` (`code`, `country_name`) VALUES
 ('ABW', 'Aruba'),
 ('AFG', 'Afghanistan'),
@@ -298,25 +269,6 @@ INSERT INTO `country` (`code`, `country_name`) VALUES
 ('ZAF', 'South Africa'),
 ('ZMB', 'Zambia'),
 ('ZWE', 'Zimbabwe');
-
-
--- --------------------------------------------------------
-
---
--- Tablo yapısı: `city`
---
-
-CREATE TABLE IF NOT EXISTS `city` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `city_name` varchar(200) NOT NULL,
-  `country_code` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK2E996B53BC3FD2` (`country_code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4080 ;
-
---
--- Tablo döküm verisi `city`
---
 
 INSERT INTO `city` (`id`, `city_name`, `country_code`) VALUES
 (1, 'Kabul', 'AFG'),
@@ -4400,22 +4352,13 @@ INSERT INTO `city` (`id`, `city_name`, `country_code`) VALUES
 (4077, 'Jabaliya', 'PSE'),
 (4078, 'Nablus', 'PSE'),
 (4079, 'Rafah', 'PSE');
-
 -- --------------------------------------------------------
 
---
--- Tablo yapısı: `education_level`
---
+INSERT INTO `language` (`id`, `language`) VALUES
+(1, 'Türkçe'),
+(2, 'İngilizce');
 
-CREATE TABLE IF NOT EXISTS `education_level` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `education_level` varchar(200) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
-
---
--- Tablo döküm verisi `education_level`
---
+-- --------------------------------------------------------
 
 INSERT INTO `education_level` (`id`, `education_level`) VALUES
 (1, 'Lisans'),
@@ -4424,58 +4367,37 @@ INSERT INTO `education_level` (`id`, `education_level`) VALUES
 
 -- --------------------------------------------------------
 
---
--- Tablo yapısı: `education_type`
---
-
-CREATE TABLE IF NOT EXISTS `education_type` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `education_type` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
-
---
--- Tablo döküm verisi `education_type`
---
-
 INSERT INTO `education_type` (`id`, `education_type`) VALUES
 (1, '1.Öğretim'),
 (2, '2.Öğretim');
-
 -- --------------------------------------------------------
 
---
--- Tablo yapısı: `position`
---
+INSERT INTO `university` (`id`, `university_name`, `city_id`) VALUES
+(1, 'Yıldız Teknik Üniversitesi', 34),
+(2, 'İstanbul Teknik Üniversitesi', 34);
+-- --------------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `position` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `position_name` varchar(200) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+INSERT INTO `faculty` (`id`, `faculty_name`, `university_id`) VALUES
+(1, 'Elektrik-Elektronik Fakültesi', 1),
+(2, 'Mimarlık Fakültesi', 1),
+(3, 'Fen - Edebiyat Fakültesi', 2),
+(4, 'Uzay Bilimleri Fakültesi', 2);
+-- --------------------------------------------------------
 
---
--- Tablo döküm verisi `position`
---
+INSERT INTO `department` (`id`, `department_name`, `education_type_id`, `faculty_id`, `language_id`) VALUES
+(1, 'Bilgisayar Mühendisliği', 1, 1, 1),
+(2, 'Elektrik Mühendisliği', 1, 1, 1),
+(3, 'Meteoroloji Mühendisliği', 2, 4, 2),
+(4, 'Matematik Öğretmenliği', 1, 3, 2);
+
+
+
+-- --------------------------------------------------------
 
 INSERT INTO `position` (`id`, `position_name`) VALUES
 (1, 'Yazılım Mühendisi');
 
 -- --------------------------------------------------------
-
---
--- Tablo yapısı: `role`
---
-
-CREATE TABLE IF NOT EXISTS `role` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `role` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
-
---
--- Tablo döküm verisi `role`
---
 
 INSERT INTO `role` (`id`, `role`) VALUES
 (1, 'ROLE_ADMIN'),
@@ -4484,38 +4406,13 @@ INSERT INTO `role` (`id`, `role`) VALUES
 
 -- --------------------------------------------------------
 
---
--- Tablo yapısı: `sector`
---
-
-CREATE TABLE IF NOT EXISTS `sector` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `sector_name` varchar(200) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
-
---
--- Tablo döküm verisi `sector`
---
 
 INSERT INTO `sector` (`id`, `sector_name`) VALUES
 (1, 'Bilişim');
 
+
+
 -- --------------------------------------------------------
-
---
--- Tablo yapısı: `working_type`
---
-
-CREATE TABLE IF NOT EXISTS `working_type` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `working_type` varchar(200) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
-
---
--- Tablo döküm verisi `working_type`
---
 
 INSERT INTO `working_type` (`id`, `working_type`) VALUES
 (1, 'Tam Zamanlı'),
@@ -4524,6 +4421,20 @@ INSERT INTO `working_type` (`id`, `working_type`) VALUES
 (4, 'Gönüllü');
 
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- --------------------------------------------------------
+INSERT INTO `grading_system` (`id`, `grade`) VALUES
+(1, 4),
+(2, 5),
+(3, 10),
+(4, 100);
+
+-- --------------------------------------------------------
+
+
+INSERT INTO `high_school_type` (`id`, `high_school_type`) VALUES
+(1, 'Anadolu Lisesi'),
+(2, 'Fen Lisesi');
+
+
+
+
