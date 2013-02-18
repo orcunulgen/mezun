@@ -142,7 +142,7 @@ public class ProfileSettingsView implements Serializable {
 		if (node.getChildren().isEmpty()) {
 			Object label = node.getLabel();
 
-			if (label.equals("Kişisel Bilgilerim")) {
+			if (label.equals("Kişisel Bilgiler")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
@@ -170,14 +170,14 @@ public class ProfileSettingsView implements Serializable {
 						.redirect(
 								"foreign_language.xhtml?user="
 										+ getLoggedUser().getTcno());
-			} else if (label.equals("İletişim Bilgilerim")) {
+			} else if (label.equals("İletişim Bilgileri")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
 								"contact_info.xhtml?user="
 										+ getLoggedUser().getTcno());
-			} else if (label.equals("İş Tecrübelerim")) {
+			} else if (label.equals("İş Tecrübeleri")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
@@ -198,47 +198,47 @@ public class ProfileSettingsView implements Serializable {
 						.redirect(
 								"classical_cv.xhtml?user="
 										+ getLoggedUser().getTcno());
-			} else if (label.equals("Sertifikalarım")) {
+			} else if (label.equals("Sertifikalar")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
 								"certification.xhtml?user="
 										+ getLoggedUser().getTcno());
-			} else if (label.equals("İlgi Alanlarım")) {
+			} else if (label.equals("İlgi Alanları")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
 								"area_of_interest.xhtml?user="
 										+ getLoggedUser().getTcno());
-			} else if (label.equals("Kişi Listem")) {
+			} else if (label.equals("Kişi Listesi")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
 								"chat_list.xhtml?user="
 										+ getLoggedUser().getTcno());
-			} else if (label.equals("Fotoğraflarım")) {
+			} else if (label.equals("Fotoğraflar")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
 								"photo.xhtml?user=" + getLoggedUser().getTcno());
-			} else if (label.equals("Etkinliklerim")) {
+			} else if (label.equals("Etkinlikler")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
 								"event.xhtml?user=" + getLoggedUser().getTcno());
-			} else if (label.equals("Duyurularım")) {
+			} else if (label.equals("Duyurular")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
 								"announcement.xhtml?user="
 										+ getLoggedUser().getTcno());
-			} else if (label.equals("Gönderilerim")) {
+			} else if (label.equals("Gönderiler")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()

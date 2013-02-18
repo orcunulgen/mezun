@@ -8,8 +8,144 @@
 	<!-- <f:metadata>
 		<f:event type="preRenderView" listener="#{personalInfoView.checkURL}" />
 	</f:metadata> -->
-	
+
 	<ui:define name="main_container">
+
+		<h:outputStylesheet library="css"
+			name="user_profile/foreign_language.css" />
+		<div class="foreign_language">
+
+			<h:form id="list_foreign_language_form">
+				<p:growl id="list_foreign_language_messages" showDetail="true" />
+				<p:dataTable var="foreignLanguageList"
+					value="#{foreignLanguageView.foreignLanguages}" paginator="true"
+					rows="10">
+					<p:column style="width:15%">
+						<f:facet name="header">
+							<h:outputText value="İşlemler" />
+						</f:facet>
+						<p:commandButton id="selectButton"
+							actionListener="#{foreignLanguageView.initSelectedForeignLanguage(foreignLanguageList)}"
+							update=":foreign_language_dialog_form"
+							oncomplete="foreignLanguageUpdateDialog.show()"
+							icon="ui-icon-search" title="View">
+						</p:commandButton>
+						<p:commandButton id="deleteButton"
+							actionListener="#{foreignLanguageView.deleteSelectedForeignLanguage(foreignLanguageList)}"
+							icon="ui-icon-close" title="Delete">
+						</p:commandButton>
+					</p:column>
+					<p:column headerText="Yabancı Dil">
+						<h:outputText value="#{foreignLanguageList.language.language}" />
+					</p:column>
+					<p:column headerText="Okuma Seviyesi">
+						<p:rating value="#{foreignLanguageList.readingRank}" stars="10" />
+					</p:column>
+					<p:column headerText="Yazma Seviyesi">
+						<p:rating value="#{foreignLanguageList.writingRank}" stars="10" />
+					</p:column>
+					<p:column headerText="Konuşma Seviyesi">
+						<p:rating value="#{foreignLanguageList.speakingRank}" stars="10" />
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<p:dialog header="Yabancı Dil Ayrıntıları"
+				widgetVar="foreignLanguageUpdateDialog" resizable="false"
+				id="foreignLanguageUpdateDialog" showEffect="fade" modal="true">
+				<h:form id="foreign_language_dialog_form">
+					<p:growl id="selected_foreign_language_dialog_messages" />
+					<h:panelGrid id="foreign_language_detail_display" columns="2"
+						cellpadding="4" style="margin:0 auto;">
+
+						<h:outputText value="Yabancı Dil :" />
+						<p:selectOneMenu validator="languageValidator"
+							converter="languageConverter"
+							value="#{foreignLanguageView.selectedForeignLanguage.language}">
+							<f:selectItem itemValue="0"
+								itemLabel="Lütfen yabancı dil seçiniz." />
+							<f:selectItems value="#{foreignLanguageView.languages}"
+								var="language" itemValue="#{language}"
+								itemLabel="#{language.language}" />
+						</p:selectOneMenu>
+
+						<h:outputText value="Okuma Seviyesi :" />
+						<p:rating
+							value="#{foreignLanguageView.selectedForeignLanguage.readingRank}"
+							stars="10" required="true"
+							requiredMessage="Lütfen okuma seviyenizi belirtiniz." />
+
+						<h:outputText value="Yazma Seviyesi :" />
+						<p:rating
+							value="#{foreignLanguageView.selectedForeignLanguage.writingRank}"
+							stars="10" required="true"
+							requiredMessage="Lütfen yazma seviyenizi belirtiniz." />
+
+						<h:outputText value="Konuşma Seviyesi :" />
+						<p:rating
+							value="#{foreignLanguageView.selectedForeignLanguage.speakingRank}"
+							stars="10" required="true"
+							requiredMessage="Lütfen konuşma seviyenizi belirtiniz." />
+
+					</h:panelGrid>
+					<p:commandButton
+						action="#{foreignLanguageView.updateForeignLanguage}"
+						value="Kaydet" ajax="true" icon="ui-icon-disk"
+						update=":foreign_language_dialog_form" />
+				</h:form>
+			</p:dialog>
+
+
+
+
+			<p:commandButton value="Yeni Yabancı Dil Ekle" type="button"
+				onclick="foreignLanguageAddDialog.show()" />
+			<p:dialog header="Yeni Yabancı Dil Ekle"
+				widgetVar="foreignLanguageAddDialog" resizable="false"
+				id="foreignLanguageAddDlg" showEffect="fade" modal="true">
+				<h:form id="dialog_foreign_language_add_form">
+					<p:growl id="foreing_language_add_messages" />
+					<h:panelGrid id="foreign_language_add_display" columns="2"
+						cellpadding="4" style="margin:0 auto;">
+
+						<h:outputText value="Yabancı Dil :" />
+						<p:selectOneMenu validator="languageValidator"
+							converter="languageConverter"
+							value="#{foreignLanguageView.foreignLanguage.language}">
+							<f:selectItem itemValue="0"
+								itemLabel="Lütfen yabancı dil seçiniz." />
+							<f:selectItems value="#{foreignLanguageView.languages}"
+								var="language" itemValue="#{language}"
+								itemLabel="#{language.language}" />
+						</p:selectOneMenu>
+						
+						<h:outputText value="Okuma Seviyesi :" />
+						<p:rating
+							value="#{foreignLanguageView.foreignLanguage.readingRank}"
+							stars="10" required="true"
+							requiredMessage="Lütfen okuma seviyenizi belirtiniz." />
+
+						<h:outputText value="Yazma Seviyesi :" />
+						<p:rating
+							value="#{foreignLanguageView.foreignLanguage.writingRank}"
+							stars="10" required="true"
+							requiredMessage="Lütfen yazma seviyenizi belirtiniz." />
+
+						<h:outputText value="Konuşma Seviyesi :" />
+						<p:rating
+							value="#{foreignLanguageView.foreignLanguage.speakingRank}"
+							stars="10" required="true"
+							requiredMessage="Lütfen konuşma seviyenizi belirtiniz." />
+
+
+
+					</h:panelGrid>
+					<p:commandButton action="#{foreignLanguageView.addForeignLanguage}"
+						value="Ekle" ajax="true" icon="ui-icon-disk"
+						update=":dialog_foreign_language_add_form" />
+				</h:form>
+			</p:dialog>
+		</div>
 
 
 	</ui:define>

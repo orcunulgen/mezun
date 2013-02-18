@@ -27,7 +27,7 @@ public class ForeignLanguage implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToOne(fetch=FetchType.LAZY)
+	@OneToOne(fetch=FetchType.EAGER)
 	private Language language;
 	
 	@Column(name="writing_rank",nullable=false)
