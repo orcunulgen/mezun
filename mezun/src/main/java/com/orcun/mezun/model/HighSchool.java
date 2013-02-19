@@ -3,6 +3,7 @@ package com.orcun.mezun.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,8 +11,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name="high_school")
@@ -42,6 +47,11 @@ public class HighSchool implements Serializable{
 	
 	@Column(name="graduation_degree")
 	private Integer graduationDegree;
+	
+	@ManyToOne(cascade=CascadeType.ALL)
+	@OnDelete(action=OnDeleteAction.CASCADE)
+	private User user;
+
 
 	public Long getId() {
 		return id;
@@ -97,6 +107,14 @@ public class HighSchool implements Serializable{
 
 	public void setGraduationDegree(Integer graduationDegree) {
 		this.graduationDegree = graduationDegree;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override

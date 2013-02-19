@@ -6,11 +6,116 @@
 	xmlns:p="http://primefaces.org/ui">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<!-- <f:metadata>
-		<f:event type="preRenderView" listener="#{personalInfoView.checkURL}" />
+		<f:event type="preRenderView" listener="#{highSchoolView.checkURL}" />
 	</f:metadata> -->
-	
+
 	<ui:define name="main_container">
 
+		<h:outputStylesheet library="css" name="user_profile/high_school.css" />
+		<div class="high_school">
+			<h:form id="form_high_school_panel" enctype="multipart/form-data"
+				prependId="false">
 
+				<p:growl id="form_high_school_messages" showDetail="true" />
+				<p:fieldset legend="Lise Bilgileri">
+					<p:panelGrid>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel for="form_high_school_name" value="Lise İsimi" />
+							</p:column>
+							<p:column>
+								<p:inputText id="form_high_school_name"
+									value="#{highSchoolView.highSchool.highSchoolName}"
+									required="true" requiredMessage="Lütfen lise ismini giriniz.">
+								</p:inputText>
+							</p:column>
+
+							<p:column>
+								<h:outputLabel for="form_high_school_department"
+									value="Lisedeki Bölümü" />
+							</p:column>
+							<p:column>
+								<p:inputText id="form_high_school_department"
+									value="#{highSchoolView.highSchool.highSchoolDepartment}"
+									required="true"
+									requiredMessage="Lütfen lisedeki bölümünüzü giriniz.">
+								</p:inputText>
+							</p:column>
+
+
+						</p:row>
+
+						<p:row>
+
+							<p:column>
+								<h:outputLabel for="form_end_date" value="Bitiş Tarihi" />
+							</p:column>
+							<p:column>
+								<p:calendar value="#{highSchoolView.highSchool.endDate}"
+									showOn="button" />
+							</p:column>
+
+							<p:column>
+								<h:outputLabel for="form_high_school_type" value="Lise Tipi" />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu validator="highSchoolTypeValidator"
+									converter="highSchoolTypeConverter"
+									value="#{highSchoolView.highSchool.highSchoolType}">
+									<f:selectItem itemValue="0"
+										itemLabel="Lütfen lise tipi seçiniz" />
+									<f:selectItems value="#{highSchoolView.highSchoolTypes}"
+										var="highSchoolType" itemValue="#{highSchoolType}"
+										itemLabel="#{highSchoolType.highSchoolType}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+
+						<p:row>
+
+							<p:column>
+								<h:outputLabel for="form_grading_system"
+									value="Diploma Not Sistemi" />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu validator="gradingSystemValidator"
+									converter="gradingSystemConverter"
+									value="#{highSchoolView.highSchool.gradingSystem}">
+									<f:selectItem itemValue="0"
+										itemLabel="Lütfen not sistemini seçiniz" />
+									<f:selectItems value="#{highSchoolView.gradingSystems}"
+										var="gradingSystem" itemValue="#{gradingSystem}"
+										itemLabel="#{gradingSystem.grade}" />
+								</p:selectOneMenu>
+							</p:column>
+
+							<p:column>
+								<h:outputLabel for="form_graduation_degree"
+									value="Lise Mezuniyet Derecesi" />
+							</p:column>
+							<p:column>
+								<p:inputText id="form_graduation_degree"
+									value="#{highSchoolView.highSchool.graduationDegree}"
+									required="true"
+									requiredMessage="Lütfen mezuniyet derecenizi giriniz.">
+								</p:inputText>
+							</p:column>
+
+
+						</p:row>
+
+						<p:row>
+							<p:column colspan="4">
+								<p:commandButton value="Kaydet"
+									action="#{highSchoolView.saveHighSchool}" ajax="false"
+									update="form_high_school_messages" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:fieldset>
+
+			</h:form>
+		</div>
 	</ui:define>
 </ui:composition>
