@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
+import com.orcun.mezun.model.ParentInfo;
 import com.orcun.mezun.model.User;
 import com.orcun.mezun.service.user.PersonalInfoService;
 
@@ -28,6 +30,8 @@ public class PersonalInfoView implements Serializable {
 
 	private User loggedUser;
 	
+	private ParentInfo parentInfo;
+	
 	private String confirmEmail;
 	private String confirmPassword;
 	
@@ -36,7 +40,29 @@ public class PersonalInfoView implements Serializable {
 	@ManagedProperty(value = "#{personalInfoService}")
 	private PersonalInfoService personalInfoService;
 	
-	
+	@PostConstruct
+	public void init() {
+		SecurityContext securityContext = (SecurityContext) FacesContext
+				.getCurrentInstance().getExternalContext().getSessionMap()
+				.get("SPRING_SECURITY_CONTEXT");
+
+		this.loggedUser = (User) securityContext.getAuthentication()
+				.getPrincipal();
+
+		
+		
+		if (parentInfo == null) {
+			parentInfo=new ParentInfo();
+
+		}
+		
+		if(parentInfo.getUser()==null){
+			if (getPersonalInfoService().findParentInfoByUser(getLoggedUser()) != null) {
+				setParentInfo(getPersonalInfoService().findParentInfoByUser(getLoggedUser()));
+			}	
+		}
+	}
+
 	public List<Integer> getBirthdayYears() {
 		if (this.birthdayYears == null || this.birthdayYears.size() == 0) {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy");
@@ -64,19 +90,21 @@ public class PersonalInfoView implements Serializable {
 	}
 
 	public User getLoggedUser() {
-		SecurityContext securityContext = (SecurityContext) FacesContext
-				.getCurrentInstance().getExternalContext().getSessionMap()
-				.get("SPRING_SECURITY_CONTEXT");
-
-		this.loggedUser = (User) securityContext.getAuthentication()
-				.getPrincipal();
-
+		
 		return loggedUser;
 
 	}
 	
 	public void setLoggedUser(User loggedUser) {
 		this.loggedUser = loggedUser;
+	}
+
+	public ParentInfo getParentInfo() {
+		return parentInfo;
+	}
+
+	public void setParentInfo(ParentInfo parentInfo) {
+		this.parentInfo = parentInfo;
 	}
 
 	public String getConfirmEmail() {

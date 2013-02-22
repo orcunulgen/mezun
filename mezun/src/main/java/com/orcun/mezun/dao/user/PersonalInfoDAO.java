@@ -4,10 +4,12 @@ package com.orcun.mezun.dao.user;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.orcun.mezun.model.ParentInfo;
 import com.orcun.mezun.model.User;
 
 
@@ -34,6 +36,12 @@ public class PersonalInfoDAO{
 		
 	public void updatePersonalInfo(User personalInfo){
 		getSession().update(personalInfo);
+	}
+
+	public ParentInfo findContactByUser(User loggedUser) {
+		return (ParentInfo) getSession().createCriteria(ParentInfo.class).
+				add(Restrictions.eq("user", loggedUser))
+				.uniqueResult();
 	}
 	
 	

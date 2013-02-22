@@ -7,11 +7,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -25,8 +22,9 @@ public class HighSchool implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
+	@OneToOne(cascade=CascadeType.ALL)
+	@OnDelete(action=OnDeleteAction.CASCADE)
+	private User user;
 	
 	@Column(name="high_school_name",nullable=false,length=200)
 	private String highSchoolName;
@@ -48,19 +46,6 @@ public class HighSchool implements Serializable{
 	@Column(name="graduation_degree")
 	private Integer graduationDegree;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
-	@OnDelete(action=OnDeleteAction.CASCADE)
-	private User user;
-
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public String getHighSchoolName() {
 		return highSchoolName;
 	}
@@ -121,7 +106,7 @@ public class HighSchool implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
 
@@ -134,13 +119,14 @@ public class HighSchool implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		HighSchool other = (HighSchool) obj;
-		if (id == null) {
-			if (other.id != null)
+		if (user == null) {
+			if (other.user != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!user.equals(other.user))
 			return false;
 		return true;
 	}
 
+	
 
 }
