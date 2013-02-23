@@ -15,7 +15,7 @@
 		<div class="area_of_interest">
 
 			<h:form id="list_area_of_interest_form">
-				<p:growl id="list_area_of_interest_messages" showDetail="true" />
+				<p:growl id="list_area_of_interest_messages"/>
 				<p:dataTable var="areaOfInterestList"
 					value="#{areaOfInterestView.areaOfInterests}" paginator="true"
 					rows="10">
@@ -45,7 +45,7 @@
 
 			<p:dialog header="İlgi Alanı Ayrıntıları"
 				widgetVar="areaOfInterestUpdateDialog" resizable="false"
-				id="areaOfInterestUpdateDialog" showEffect="fade" modal="true">
+				id="areaOfInterestUpdateDlg" showEffect="fade" modal="true">
 				<h:form id="area_of_interest_dialog_form">
 					<p:growl id="selected_area_of_interest_dialog_messages" />
 					<h:panelGrid id="area_of_interest_detail_display" columns="2"

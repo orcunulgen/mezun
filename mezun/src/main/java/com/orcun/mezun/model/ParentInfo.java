@@ -32,7 +32,7 @@ public class ParentInfo implements Serializable {
 	@Column(name="father_job",nullable=false,length=200)
 	private String fatherJob;
 	
-	@Column(name="mother_job",nullable=true,length=200)
+	@Column(name="mother_job",nullable=false,length=200)
 	private String motherJob;
 	
 	@Column(name="father_birthday_year",nullable=false)
@@ -47,7 +47,7 @@ public class ParentInfo implements Serializable {
 	@Column(name="parent_phone_number",nullable=false,length=200)
 	private String parentPhoneNumber;
 	
-	@Column(name="parent_address",nullable=true,length=200)
+	@Column(name="parent_address",nullable=false,length=200)
 	private String parentAddress;
 
 	public User getUser() {

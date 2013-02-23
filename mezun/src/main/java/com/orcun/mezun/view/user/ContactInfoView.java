@@ -95,7 +95,7 @@ public class ContactInfoView implements Serializable {
 		}
 	}
 
-	public String saveContact() {
+	public void saveContact() throws IOException {
 		try {
 			if (getContactInfoService().findContactByUser(getLoggedUser()) != null) {
 				getContactInfoService().updateContact(getContact());
@@ -103,10 +103,17 @@ public class ContactInfoView implements Serializable {
 				getContact().setUser(getLoggedUser());
 				getContactInfoService().addContact(getContact());
 			}
+			
+			FacesContext
+			.getCurrentInstance()
+			.getExternalContext()
+			.redirect(
+					"contact_info.xhtml?user="
+							+ getLoggedUser().getTcno());
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}
-		return ("contact_info.xhtml?faces-redirect=true&user="+getLoggedUser().getTcno());
 	}
 
 }

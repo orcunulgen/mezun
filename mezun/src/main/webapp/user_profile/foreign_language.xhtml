@@ -16,7 +16,7 @@
 		<div class="foreign_language">
 
 			<h:form id="list_foreign_language_form">
-				<p:growl id="list_foreign_language_messages" showDetail="true" />
+				<p:growl id="list_foreign_language_messages" />
 				<p:dataTable var="foreignLanguageList"
 					value="#{foreignLanguageView.foreignLanguages}" paginator="true"
 					rows="10">
@@ -52,7 +52,7 @@
 
 			<p:dialog header="Yabancı Dil Ayrıntıları"
 				widgetVar="foreignLanguageUpdateDialog" resizable="false"
-				id="foreignLanguageUpdateDialog" showEffect="fade" modal="true">
+				id="foreignLanguageUpdateDlg" showEffect="fade" modal="true">
 				<h:form id="foreign_language_dialog_form">
 					<p:growl id="selected_foreign_language_dialog_messages" />
 					<h:panelGrid id="foreign_language_detail_display" columns="2"

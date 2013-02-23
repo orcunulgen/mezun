@@ -18,24 +18,24 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
+import com.orcun.mezun.model.ParentInfo;
 import com.orcun.mezun.model.User;
-import com.orcun.mezun.service.user.PersonalInfoService;
+import com.orcun.mezun.service.user.ParentInfoService;
 
 @ManagedBean
 @ViewScoped
-public class PersonalInfoView implements Serializable {
+public class ParentInfoView implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private User loggedUser;
 	
-	private String confirmEmail;
-	private String confirmPassword;
+	private ParentInfo parentInfo;
 	
 	private List<Integer> birthdayYears = new ArrayList<Integer>();
 	
-	@ManagedProperty(value = "#{personalInfoService}")
-	private PersonalInfoService personalInfoService;
+	@ManagedProperty(value = "#{parentInfoService}")
+	private ParentInfoService parentInfoService;
 	
 	@PostConstruct
 	public void init() {
@@ -45,7 +45,19 @@ public class PersonalInfoView implements Serializable {
 
 		this.loggedUser = (User) securityContext.getAuthentication()
 				.getPrincipal();
+
 		
+		
+		if (parentInfo == null) {
+			parentInfo=new ParentInfo();
+
+		}
+		
+		if(parentInfo.getUser()==null){
+			if (getParentInfoService().findParentInfoByUser(getLoggedUser()) != null) {
+				setParentInfo(getParentInfoService().findParentInfoByUser(getLoggedUser()));
+			}	
+		}
 	}
 
 	public List<Integer> getBirthdayYears() {
@@ -66,12 +78,12 @@ public class PersonalInfoView implements Serializable {
 	}
 
 	
-	public PersonalInfoService getPersonalInfoService() {
-		return personalInfoService;
+	public ParentInfoService getParentInfoService() {
+		return parentInfoService;
 	}
 
-	public void setPersonalInfoService(PersonalInfoService personalInfoService) {
-		this.personalInfoService = personalInfoService;
+	public void setParentInfoService(ParentInfoService parentInfoService) {
+		this.parentInfoService = parentInfoService;
 	}
 
 	public User getLoggedUser() {
@@ -84,20 +96,12 @@ public class PersonalInfoView implements Serializable {
 		this.loggedUser = loggedUser;
 	}
 
-	public String getConfirmEmail() {
-		return confirmEmail;
+	public ParentInfo getParentInfo() {
+		return parentInfo;
 	}
 
-	public void setConfirmEmail(String confirmEmail) {
-		this.confirmEmail = confirmEmail;
-	}
-
-	public String getConfirmPassword() {
-		return confirmPassword;
-	}
-
-	public void setConfirmPassword(String confirmPassword) {
-		this.confirmPassword = confirmPassword;
+	public void setParentInfo(ParentInfo parentInfo) {
+		this.parentInfo = parentInfo;
 	}
 
 	public void checkURL() throws IOException{
@@ -108,24 +112,28 @@ public class PersonalInfoView implements Serializable {
 		if(userParameter==null || userParameter.equals("")){
 			
 			FacesContext.getCurrentInstance().getExternalContext()
-			.redirect("personal_info.xhtml?user="+getLoggedUser().getTcno());
+			.redirect("parent_info.xhtml?user="+getLoggedUser().getTcno());
 			
 		}else if(!userParameter.equals(getLoggedUser().getTcno().toString())){
 			FacesContext.getCurrentInstance().getExternalContext()
-			.redirect("personal_info.xhtml?user="+getLoggedUser().getTcno());
+			.redirect("parent_info.xhtml?user="+getLoggedUser().getTcno());
 			
 		}
 	}
 	
-	public String updatePersonalInfo() {
+	public void saveParentInfo() throws IOException {
 		try {
-			if (getLoggedUser() != null) {
-				getPersonalInfoService().updatePersonalInfo(getLoggedUser());
+			if (getParentInfoService().findParentInfoByUser(getLoggedUser()) != null) {
+				getParentInfoService().updateParentInfo(getParentInfo());
+			} else {
+				getParentInfo().setUser(getLoggedUser());
+				getParentInfoService().addParentInfo(getParentInfo());
 			}
+			FacesContext.getCurrentInstance().getExternalContext()
+			.redirect("parent_info.xhtml?user="+getLoggedUser().getTcno());
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}
-		return ("personal_info.xhtml?faces-redirect=true&user="+getLoggedUser().getTcno());
 	}
 
 }

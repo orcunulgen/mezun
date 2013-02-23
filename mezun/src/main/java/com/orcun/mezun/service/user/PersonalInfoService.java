@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.orcun.mezun.dao.user.PersonalInfoDAO;
-import com.orcun.mezun.model.ParentInfo;
 import com.orcun.mezun.model.User;
 
 @Service
@@ -24,14 +23,6 @@ public class PersonalInfoService {
 
 	public void updatePersonalInfo(User personalInfo) {
 		getPersonalInfoDAO().updatePersonalInfo(personalInfo);
-	}
-
-	public ParentInfo findParentInfoByUser(User loggedUser) {
-		if (loggedUser != null) {
-			return personalInfoDAO.findContactByUser(loggedUser);
-		} else {
-			return null;
-		}
 	}
 
 }

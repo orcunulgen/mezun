@@ -10,12 +10,12 @@
 	</f:metadata> -->
 
 	<ui:define name="main_container">
-		<h:outputStylesheet library="css" name="personal_info.css" />
+		<h:outputStylesheet library="css" name="user_profile/personal_info.css" />
 		<div class="personal_info">
 			<h:form id="form_personal_info_panel" enctype="multipart/form-data"
 				prependId="false">
 
-				<p:growl id="form_personal_info_messages" showDetail="true" />
+				<p:growl id="form_personal_info_messages" />
 				<p:fieldset legend="Üyelik Bilgileri">
 					<p:panelGrid>
 
@@ -113,127 +113,6 @@
 									requiredMessage="Lütfen TC kimlik numaranızı giriniz.">
 									<p:ajax event="blur" update="form_personal_info_messages" />
 								</p:inputMask>
-							</p:column>
-						</p:row>
-					</p:panelGrid>
-				</p:fieldset>
-
-				<p:fieldset legend="Aile Bilgileri">
-					<p:panelGrid>
-
-						<p:row>
-							<p:column>
-								<h:outputLabel for="form_father_name" value="Baba Adı" />
-							</p:column>
-							<p:column>
-								<p:inputText id="form_father_name"
-									value="#{personalInfoView.parentInfo.fatherName}"
-									required="true" requiredMessage="Lütfen baba adı giriniz.">
-								</p:inputText>
-							</p:column>
-
-							<p:column>
-								<h:outputLabel for="form_mother_name" value="Anne Adı" />
-							</p:column>
-							<p:column>
-								<p:inputText id="form_mother_name"
-									value="#{personalInfoView.parentInfo.motherName}"
-									required="true" requiredMessage="Lütfen anne adı giriniz.">
-								</p:inputText>
-							</p:column>
-
-
-						</p:row>
-
-						<p:row>
-							<p:column>
-								<h:outputLabel for="form_father_job" value="Baba Mesleği" />
-							</p:column>
-							<p:column>
-								<p:inputText id="form_father_job"
-									value="#{personalInfoView.parentInfo.fatherJob}"
-									required="true"
-									requiredMessage="Lütfen baba mesleğini giriniz.">
-								</p:inputText>
-							</p:column>
-
-							<p:column>
-								<h:outputLabel for="form_mother_job" value="Anne Mesleği" />
-							</p:column>
-							<p:column>
-								<p:inputText id="form_mother_job"
-									value="#{personalInfoView.parentInfo.motherJob}"
-									required="true"
-									requiredMessage="Lütfen anne mesleğini giriniz.">
-								</p:inputText>
-							</p:column>
-
-
-						</p:row>
-
-						<p:row>
-							<p:column>
-								<h:outputLabel for="form_father_birthday_year"
-									value="Baba Doğum yılı" />
-							</p:column>
-							<p:column>
-								<p:selectOneMenu id="form_father_birthday_year" required="true"
-									requiredMessage="Lütfen doğum yılınızı seçiniz."
-									value="#{personalInfoView.parentInfo.fatherBirthdayYear}">
-									<f:selectItem itemLabel="Doğum yılınızı seçiniz..." />
-									<f:selectItems value="#{personalInfoView.birthdayYears}"
-										var="birthdayYear" itemValue="#{birthdayYear}" />
-								</p:selectOneMenu>
-							</p:column>
-
-							<p:column>
-								<h:outputLabel for="form_mother_birthday_year"
-									value="Anne Doğum yılı" />
-							</p:column>
-							<p:column>
-								<p:selectOneMenu id="form_mother_birthday_year" required="true"
-									requiredMessage="Lütfen doğum yılınızı seçiniz."
-									value="#{personalInfoView.parentInfo.motherBirthdayYear}">
-									<f:selectItem itemLabel="Doğum yılınızı seçiniz..." />
-									<f:selectItems value="#{personalInfoView.birthdayYears}"
-										var="birthdayYear" itemValue="#{birthdayYear}" />
-								</p:selectOneMenu>
-							</p:column>
-						</p:row>
-
-						<p:row>
-							<p:column>
-								<h:outputLabel for="form_parent_monthly_income" value="Ailenin Aylık Gelir Düzeyi" />
-							</p:column>
-							<p:column>
-								<p:inputText id="form_parent_monthly_income"
-									value="#{personalInfoView.parentInfo.parentMonthlyIncome}"
-									required="true"
-									requiredMessage="Lütfen aile gelir düzeyini giriniz.">
-								</p:inputText>
-							</p:column>
-
-							<p:column>
-								<h:outputLabel for="form_parent_phone_number" value="Aile Telefonu" />
-							</p:column>
-							<p:column>
-								<p:inputMask mask="9999-999-99-99" id="form_parent_phone_number"
-									value="#{personalInfoView.parentInfo.parentPhoneNumber}"
-									required="true"
-									requiredMessage="Lütfen aile telefonu giriniz."/>
-							</p:column>
-
-
-						</p:row>
-						
-						<p:row>
-							<p:column>
-								<h:outputLabel for="form_parent_address" value="Aile Adresi" />
-							</p:column>
-							<p:column colspan="3">
-								<p:inputTextarea id="form_parent_address"
-									value="#{personalInfoView.parentInfo.parentAddress}" rows="5" cols="50"
-									maxlength="100" autoResize="false" />
 							</p:column>
 						</p:row>
 					</p:panelGrid>

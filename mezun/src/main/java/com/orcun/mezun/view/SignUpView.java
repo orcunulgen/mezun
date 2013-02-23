@@ -51,7 +51,7 @@ public class SignUpView implements Serializable {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy");
 			Date date = new Date();
 			int year = Integer.parseInt(dateFormat.format(date));
-			for (int i = 1970; i < year - 17; i++) {
+			for (int i = 1950; i < year - 17; i++) {
 				this.birthdayYears.add(i);
 			}
 		}

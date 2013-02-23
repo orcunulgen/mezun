@@ -45,6 +45,9 @@ public class ProfileSettingsView implements Serializable {
 		MindmapNode personalInfo = new DefaultMindmapNode("Kişisel Bilgiler",
 				"", "6e9ebf", true);
 
+		MindmapNode parentInfo = new DefaultMindmapNode("Aile Bilgileri", "",
+				"6e9ebf", true);
+
 		MindmapNode eduInfo = new DefaultMindmapNode("Eğitim Bilgileri", "",
 				"6e9ebf", true);
 		MindmapNode university = new DefaultMindmapNode("Üniversite", "",
@@ -89,6 +92,7 @@ public class ProfileSettingsView implements Serializable {
 		root.addNode(cv);
 
 		cv.addNode(personalInfo);
+		cv.addNode(parentInfo);
 		cv.addNode(eduInfo);
 		eduInfo.addNode(university);
 		eduInfo.addNode(highSchool);
@@ -148,6 +152,13 @@ public class ProfileSettingsView implements Serializable {
 						.getExternalContext()
 						.redirect(
 								"personal_info.xhtml?user="
+										+ getLoggedUser().getTcno());
+			} else if (label.equals("Aile Bilgileri")) {
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								"parent_info.xhtml?user="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("Üniversite")) {
 				FacesContext
