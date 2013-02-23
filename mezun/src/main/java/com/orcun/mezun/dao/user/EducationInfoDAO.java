@@ -15,6 +15,7 @@ import com.orcun.mezun.model.Department;
 import com.orcun.mezun.model.EducationInfo;
 import com.orcun.mezun.model.EducationLevel;
 import com.orcun.mezun.model.Faculty;
+import com.orcun.mezun.model.GradingSystem;
 import com.orcun.mezun.model.University;
 import com.orcun.mezun.model.User;
 
@@ -66,6 +67,11 @@ public class EducationInfoDAO{
 	@SuppressWarnings("unchecked")
 	public List<EducationLevel> allEducationLevels() {
 		return getSession().createCriteria(EducationLevel.class).list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<GradingSystem> allGradingSystems() {
+		return getSession().createCriteria(GradingSystem.class).list();
 	}
 
 	@SuppressWarnings("unchecked")

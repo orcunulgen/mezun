@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.orcun.mezun.dao.SignUpDAO;
+import com.orcun.mezun.model.City;
+import com.orcun.mezun.model.Country;
 import com.orcun.mezun.model.Role;
 import com.orcun.mezun.model.User;
 
@@ -31,6 +33,14 @@ public class SignUpService{
 
 	public void setSignUpDAO(SignUpDAO signUpDAO) {
 		this.signUpDAO = signUpDAO;
+	}
+	
+	public List<Country> allCountries() {
+		return getSignUpDAO().allCountries();
+	}
+
+	public List<City> allCities(Country country) {
+		return getSignUpDAO().allCities(country);
 	}
 	
 	public boolean areThereSameUsername(String username){

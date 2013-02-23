@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -18,6 +19,8 @@ import org.springframework.dao.DataAccessException;
 
 import tr.gov.nvi.tckimlik.WS.KPSPublicSoapProxy;
 
+import com.orcun.mezun.model.City;
+import com.orcun.mezun.model.Country;
 import com.orcun.mezun.model.Role;
 import com.orcun.mezun.model.User;
 import com.orcun.mezun.service.SignUpService;
@@ -31,14 +34,23 @@ public class SignUpView implements Serializable {
 	private User user;
 
 	private List<Integer> birthdayYears = new ArrayList<Integer>();
+	
+	private List<Country> countries = new ArrayList<Country>();
+
+	private List<City> userCities = new ArrayList<City>();
 
 	@ManagedProperty(value = "#{signUpService}")
 	private SignUpService signUpService;
-
-	public User getUser() {
+	
+	@PostConstruct
+	public void init() {
+		countries = signUpService.allCountries();
+		
 		if (user == null)
 			user = new User();
+	}
 
+	public User getUser() {
 		return user;
 	}
 
@@ -63,12 +75,32 @@ public class SignUpView implements Serializable {
 		this.birthdayYears = birthdayYears;
 	}
 
+	public List<Country> getCountries() {
+		return countries;
+	}
+
+	public void setCountries(List<Country> countries) {
+		this.countries = countries;
+	}
+
+	public List<City> getUserCities() {
+		return userCities;
+	}
+
+	public void setUserCities(List<City> userCities) {
+		this.userCities = userCities;
+	}
+
 	public SignUpService getSignUpService() {
 		return signUpService;
 	}
 
 	public void setSignUpService(SignUpService signUpService) {
 		this.signUpService = signUpService;
+	}
+	
+	public void updateUserChangeCountry(){
+		userCities=getSignUpService().allCities(getUser().getCountry());
 	}
 
 	public String saveUser() {

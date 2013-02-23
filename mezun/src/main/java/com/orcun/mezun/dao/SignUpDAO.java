@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.orcun.mezun.model.City;
+import com.orcun.mezun.model.Country;
 import com.orcun.mezun.model.Role;
 import com.orcun.mezun.model.User;
 
@@ -40,6 +42,16 @@ public class SignUpDAO{
 		getSession().save(user);
 	}	
 		
+	@SuppressWarnings("unchecked")
+	public List<Country> allCountries() {
+		return getSession().createCriteria(Country.class).list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<City> allCities(Country country) {
+		return getSession().createCriteria(City.class).add(Restrictions.eq("country", country)).list();
+	}
+	
 	public boolean areThereSameUsername(String username){
 		Query query=getSession().createSQLQuery("select * from user where username=:username");
 		query.setParameter("username", username);

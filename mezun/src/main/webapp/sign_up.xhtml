@@ -12,7 +12,7 @@
 			<h:form id="form_sign_up_panel" enctype="multipart/form-data"
 				prependId="false">
 
-				<p:growl id="form_sign_up_messages"/>
+				<p:growl id="form_sign_up_messages" />
 				<p:fieldset legend="Yeni Üye Kayıt Formu">
 					<p:panelGrid>
 
@@ -110,14 +110,41 @@
 								</p:inputMask>
 							</p:column>
 						</p:row>
-
 						<p:row>
-							<p:column colspan="4">
-								<p:commandButton value="Kaydet" action="#{signUpView.saveUser}"
-									ajax="false" update="form_sign_up_messages" />
+							<p:column>
+								<h:outputText value="Doğduğu Ülke " />
+							</p:column>
+							<p:column colspan="3">
+								<p:selectOneMenu validator="countryValidator"
+									converter="countryConverter" value="#{signUpView.user.country}">
+									<f:selectItem itemValue="0" itemLabel="Lütfen bir ülke seçiniz" />
+									<f:selectItems value="#{signUpView.countries}" var="country"
+										itemValue="#{country}" itemLabel="#{country.countryName}" />
+									<p:ajax listener="#{signUpView.updateUserChangeCountry}"
+										event="change" update="form_update_user_city" />
+
+								</p:selectOneMenu>
 							</p:column>
 						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="Doğduğu Şehir " />
+							</p:column>
+							<p:column colspan="3">
+								<p:selectOneMenu validator="cityValidator"
+									converter="cityConverter" id="form_update_user_city"
+									value="#{signUpView.user.city}">
+									<f:selectItem itemValue="0"
+										itemLabel="Lütfen bir şehir seçiniz" />
+									<f:selectItems value="#{signUpView.userCities}" var="city"
+										itemValue="#{city}" itemLabel="#{city.cityName}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+
 					</p:panelGrid>
+					<p:commandButton value="Kaydet" action="#{signUpView.saveUser}"
+									ajax="false" update="form_sign_up_messages" />
 				</p:fieldset>
 
 			</h:form>

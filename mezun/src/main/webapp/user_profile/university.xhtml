@@ -33,10 +33,12 @@
 						</p:commandButton>
 					</p:column>
 					<p:column headerText="Üniversitenin İsmi">
-						<h:outputText value="#{educationInfoList.university.universityName}" />
+						<h:outputText
+							value="#{educationInfoList.university.universityName}" />
 					</p:column>
 					<p:column headerText="Bölüm">
-						<h:outputText value="#{educationInfoList.department.departmentName}" />
+						<h:outputText
+							value="#{educationInfoList.department.departmentName}" />
 					</p:column>
 					<p:column headerText="Başlangıç Tarihi">
 						<h:outputText value="#{educationInfoList.startDate}">
@@ -77,7 +79,8 @@
 								itemLabel="#{university.universityName}" />
 							<p:ajax
 								listener="#{educationInfoView.updateUniversityChangeFaculty}"
-								event="change" update="form_update_university_faculty form_update_faculty_department" />
+								event="change"
+								update="form_update_university_faculty form_update_faculty_department" />
 						</p:selectOneMenu>
 
 						<h:outputText value="Fakülte :" />
@@ -86,8 +89,10 @@
 							value="#{educationInfoView.selectedEducationInfo.faculty}">
 							<f:selectItem itemValue="0"
 								itemLabel="Lütfen bir fakülte seçiniz" />
-							<f:selectItems value="#{educationInfoView.universityUpdateFaculties}" var="faculty"
-								itemValue="#{faculty}" itemLabel="#{faculty.facultyName}" />
+							<f:selectItems
+								value="#{educationInfoView.universityUpdateFaculties}"
+								var="faculty" itemValue="#{faculty}"
+								itemLabel="#{faculty.facultyName}" />
 							<p:ajax
 								listener="#{educationInfoView.updateFacultyChangeDepartment}"
 								event="change" update="form_update_faculty_department" />
@@ -99,17 +104,20 @@
 							id="form_update_faculty_department"
 							value="#{educationInfoView.selectedEducationInfo.department}">
 							<f:selectItem itemValue="0" itemLabel="Lütfen bir bölüm seçiniz" />
-							<f:selectItems value="#{educationInfoView.facultyUpdateDepartments}"
+							<f:selectItems
+								value="#{educationInfoView.facultyUpdateDepartments}"
 								var="department" itemValue="#{department}"
 								itemLabel="#{department.departmentName}" />
 						</p:selectOneMenu>
 
 						<h:outputText value="Başlangıç Tarihi :" />
-						<p:calendar value="#{educationInfoView.selectedEducationInfo.startDate}"
+						<p:calendar
+							value="#{educationInfoView.selectedEducationInfo.startDate}"
 							showOn="button" />
 
 						<h:outputText value="Bitiş Tarihi :" />
-						<p:calendar value="#{educationInfoView.selectedEducationInfo.endDate}"
+						<p:calendar
+							value="#{educationInfoView.selectedEducationInfo.endDate}"
 							showOn="button" />
 
 						<h:outputText value="Eğitim Seviyesi :" />
@@ -122,6 +130,27 @@
 								var="educationLevel" itemValue="#{educationLevel}"
 								itemLabel="#{educationLevel.educationLevel}" />
 						</p:selectOneMenu>
+
+						<h:outputLabel for="form_grading_system"
+							value="Diploma Not Sistemi" />
+						<p:selectOneMenu validator="gradingSystemValidator"
+							converter="gradingSystemConverter"
+							value="#{educationInfoView.selectedEducationInfo.gradingSystem}">
+							<f:selectItem itemValue="0"
+								itemLabel="Lütfen not sistemini seçiniz" />
+							<f:selectItems value="#{educationInfoView.gradingSystems}"
+								var="gradingSystem" itemValue="#{gradingSystem}"
+								itemLabel="#{gradingSystem.grade}" />
+						</p:selectOneMenu>
+
+						<h:outputLabel for="form_graduation_degree"
+							value="Lise Mezuniyet Derecesi" />
+
+						<p:inputText id="form_graduation_degree"
+							value="#{educationInfoView.selectedEducationInfo.graduationDegree}"
+							required="true"
+							requiredMessage="Lütfen mezuniyet derecenizi giriniz.">
+						</p:inputText>
 
 					</h:panelGrid>
 					<p:commandButton action="#{educationInfoView.updateEducationInfo}"
@@ -154,7 +183,8 @@
 								itemLabel="#{university.universityName}" />
 							<p:ajax
 								listener="#{educationInfoView.addUniversityChangeFaculty}"
-								event="change" update="form_add_university_faculty form_add_faculty_department" />
+								event="change"
+								update="form_add_university_faculty form_add_faculty_department" />
 						</p:selectOneMenu>
 
 						<h:outputText value="Fakülte :" />
@@ -163,8 +193,10 @@
 							value="#{educationInfoView.educationInfo.faculty}">
 							<f:selectItem itemValue="0"
 								itemLabel="Lütfen bir fakülte seçiniz" />
-							<f:selectItems value="#{educationInfoView.universityAddFaculties}" var="faculty"
-								itemValue="#{faculty}" itemLabel="#{faculty.facultyName}" />
+							<f:selectItems
+								value="#{educationInfoView.universityAddFaculties}"
+								var="faculty" itemValue="#{faculty}"
+								itemLabel="#{faculty.facultyName}" />
 							<p:ajax
 								listener="#{educationInfoView.addFacultyChangeDepartment}"
 								event="change" update="form_add_faculty_department" />
@@ -172,8 +204,7 @@
 
 						<h:outputText value="Bölüm :" />
 						<p:selectOneMenu validator="departmentValidator"
-							converter="departmentConverter"
-							id="form_add_faculty_department"
+							converter="departmentConverter" id="form_add_faculty_department"
 							value="#{educationInfoView.educationInfo.department}">
 							<f:selectItem itemValue="0" itemLabel="Lütfen bir bölüm seçiniz" />
 							<f:selectItems value="#{educationInfoView.facultyAddDepartments}"
@@ -199,6 +230,28 @@
 								var="educationLevel" itemValue="#{educationLevel}"
 								itemLabel="#{educationLevel.educationLevel}" />
 						</p:selectOneMenu>
+						
+						
+						<h:outputLabel for="form_grading_system"
+							value="Diploma Not Sistemi" />
+						<p:selectOneMenu validator="gradingSystemValidator"
+							converter="gradingSystemConverter"
+							value="#{educationInfoView.educationInfo.gradingSystem}">
+							<f:selectItem itemValue="0"
+								itemLabel="Lütfen not sistemini seçiniz" />
+							<f:selectItems value="#{educationInfoView.gradingSystems}"
+								var="gradingSystem" itemValue="#{gradingSystem}"
+								itemLabel="#{gradingSystem.grade}" />
+						</p:selectOneMenu>
+
+						<h:outputLabel for="form_graduation_degree"
+							value="Lise Mezuniyet Derecesi" />
+
+						<p:inputText id="form_graduation_degree"
+							value="#{educationInfoView.educationInfo.graduationDegree}"
+							required="true"
+							requiredMessage="Lütfen mezuniyet derecenizi giriniz.">
+						</p:inputText>
 
 					</h:panelGrid>
 					<p:commandButton action="#{educationInfoView.addEducationInfo}"

@@ -23,6 +23,7 @@ import com.orcun.mezun.model.Department;
 import com.orcun.mezun.model.EducationInfo;
 import com.orcun.mezun.model.EducationLevel;
 import com.orcun.mezun.model.Faculty;
+import com.orcun.mezun.model.GradingSystem;
 import com.orcun.mezun.model.University;
 import com.orcun.mezun.model.User;
 import com.orcun.mezun.service.user.EducationInfoService;
@@ -47,6 +48,9 @@ public class EducationInfoView implements Serializable {
 	
 	private List<EducationLevel> educationLevels=new ArrayList<EducationLevel>();
 	
+	private List<GradingSystem> gradingSystems = new ArrayList<GradingSystem>();
+
+	
 	private List<EducationInfo> educations = new ArrayList<EducationInfo>();
 	private EducationInfo selectedEducationInfo;
 	
@@ -58,7 +62,7 @@ public class EducationInfoView implements Serializable {
 		universities = educationInfoService.allUniversities();
 		educationLevels = educationInfoService.allEducationLevels();
 		educations=educationInfoService.allEducations(getLoggedUser());
-		
+		gradingSystems = educationInfoService.allGradingSystems();
 		if (educationInfo == null) {
 			educationInfo = new EducationInfo();
 
@@ -155,6 +159,14 @@ public class EducationInfoView implements Serializable {
 
 	public void setEducationLevels(List<EducationLevel> educationLevels) {
 		this.educationLevels = educationLevels;
+	}
+
+	public List<GradingSystem> getGradingSystems() {
+		return gradingSystems;
+	}
+
+	public void setGradingSystems(List<GradingSystem> gradingSystems) {
+		this.gradingSystems = gradingSystems;
 	}
 
 	public List<EducationInfo> getEducations() {

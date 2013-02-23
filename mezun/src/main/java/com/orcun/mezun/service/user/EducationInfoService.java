@@ -10,6 +10,7 @@ import com.orcun.mezun.model.Department;
 import com.orcun.mezun.model.EducationInfo;
 import com.orcun.mezun.model.EducationLevel;
 import com.orcun.mezun.model.Faculty;
+import com.orcun.mezun.model.GradingSystem;
 import com.orcun.mezun.model.University;
 import com.orcun.mezun.model.User;
 
@@ -52,7 +53,9 @@ public class EducationInfoService {
 	public List<EducationLevel> allEducationLevels() {
 		return getEducationInfoDAO().allEducationLevels();
 	}
-
+	public List<GradingSystem> allGradingSystems() {
+		return getEducationInfoDAO().allGradingSystems();
+	}
 	public List<EducationInfo> allEducations(User loggedUser) {
 		return getEducationInfoDAO().allEducations(loggedUser);
 	}

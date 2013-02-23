@@ -48,6 +48,13 @@ public class EducationInfo implements Serializable{
 	@OneToOne(fetch=FetchType.EAGER)
 	private Department department;
 	
+	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="grading_system_id")
+	private GradingSystem gradingSystem;
+	
+	@Column(name="graduation_degree")
+	private Integer graduationDegree;
+	
 	@ManyToOne(cascade=CascadeType.ALL)
 	@OnDelete(action=OnDeleteAction.CASCADE)
 	private User user;
@@ -106,6 +113,22 @@ public class EducationInfo implements Serializable{
 
 	public void setDepartment(Department department) {
 		this.department = department;
+	}
+
+	public GradingSystem getGradingSystem() {
+		return gradingSystem;
+	}
+
+	public void setGradingSystem(GradingSystem gradingSystem) {
+		this.gradingSystem = gradingSystem;
+	}
+
+	public Integer getGraduationDegree() {
+		return graduationDegree;
+	}
+
+	public void setGraduationDegree(Integer graduationDegree) {
+		this.graduationDegree = graduationDegree;
 	}
 
 	public User getUser() {

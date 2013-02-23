@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -51,6 +52,12 @@ public class User implements Serializable,UserDetails{
 	
 	@Column(name="enabled",nullable = false)
 	private boolean enabled=true;
+	
+	@OneToOne(fetch=FetchType.EAGER)
+	private Country country;
+	
+	@OneToOne(fetch=FetchType.EAGER)
+	private City city;
 	
 	@ManyToMany(cascade=CascadeType.MERGE,fetch=FetchType.EAGER)
 	private List<Role> roles=new ArrayList<Role>();
@@ -108,6 +115,18 @@ public class User implements Serializable,UserDetails{
 	}
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+	public Country getCountry() {
+		return country;
+	}
+	public void setCountry(Country country) {
+		this.country = country;
+	}
+	public City getCity() {
+		return city;
+	}
+	public void setCity(City city) {
+		this.city = city;
 	}
 	public List<Role> getRoles() {
 		return roles;
