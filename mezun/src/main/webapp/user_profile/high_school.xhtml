@@ -16,7 +16,7 @@
 			<h:form id="form_high_school_panel" enctype="multipart/form-data"
 				prependId="false">
 
-				<p:growl id="form_high_school_messages"/>
+				<p:growl id="form_high_school_messages" />
 				<p:fieldset legend="Lise Bilgileri">
 					<p:panelGrid>
 
@@ -103,6 +103,59 @@
 							</p:column>
 
 
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel for="form_oss_degree"
+									value="Öss Puanı " />
+							</p:column>
+
+							<p:column>
+								<p:inputMask mask="999,9" id="form_oss_degree"
+									value="#{highSchoolView.highSchool.ossDegree}"/>
+							</p:column>
+							<p:column>
+								<h:outputLabel for="form_ytu_ce_order_of_preference"
+									value="YTÜ Bilgisayar Tercih Sırası" />
+							</p:column>
+							<p:column>
+								<p:inputText id="form_ytu_ce_order_of_preference"
+									value="#{highSchoolView.highSchool.ytuCeOrderOfPreference}"/>
+							</p:column>
+						</p:row>
+						
+						<p:row>
+							<p:column colspan="2">
+								<h:outputLabel for="form_oss_first_choise"
+									value="Öss 1.Tercihi ( Üniversite/Bölüm ) " />
+							</p:column>
+							<p:column colspan="2">
+								<p:inputText id="form_oss_first_choise"
+									value="#{highSchoolView.highSchool.ossFirstChoise}"/>
+							</p:column>
+						</p:row>
+						
+						<p:row>
+							<p:column colspan="2">
+								<h:outputLabel for="form_oss_second_choise"
+									value="Öss 2.Tercihi ( Üniversite/Bölüm ) "  />
+							</p:column>
+							<p:column colspan="2">
+								<p:inputText id="form_oss_second_choise"
+									value="#{highSchoolView.highSchool.ossSecondChoise}"/>
+							</p:column>
+						</p:row>
+						
+						<p:row>
+							<p:column colspan="2">
+								<h:outputLabel for="form_oss_third_choise"
+									value="Öss 3.Tercihi ( Üniversite/Bölüm ) " />
+							</p:column>
+							<p:column colspan="2">
+								<p:inputText id="form_oss_third_choise"
+									value="#{highSchoolView.highSchool.ossThirdChoise}"/>
+							</p:column>
 						</p:row>
 
 						<p:row>

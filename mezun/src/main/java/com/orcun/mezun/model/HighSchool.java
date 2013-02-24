@@ -44,7 +44,22 @@ public class HighSchool implements Serializable{
 	private GradingSystem gradingSystem;
 	
 	@Column(name="graduation_degree")
-	private Integer graduationDegree;
+	private String graduationDegree;
+	
+	@Column(name="oss_degree",nullable=true)
+	private String ossDegree;
+	
+	@Column(name="ytu_ce_order_of_preference",nullable=true)
+	private Integer ytuCeOrderOfPreference;
+	
+	@Column(name="oss_first_choise",nullable=true)
+	private String ossFirstChoise;
+	
+	@Column(name="oss_second_choise",nullable=true)
+	private String ossSecondChoise;
+	
+	@Column(name="oss_third_choise",nullable=true)
+	private String ossThirdChoise;
 	
 	public String getHighSchoolName() {
 		return highSchoolName;
@@ -86,12 +101,52 @@ public class HighSchool implements Serializable{
 		this.gradingSystem = gradingSystem;
 	}
 
-	public Integer getGraduationDegree() {
+	public String getGraduationDegree() {
 		return graduationDegree;
 	}
 
-	public void setGraduationDegree(Integer graduationDegree) {
+	public void setGraduationDegree(String graduationDegree) {
 		this.graduationDegree = graduationDegree;
+	}
+
+	public String getOssDegree() {
+		return ossDegree;
+	}
+
+	public void setOssDegree(String ossDegree) {
+		this.ossDegree = ossDegree;
+	}
+
+	public Integer getYtuCeOrderOfPreference() {
+		return ytuCeOrderOfPreference;
+	}
+
+	public void setYtuCeOrderOfPreference(Integer ytuCeOrderOfPreference) {
+		this.ytuCeOrderOfPreference = ytuCeOrderOfPreference;
+	}
+
+	public String getOssFirstChoise() {
+		return ossFirstChoise;
+	}
+
+	public void setOssFirstChoise(String ossFirstChoise) {
+		this.ossFirstChoise = ossFirstChoise;
+	}
+
+	public String getOssSecondChoise() {
+		return ossSecondChoise;
+	}
+
+	public void setOssSecondChoise(String ossSecondChoise) {
+		this.ossSecondChoise = ossSecondChoise;
+	}
+
+	public String getOssThirdChoise() {
+		return ossThirdChoise;
+	}
+
+	public void setOssThirdChoise(String ossThirdChoise) {
+		this.ossThirdChoise = ossThirdChoise;
 	}
 
 	public User getUser() {

@@ -53,7 +53,7 @@ public class EducationInfo implements Serializable{
 	private GradingSystem gradingSystem;
 	
 	@Column(name="graduation_degree")
-	private Integer graduationDegree;
+	private String graduationDegree;
 	
 	@ManyToOne(cascade=CascadeType.ALL)
 	@OnDelete(action=OnDeleteAction.CASCADE)
@@ -123,11 +123,11 @@ public class EducationInfo implements Serializable{
 		this.gradingSystem = gradingSystem;
 	}
 
-	public Integer getGraduationDegree() {
+	public String getGraduationDegree() {
 		return graduationDegree;
 	}
 
-	public void setGraduationDegree(Integer graduationDegree) {
+	public void setGraduationDegree(String graduationDegree) {
 		this.graduationDegree = graduationDegree;
 	}
 
