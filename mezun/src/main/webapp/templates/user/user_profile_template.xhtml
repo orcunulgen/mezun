@@ -18,20 +18,31 @@
 				<div class="logo"></div>
 				<div class="menu">
 					<p:menubar>
-						<p:menuitem value="Anasayfa" url="/user_profile/index.xhtml" icon="ui-icon-extlink"/>
+						<p:menuitem value="Anasayfa" url="/user_profile/index.xhtml"
+							icon="ui-icon-extlink" />
 						<p:menuitem value="Profilim"
 							url="/user_profile/showcase/index.xhtml?user=#{showCaseView.loggedUser.tcno}" />
 						<p:menuitem value="Hesap Ayarları"
-							url="/user_profile/profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}" icon="ui-icon-gear" />
+							url="/user_profile/profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}"
+							icon="ui-icon-gear" />
 						<p:menuitem value="Çıkış" url="/logout" icon="ui-icon-close" />
 
 					</p:menubar>
+				</div>
+				<div class="welcome">
+					<h:outputLabel style="float:right;" value="Hoşgeldiniz , #{profileSettingsView.loggedUser.name} #{profileSettingsView.loggedUser.surname} "/>
+				
 				</div>
 
 			</div>
 
 			<div class="main_panel">
-				<ui:insert name="main_container" />
+				<div class="main_panel_left"></div>
+				<div class="main_panel_middle">
+					<ui:insert name="main_container" />
+				</div>
+				<div class="main_panel_right"></div>
+
 			</div>
 
 			<div class="footer_panel"></div>
