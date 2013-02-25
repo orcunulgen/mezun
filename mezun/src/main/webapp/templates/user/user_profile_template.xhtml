@@ -18,19 +18,13 @@
 				<div class="logo"></div>
 				<div class="menu">
 					<p:menubar>
-						<p:menuitem value="Anasayfa" url="/user_profile/index.xhtml" />
-						<!-- <p:submenu label="Profil Düzenle">
-							<p:menuitem value="Kitap Ekle"
-								url="add_book.xhtml?faces-redirect=true" />
-							<p:menuitem value="Tüm Kitaplar"
-								url="list_book.xhtml?faces-redirect=true" />
-						</p:submenu>
-						 -->
+						<p:menuitem value="Anasayfa" url="/user_profile/index.xhtml" icon="ui-icon-extlink"/>
 						<p:menuitem value="Profilim"
 							url="/user_profile/showcase/index.xhtml?user=#{showCaseView.loggedUser.tcno}" />
 						<p:menuitem value="Hesap Ayarları"
-							url="/user_profile/profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
-						<p:menuitem value="Çıkış" url="/logout" />
+							url="/user_profile/profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}" icon="ui-icon-gear" />
+						<p:menuitem value="Çıkış" url="/logout" icon="ui-icon-close" />
+
 					</p:menubar>
 				</div>
 

@@ -21,7 +21,7 @@
 					rows="10">
 					<p:column style="width:15%">
 						<f:facet name="header">
-							<h:outputText value="İşlemler" />
+							<h:outputLabel value="İşlemler" />
 						</f:facet>
 						<p:commandButton id="selectButton"
 							actionListener="#{certificationView.initSelectedCertification(certificationList)}"
@@ -34,16 +34,25 @@
 							icon="ui-icon-close" title="Delete">
 						</p:commandButton>
 					</p:column>
-					<p:column headerText="Sertifika İsmi">
-						<h:outputText value="#{certificationList.certificateName}" />
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Sertifika İsmi" />
+						</f:facet>
+						<h:outputLabel value="#{certificationList.certificateName}" />
 					</p:column>
-					<p:column headerText="Alınma Tarihi">
-						<h:outputText value="#{certificationList.certificateDate}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Alınma Tarihi" />
+						</f:facet>
+						<h:outputLabel value="#{certificationList.certificateDate}">
 							<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputText>
+						</h:outputLabel>
 					</p:column>
-					<p:column headerText="Alındığı Kurum">
-						<h:outputText value="#{certificationList.institution}" />
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Alındığı Kurum" />
+						</f:facet>
+						<h:outputLabel value="#{certificationList.institution}" />
 					</p:column>
 				</p:dataTable>
 			</h:form>
@@ -56,31 +65,32 @@
 					<h:panelGrid id="certification_detail_display" columns="2"
 						cellpadding="4" style="margin:0 auto;">
 
-						<h:outputText value="Sertifika İsmi :" />
+						<h:outputLabel value="Sertifika İsmi :" />
 						<p:inputText
 							value="#{certificationView.selectedCertification.certificateName}"
 							required="true" requiredMessage="Lütfen sertifika ismi giriniz." />
 
-						<h:outputText value="Açıklama :" />
+						<h:outputLabel value="Açıklama :" />
 						<p:inputTextarea
 							value="#{certificationView.selectedCertification.description}"
 							rows="5" cols="50" maxlength="100" autoResize="false"
 							required="true"
 							requiredMessage="Lütfen sertifikanızın detaylarını açıklayınız." />
 
-						<h:outputText value="Alınma Tarihi :" />
+						<h:outputLabel value="Alınma Tarihi :" />
 						<p:calendar
 							value="#{certificationView.selectedCertification.certificateDate}"
 							showOn="button" />
 
-						<h:outputText value="Alındığı Kurum :" />
+						<h:outputLabel value="Alındığı Kurum :" />
 						<p:inputText
 							value="#{certificationView.selectedCertification.institution}"
 							required="true" requiredMessage="Lütfen alındığı kurumu giriniz." />
 
 					</h:panelGrid>
 					<p:commandButton action="#{certificationView.updateCertification}"
-						value="Kaydet" ajax="true" icon="ui-icon-disk" update=":certification_dialog_form" />
+						value="Kaydet" ajax="true" icon="ui-icon-disk"
+						update=":certification_dialog_form" />
 				</h:form>
 			</p:dialog>
 
@@ -89,31 +99,31 @@
 
 			<p:commandButton value="Yeni Sertifika Ekle" type="button"
 				onclick="certificationAddDialog.show()" />
-			<p:dialog header="Sertifika Ekle"
-				widgetVar="certificationAddDialog" resizable="false"
-				id="certificationAddDlg" showEffect="fade" modal="true">
+			<p:dialog header="Sertifika Ekle" widgetVar="certificationAddDialog"
+				resizable="false" id="certificationAddDlg" showEffect="fade"
+				modal="true">
 				<h:form id="dialog_certification_add_form">
 					<p:growl id="certification_add_messages" />
 					<h:panelGrid id="certification_add_display" columns="2"
 						cellpadding="4" style="margin:0 auto;">
 
-						<h:outputText value="Sertifika İsmi :" />
+						<h:outputLabel value="Sertifika İsmi :" />
 						<p:inputText
 							value="#{certificationView.certification.certificateName}"
 							required="true" requiredMessage="Lütfen sertifika ismi giriniz." />
 
-						<h:outputText value="Açıklama :" />
+						<h:outputLabel value="Açıklama :" />
 						<p:inputTextarea id="form_add_description"
 							value="#{certificationView.certification.description}" rows="5"
 							cols="50" maxlength="100" autoResize="false" required="true"
 							requiredMessage="Lütfen sertifika detaylarını açıklayınız." />
 
-						<h:outputText value="Alınma Tarihi :" />
+						<h:outputLabel value="Alınma Tarihi :" />
 						<p:calendar
 							value="#{certificationView.certification.certificateDate}"
 							showOn="button" />
-							
-						<h:outputText value="Alındığı Kurum :" />
+
+						<h:outputLabel value="Alındığı Kurum :" />
 						<p:inputText
 							value="#{certificationView.certification.institution}"
 							required="true" requiredMessage="Lütfen alındığı kurumu giriniz." />
@@ -121,7 +131,8 @@
 
 					</h:panelGrid>
 					<p:commandButton action="#{certificationView.addCertification}"
-						value="Ekle" ajax="true" icon="ui-icon-disk" update=":dialog_certification_add_form" />
+						value="Ekle" ajax="true" icon="ui-icon-disk"
+						update=":dialog_certification_add_form" />
 				</h:form>
 			</p:dialog>
 		</div>

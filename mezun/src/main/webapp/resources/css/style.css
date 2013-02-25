@@ -2,6 +2,7 @@
 	height:auto;
 	width: 1024px;
 	margin: auto;
+	
 }
 
 	.header_panel{
@@ -33,3 +34,15 @@
 		width: 80%;
 		margin:auto;
 	}
+	
+.ui-widget{
+	font-size:0.9em;
+}
+
+.ui-widget .ui-widget{
+	font-size:0.9em;
+}
+
+label{
+	font-size:0.9em;
+}

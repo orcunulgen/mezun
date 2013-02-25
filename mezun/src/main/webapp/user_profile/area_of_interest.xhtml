@@ -15,13 +15,13 @@
 		<div class="area_of_interest">
 
 			<h:form id="list_area_of_interest_form">
-				<p:growl id="list_area_of_interest_messages"/>
+				<p:growl id="list_area_of_interest_messages" />
 				<p:dataTable var="areaOfInterestList"
 					value="#{areaOfInterestView.areaOfInterests}" paginator="true"
 					rows="10">
 					<p:column style="width:15%">
 						<f:facet name="header">
-							<h:outputText value="İşlemler" />
+							<h:outputLabel value="İşlemler" />
 						</f:facet>
 						<p:commandButton id="selectButton"
 							actionListener="#{areaOfInterestView.initSelectedAreaOfInterest(areaOfInterestList)}"
@@ -34,10 +34,16 @@
 							icon="ui-icon-close" title="Delete">
 						</p:commandButton>
 					</p:column>
-					<p:column headerText="Başlık">
-						<h:outputText value="#{areaOfInterestList.areaOfInterestTitle}" />
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Başlık" />
+						</f:facet>
+						<h:outputLabel value="#{areaOfInterestList.areaOfInterestTitle}" />
 					</p:column>
-					<p:column headerText="Deneyim Seviyesi">
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Deneyim Seviyesi" />
+						</f:facet>
 						<p:rating value="#{areaOfInterestList.experienceLevel}" stars="10" />
 					</p:column>
 				</p:dataTable>
@@ -51,26 +57,29 @@
 					<h:panelGrid id="area_of_interest_detail_display" columns="2"
 						cellpadding="4" style="margin:0 auto;">
 
-						<h:outputText value="Başlık :" />
+						<h:outputLabel value="Başlık :" />
 						<p:inputText
 							value="#{areaOfInterestView.selectedAreaOfInterest.areaOfInterestTitle}"
 							required="true"
 							requiredMessage="Lütfen ilgi alanınız için bir başlık giriniz." />
 
-						<h:outputText value="Açıklama :" />
+						<h:outputLabel value="Açıklama :" />
 						<p:inputTextarea
 							value="#{areaOfInterestView.selectedAreaOfInterest.areaOfInterestName}"
 							rows="5" cols="50" maxlength="100" autoResize="false"
 							required="true"
 							requiredMessage="Lütfen ilgi alanınıza ait detayları anlatınız." />
 
-						<h:outputText value="Deneyim Seviyesi :" />
-						<p:rating value="#{areaOfInterestView.selectedAreaOfInterest.experienceLevel}" stars="10"
-						required="true" requiredMessage="Lütfen bir seviye belirleyiniz."/>
+						<h:outputLabel value="Deneyim Seviyesi :" />
+						<p:rating
+							value="#{areaOfInterestView.selectedAreaOfInterest.experienceLevel}"
+							stars="10" required="true"
+							requiredMessage="Lütfen bir seviye belirleyiniz." />
 
 					</h:panelGrid>
-					<p:commandButton action="#{areaOfInterestView.updateAreaOfInterest}"
-						value="Kaydet" ajax="true" icon="ui-icon-disk"
+					<p:commandButton
+						action="#{areaOfInterestView.updateAreaOfInterest}" value="Kaydet"
+						ajax="true" icon="ui-icon-disk"
 						update=":area_of_interest_dialog_form" />
 				</h:form>
 			</p:dialog>
@@ -80,30 +89,32 @@
 
 			<p:commandButton value="Yeni İlgi Alanı Ekle" type="button"
 				onclick="areaOfInterestAddDialog.show()" />
-			<p:dialog header="Yeni İlgi Alanı Ekle" widgetVar="areaOfInterestAddDialog"
-				resizable="false" id="areaOfInterestAddDlg" showEffect="fade"
-				modal="true">
+			<p:dialog header="Yeni İlgi Alanı Ekle"
+				widgetVar="areaOfInterestAddDialog" resizable="false"
+				id="areaOfInterestAddDlg" showEffect="fade" modal="true">
 				<h:form id="dialog_area_of_interest_add_form">
 					<p:growl id="area_of_interest_add_messages" />
 					<h:panelGrid id="area_of_interest_add_display" columns="2"
 						cellpadding="4" style="margin:0 auto;">
 
-						<h:outputText value="Başlık :" />
+						<h:outputLabel value="Başlık :" />
 						<p:inputText
 							value="#{areaOfInterestView.areaOfInterest.areaOfInterestTitle}"
 							required="true"
 							requiredMessage="Lütfen ilgi alanınız için bir başlık giriniz." />
 
-						<h:outputText value="Açıklama :" />
+						<h:outputLabel value="Açıklama :" />
 						<p:inputTextarea
 							value="#{areaOfInterestView.areaOfInterest.areaOfInterestName}"
 							rows="5" cols="50" maxlength="100" autoResize="false"
 							required="true"
 							requiredMessage="Lütfen ilgi alanınıza ait detayları anlatınız." />
 
-						<h:outputText value="Deneyim Seviyesi :" />
-						<p:rating value="#{areaOfInterestView.areaOfInterest.experienceLevel}" stars="10"
-						required="true" requiredMessage="Lütfen bir seviye belirleyiniz."/>
+						<h:outputLabel value="Deneyim Seviyesi :" />
+						<p:rating
+							value="#{areaOfInterestView.areaOfInterest.experienceLevel}"
+							stars="10" required="true"
+							requiredMessage="Lütfen bir seviye belirleyiniz." />
 
 
 

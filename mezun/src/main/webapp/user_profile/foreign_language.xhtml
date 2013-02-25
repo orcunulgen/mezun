@@ -22,7 +22,7 @@
 					rows="10">
 					<p:column style="width:15%">
 						<f:facet name="header">
-							<h:outputText value="İşlemler" />
+							<h:outputLabel value="İşlemler" />
 						</f:facet>
 						<p:commandButton id="selectButton"
 							actionListener="#{foreignLanguageView.initSelectedForeignLanguage(foreignLanguageList)}"
@@ -35,16 +35,28 @@
 							icon="ui-icon-close" title="Delete">
 						</p:commandButton>
 					</p:column>
-					<p:column headerText="Yabancı Dil">
-						<h:outputText value="#{foreignLanguageList.language.language}" />
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Yabancı Dil" />
+						</f:facet>
+						<h:outputLabel value="#{foreignLanguageList.language.language}" />
 					</p:column>
-					<p:column headerText="Okuma Seviyesi">
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Okuma Seviyesi" />
+						</f:facet>
 						<p:rating value="#{foreignLanguageList.readingRank}" stars="10" />
 					</p:column>
-					<p:column headerText="Yazma Seviyesi">
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Yazma Seviyesi" />
+						</f:facet>
 						<p:rating value="#{foreignLanguageList.writingRank}" stars="10" />
 					</p:column>
-					<p:column headerText="Konuşma Seviyesi">
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Konuşma Seviyesi" />
+						</f:facet>
 						<p:rating value="#{foreignLanguageList.speakingRank}" stars="10" />
 					</p:column>
 				</p:dataTable>
@@ -58,7 +70,7 @@
 					<h:panelGrid id="foreign_language_detail_display" columns="2"
 						cellpadding="4" style="margin:0 auto;">
 
-						<h:outputText value="Yabancı Dil :" />
+						<h:outputLabel value="Yabancı Dil :" />
 						<p:selectOneMenu validator="languageValidator"
 							converter="languageConverter"
 							value="#{foreignLanguageView.selectedForeignLanguage.language}">
@@ -69,19 +81,19 @@
 								itemLabel="#{language.language}" />
 						</p:selectOneMenu>
 
-						<h:outputText value="Okuma Seviyesi :" />
+						<h:outputLabel value="Okuma Seviyesi :" />
 						<p:rating
 							value="#{foreignLanguageView.selectedForeignLanguage.readingRank}"
 							stars="10" required="true"
 							requiredMessage="Lütfen okuma seviyenizi belirtiniz." />
 
-						<h:outputText value="Yazma Seviyesi :" />
+						<h:outputLabel value="Yazma Seviyesi :" />
 						<p:rating
 							value="#{foreignLanguageView.selectedForeignLanguage.writingRank}"
 							stars="10" required="true"
 							requiredMessage="Lütfen yazma seviyenizi belirtiniz." />
 
-						<h:outputText value="Konuşma Seviyesi :" />
+						<h:outputLabel value="Konuşma Seviyesi :" />
 						<p:rating
 							value="#{foreignLanguageView.selectedForeignLanguage.speakingRank}"
 							stars="10" required="true"
@@ -108,7 +120,7 @@
 					<h:panelGrid id="foreign_language_add_display" columns="2"
 						cellpadding="4" style="margin:0 auto;">
 
-						<h:outputText value="Yabancı Dil :" />
+						<h:outputLabel value="Yabancı Dil :" />
 						<p:selectOneMenu validator="languageValidator"
 							converter="languageConverter"
 							value="#{foreignLanguageView.foreignLanguage.language}">
@@ -118,20 +130,20 @@
 								var="language" itemValue="#{language}"
 								itemLabel="#{language.language}" />
 						</p:selectOneMenu>
-						
-						<h:outputText value="Okuma Seviyesi :" />
+
+						<h:outputLabel value="Okuma Seviyesi :" />
 						<p:rating
 							value="#{foreignLanguageView.foreignLanguage.readingRank}"
 							stars="10" required="true"
 							requiredMessage="Lütfen okuma seviyenizi belirtiniz." />
 
-						<h:outputText value="Yazma Seviyesi :" />
+						<h:outputLabel value="Yazma Seviyesi :" />
 						<p:rating
 							value="#{foreignLanguageView.foreignLanguage.writingRank}"
 							stars="10" required="true"
 							requiredMessage="Lütfen yazma seviyenizi belirtiniz." />
 
-						<h:outputText value="Konuşma Seviyesi :" />
+						<h:outputLabel value="Konuşma Seviyesi :" />
 						<p:rating
 							value="#{foreignLanguageView.foreignLanguage.speakingRank}"
 							stars="10" required="true"

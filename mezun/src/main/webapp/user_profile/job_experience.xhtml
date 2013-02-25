@@ -21,7 +21,7 @@
 					rows="10">
 					<p:column style="width:15%">
 						<f:facet name="header">
-							<h:outputText value="İşlemler" />
+							<h:outputLabel value="İşlemler" />
 						</f:facet>
 						<p:commandButton id="selectButton"
 							actionListener="#{jobExperienceView.initSelectedJobEx(jobExperienceList)}"
@@ -34,24 +34,39 @@
 							icon="ui-icon-close" title="Delete">
 						</p:commandButton>
 					</p:column>
-					<p:column headerText="Şirketin İsmi">
-						<h:outputText value="#{jobExperienceList.companyName}" />
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Şirketin İsmi" />
+						</f:facet>
+						<h:outputLabel value="#{jobExperienceList.companyName}" />
 					</p:column>
-					<p:column headerText="Başlangıç Tarihi">
-						<h:outputText value="#{jobExperienceList.startDate}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Başlangıç Tarihi" />
+						</f:facet>
+						<h:outputLabel value="#{jobExperienceList.startDate}">
 							<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputText>
+						</h:outputLabel>
 					</p:column>
-					<p:column headerText="Bitiş Tarihi">
-						<h:outputText value="#{jobExperienceList.endDate}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Bitiş Tarihi" />
+						</f:facet>
+						<h:outputLabel value="#{jobExperienceList.endDate}">
 							<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputText>
+						</h:outputLabel>
 					</p:column>
-					<p:column headerText="Sektör">
-						<h:outputText value="#{jobExperienceList.sector.sectorName}" />
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Sektör" />
+						</f:facet>
+						<h:outputLabel value="#{jobExperienceList.sector.sectorName}" />
 					</p:column>
-					<p:column headerText="Çalıştığı Pozisyon">
-						<h:outputText value="#{jobExperienceList.position.positionName}" />
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Çalıştığı Pozisyon" />
+						</f:facet>
+						<h:outputLabel value="#{jobExperienceList.position.positionName}" />
 					</p:column>
 
 
@@ -66,29 +81,29 @@
 					<h:panelGrid id="job_ex_detail_display" columns="2" cellpadding="4"
 						style="margin:0 auto;">
 
-						<h:outputText value="Şirket İsmi :" />
+						<h:outputLabel value="Şirket İsmi :" />
 						<p:inputText
 							value="#{jobExperienceView.selectedJobExperience.companyName}"
 							required="true" requiredMessage="Lütfen şirket ismi giriniz." />
 
-						<h:outputText value="Açıklama :" />
+						<h:outputLabel value="Açıklama :" />
 						<p:inputTextarea
 							value="#{jobExperienceView.selectedJobExperience.description}"
 							rows="5" cols="50" maxlength="100" autoResize="false"
 							required="true"
 							requiredMessage="Lütfen iş tecrübenizi açıklayınız." />
 
-						<h:outputText value="Başlangıç Tarihi :" />
+						<h:outputLabel value="Başlangıç Tarihi :" />
 						<p:calendar
 							value="#{jobExperienceView.selectedJobExperience.startDate}"
 							showOn="button" />
 
-						<h:outputText value="Bitiş Tarihi :" />
+						<h:outputLabel value="Bitiş Tarihi :" />
 						<p:calendar
 							value="#{jobExperienceView.selectedJobExperience.endDate}"
 							showOn="button" />
 
-						<h:outputText value="Ülke :" />
+						<h:outputLabel value="Ülke :" />
 						<p:selectOneMenu validator="countryValidator"
 							converter="countryConverter"
 							value="#{jobExperienceView.selectedJobExperience.country}">
@@ -101,7 +116,7 @@
 
 						</p:selectOneMenu>
 
-						<h:outputText value="Şehir :" />
+						<h:outputLabel value="Şehir :" />
 						<p:selectOneMenu validator="cityValidator"
 							converter="cityConverter" id="form_update_job_experience_city"
 							value="#{jobExperienceView.selectedJobExperience.city}">
@@ -110,7 +125,7 @@
 								var="city" itemValue="#{city}" itemLabel="#{city.cityName}" />
 						</p:selectOneMenu>
 
-						<h:outputText value="Çalıştığınız Pozisyon :" />
+						<h:outputLabel value="Çalıştığınız Pozisyon :" />
 						<p:selectOneMenu validator="positionValidator"
 							converter="positionConverter"
 							value="#{jobExperienceView.selectedJobExperience.position}">
@@ -121,7 +136,7 @@
 								itemLabel="#{position.positionName}" />
 						</p:selectOneMenu>
 
-						<h:outputText value="Firmanın Çalıştığı Sektör :" />
+						<h:outputLabel value="Firmanın Çalıştığı Sektör :" />
 						<p:selectOneMenu validator="sectorValidator"
 							converter="sectorConverter"
 							value="#{jobExperienceView.selectedJobExperience.sector}">
@@ -131,7 +146,7 @@
 								itemValue="#{sector}" itemLabel="#{sector.sectorName}" />
 						</p:selectOneMenu>
 
-						<h:outputText value="Çalışma Şekli :" />
+						<h:outputLabel value="Çalışma Şekli :" />
 						<p:selectOneMenu validator="workingTypeValidator"
 							converter="workingTypeConverter"
 							value="#{jobExperienceView.selectedJobExperience.workingType}">
@@ -145,7 +160,8 @@
 
 					</h:panelGrid>
 					<p:commandButton action="#{jobExperienceView.updateJobExperience}"
-						value="Kaydet" ajax="true" icon="ui-icon-disk" update=":job_ex_dialog_form" />
+						value="Kaydet" ajax="true" icon="ui-icon-disk"
+						update=":job_ex_dialog_form" />
 				</h:form>
 			</p:dialog>
 
@@ -162,26 +178,26 @@
 					<h:panelGrid id="job_experience_add_display" columns="2"
 						cellpadding="4" style="margin:0 auto;">
 
-						<h:outputText value="Şirket İsmi :" />
+						<h:outputLabel value="Şirket İsmi :" />
 						<p:inputText
 							value="#{jobExperienceView.jobExperience.companyName}"
 							required="true" requiredMessage="Lütfen şirket ismi giriniz." />
 
-						<h:outputText value="Açıklama :" />
+						<h:outputLabel value="Açıklama :" />
 						<p:inputTextarea id="form_add_description"
 							value="#{jobExperienceView.jobExperience.description}" rows="5"
 							cols="50" maxlength="100" autoResize="false" required="true"
 							requiredMessage="Lütfen iş tecrübenizi açıklayınız." />
 
-						<h:outputText value="Başlangıç Tarihi :" />
+						<h:outputLabel value="Başlangıç Tarihi :" />
 						<p:calendar value="#{jobExperienceView.jobExperience.startDate}"
 							showOn="button" />
 
-						<h:outputText value="Bitiş Tarihi :" />
+						<h:outputLabel value="Bitiş Tarihi :" />
 						<p:calendar value="#{jobExperienceView.jobExperience.endDate}"
 							showOn="button" />
 
-						<h:outputText value="Ülke :" />
+						<h:outputLabel value="Ülke :" />
 						<p:selectOneMenu validator="countryValidator"
 							converter="countryConverter" id="form_add_job_experience_country"
 							value="#{jobExperienceView.jobExperience.country}">
@@ -194,7 +210,7 @@
 
 						</p:selectOneMenu>
 
-						<h:outputText value="Şehir :" />
+						<h:outputLabel value="Şehir :" />
 						<p:selectOneMenu validator="cityValidator"
 							converter="cityConverter" id="form_add_job_experience_city"
 							value="#{jobExperienceView.jobExperience.city}">
@@ -203,7 +219,7 @@
 								var="city" itemValue="#{city}" itemLabel="#{city.cityName}" />
 						</p:selectOneMenu>
 
-						<h:outputText value="Çalıştığınız Pozisyon :" />
+						<h:outputLabel value="Çalıştığınız Pozisyon :" />
 						<p:selectOneMenu validator="positionValidator"
 							converter="positionConverter" id="form_job_experience_position"
 							value="#{jobExperienceView.jobExperience.position}">
@@ -214,7 +230,7 @@
 								itemLabel="#{position.positionName}" />
 						</p:selectOneMenu>
 
-						<h:outputText value="Firmanın Çalıştığı Sektör :" />
+						<h:outputLabel value="Firmanın Çalıştığı Sektör :" />
 						<p:selectOneMenu validator="sectorValidator"
 							converter="sectorConverter" id="form_job_experience_sector"
 							value="#{jobExperienceView.jobExperience.sector}">
@@ -224,7 +240,7 @@
 								itemValue="#{sector}" itemLabel="#{sector.sectorName}" />
 						</p:selectOneMenu>
 
-						<h:outputText value="Çalışma Şekli :" />
+						<h:outputLabel value="Çalışma Şekli :" />
 						<p:selectOneMenu validator="workingTypeValidator"
 							converter="workingTypeConverter"
 							id="form_job_experience_working_type"
@@ -238,7 +254,8 @@
 
 					</h:panelGrid>
 					<p:commandButton action="#{jobExperienceView.addJobExperience}"
-						value="Ekle" ajax="true" icon="ui-icon-disk" update=":dialog_job_experience_add_form" />
+						value="Ekle" ajax="true" icon="ui-icon-disk"
+						update=":dialog_job_experience_add_form" />
 				</h:form>
 			</p:dialog>
 		</div>
