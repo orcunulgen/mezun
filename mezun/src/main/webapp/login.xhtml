@@ -27,8 +27,8 @@
 					requiredMessage="Lütfen şifre giriniz."  />
 					<p:message for="j_password" display="icon"/>
 					
-					<p:commandButton value="Giriş" action="#{loginView.login}" update="login_panel_messages" ajax="false"/>    
-					<p:commandLink  action="sign_up.xhtml?faces-redirect=true" value="Yeni Üye Kaydı" ajax="false" immediate="true"/>  
+					<p:commandButton value="Giriş" action="#{loginView.login}" update="login_panel_messages" ajax="false"/>
+					<h:outputLink value="#{facesContext.externalContext.requestContextPath}/sign_up.xhtml">Yeni Üye Kaydı</h:outputLink>    
         			 
     	  		</p:panelGrid>
 			</p:fieldset>  
