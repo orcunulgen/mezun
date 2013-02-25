@@ -67,7 +67,7 @@
 				id="foreignLanguageUpdateDlg" showEffect="fade" modal="true">
 				<h:form id="foreign_language_dialog_form">
 					<p:growl id="selected_foreign_language_dialog_messages" />
-					<h:panelGrid id="foreign_language_detail_display" columns="2"
+					<p:panelGrid styleClass="no_border" id="foreign_language_detail_display" columns="2"
 						cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Yabancı Dil :" />
@@ -99,7 +99,7 @@
 							stars="10" required="true"
 							requiredMessage="Lütfen konuşma seviyenizi belirtiniz." />
 
-					</h:panelGrid>
+					</p:panelGrid>
 					<p:commandButton
 						action="#{foreignLanguageView.updateForeignLanguage}"
 						value="Kaydet" ajax="true" icon="ui-icon-disk"
@@ -117,7 +117,7 @@
 				id="foreignLanguageAddDlg" showEffect="fade" modal="true">
 				<h:form id="dialog_foreign_language_add_form">
 					<p:growl id="foreing_language_add_messages" />
-					<h:panelGrid id="foreign_language_add_display" columns="2"
+					<p:panelGrid styleClass="no_border" id="foreign_language_add_display" columns="2"
 						cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Yabancı Dil :" />
@@ -151,7 +151,7 @@
 
 
 
-					</h:panelGrid>
+					</p:panelGrid>
 					<p:commandButton action="#{foreignLanguageView.addForeignLanguage}"
 						value="Ekle" ajax="true" icon="ui-icon-disk"
 						update=":dialog_foreign_language_add_form" />

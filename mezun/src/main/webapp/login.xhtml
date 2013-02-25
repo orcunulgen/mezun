@@ -17,7 +17,7 @@
 				Geçersiz kullanıcı adı veya şifre.Lütfen yeniden deneyiniz.
 			</p:outputPanel>
     		<p:fieldset legend="Kullanıcı Girişi">
-    			<h:panelGrid columns="3">
+    			<p:panelGrid styleClass="no_border" columns="3">
     				<h:outputLabel for="j_username" value="Email Adresiniz :" />
 					<h:inputText id="j_username" required="true" 
 					requiredMessage="Lütfen email adresinizi giriniz."  />
@@ -30,7 +30,7 @@
 					<p:commandButton value="Giriş" action="#{loginView.login}" update="login_panel_messages" ajax="false"/>    
 					<p:commandLink  action="sign_up.xhtml?faces-redirect=true" value="Yeni Üye Kaydı" ajax="false" immediate="true"/>  
         			 
-    	  		</h:panelGrid>
+    	  		</p:panelGrid>
 			</p:fieldset>  
       	</div>
       	</h:form>

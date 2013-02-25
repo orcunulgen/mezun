@@ -17,7 +17,7 @@
 
 				<p:growl id="form_personal_info_messages" />
 				<p:fieldset legend="Üyelik Bilgileri">
-					<p:panelGrid>
+					<p:panelGrid styleClass="no_border">
 
 						<p:row>
 							<p:column>
@@ -116,10 +116,10 @@
 							</p:column>
 						</p:row>
 					</p:panelGrid>
-				</p:fieldset>
-				<p:commandButton value="Kaydet"
+					<p:commandButton value="Kaydet"
 									action="#{personalInfoView.updatePersonalInfo}" ajax="false"
 									update="form_personal_info_messages" />
+				</p:fieldset>
 			</h:form>
 		</div>
 

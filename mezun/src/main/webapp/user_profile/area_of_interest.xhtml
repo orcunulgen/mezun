@@ -54,7 +54,7 @@
 				id="areaOfInterestUpdateDlg" showEffect="fade" modal="true">
 				<h:form id="area_of_interest_dialog_form">
 					<p:growl id="selected_area_of_interest_dialog_messages" />
-					<h:panelGrid id="area_of_interest_detail_display" columns="2"
+					<p:panelGrid styleClass="no_border" id="area_of_interest_detail_display" columns="2"
 						cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Başlık :" />
@@ -76,7 +76,7 @@
 							stars="10" required="true"
 							requiredMessage="Lütfen bir seviye belirleyiniz." />
 
-					</h:panelGrid>
+					</p:panelGrid>
 					<p:commandButton
 						action="#{areaOfInterestView.updateAreaOfInterest}" value="Kaydet"
 						ajax="true" icon="ui-icon-disk"
@@ -94,7 +94,7 @@
 				id="areaOfInterestAddDlg" showEffect="fade" modal="true">
 				<h:form id="dialog_area_of_interest_add_form">
 					<p:growl id="area_of_interest_add_messages" />
-					<h:panelGrid id="area_of_interest_add_display" columns="2"
+					<p:panelGrid styleClass="no_border" id="area_of_interest_add_display" columns="2"
 						cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Başlık :" />
@@ -118,7 +118,7 @@
 
 
 
-					</h:panelGrid>
+					</p:panelGrid>
 					<p:commandButton action="#{areaOfInterestView.addAreaOfInterest}"
 						value="Ekle" ajax="true" icon="ui-icon-disk"
 						update=":dialog_area_of_interest_add_form" />

@@ -80,7 +80,7 @@
 				id="universityUpdateDlg" showEffect="fade" modal="true">
 				<h:form id="university_dialog_form">
 					<p:growl id="selected_university_dialog_messages" />
-					<h:panelGrid id="university_detail_display" columns="2"
+					<p:panelGrid styleClass="no_border" id="university_detail_display" columns="2"
 						cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Üniversite :" />
@@ -167,7 +167,7 @@
 							requiredMessage="Lütfen mezuniyet derecenizi giriniz.">
 						</p:inputText>
 
-					</h:panelGrid>
+					</p:panelGrid>
 					<p:commandButton action="#{educationInfoView.updateEducationInfo}"
 						value="Kaydet" ajax="true" icon="ui-icon-disk"
 						update=":university_dialog_form" />
@@ -184,7 +184,7 @@
 				modal="true">
 				<h:form id="dialog_university_add_form">
 					<p:growl id="university_add_messages" />
-					<h:panelGrid id="university_add_display" columns="2"
+					<p:panelGrid styleClass="no_border" id="university_add_display" columns="2"
 						cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Üniversite :" />
@@ -268,7 +268,7 @@
 							requiredMessage="Lütfen mezuniyet derecenizi giriniz.">
 						</p:inputText>
 
-					</h:panelGrid>
+					</p:panelGrid>
 					<p:commandButton action="#{educationInfoView.addEducationInfo}"
 						value="Ekle" ajax="true" icon="ui-icon-disk"
 						update=":dialog_university_add_form" />

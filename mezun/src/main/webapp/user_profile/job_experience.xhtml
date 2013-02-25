@@ -78,7 +78,7 @@
 				id="jobExperienceUpdateDlg" showEffect="fade" modal="true">
 				<h:form id="job_ex_dialog_form">
 					<p:growl id="selected_job_ex_dialog_messages" />
-					<h:panelGrid id="job_ex_detail_display" columns="2" cellpadding="4"
+					<p:panelGrid styleClass="no_border" id="job_ex_detail_display" columns="2" cellpadding="4"
 						style="margin:0 auto;">
 
 						<h:outputLabel value="Şirket İsmi :" />
@@ -158,7 +158,7 @@
 						</p:selectOneMenu>
 
 
-					</h:panelGrid>
+					</p:panelGrid>
 					<p:commandButton action="#{jobExperienceView.updateJobExperience}"
 						value="Kaydet" ajax="true" icon="ui-icon-disk"
 						update=":job_ex_dialog_form" />
@@ -175,7 +175,7 @@
 				id="jobExperienceAddDlg" showEffect="fade" modal="true">
 				<h:form id="dialog_job_experience_add_form">
 					<p:growl id="job_experience_add_messages" />
-					<h:panelGrid id="job_experience_add_display" columns="2"
+					<p:panelGrid styleClass="no_border" id="job_experience_add_display" columns="2"
 						cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Şirket İsmi :" />
@@ -252,7 +252,7 @@
 								itemLabel="#{workingType.workingType}" />
 						</p:selectOneMenu>
 
-					</h:panelGrid>
+					</p:panelGrid>
 					<p:commandButton action="#{jobExperienceView.addJobExperience}"
 						value="Ekle" ajax="true" icon="ui-icon-disk"
 						update=":dialog_job_experience_add_form" />

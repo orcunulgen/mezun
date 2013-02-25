@@ -70,7 +70,7 @@
 				showEffect="fade" modal="true">
 				<h:form id="event_dialog_form">
 					<p:growl id="selected_event_dialog_messages" />
-					<h:panelGrid id="event_detail_display" columns="2" cellpadding="4"
+					<p:panelGrid styleClass="no_border" id="event_detail_display" columns="2" cellpadding="4"
 						style="margin:0 auto;">
 
 						<h:outputLabel value="Etkinlik İsmi :" />
@@ -91,7 +91,7 @@
 						<p:calendar value="#{eventView.selectedEvent.endDate}"
 							showOn="button" />
 
-					</h:panelGrid>
+					</p:panelGrid>
 					<p:commandButton action="#{eventView.updateEvent}" value="Kaydet"
 						ajax="true" icon="ui-icon-disk" update=":event_dialog_form" />
 				</h:form>
@@ -106,7 +106,7 @@
 				resizable="false" id="eventAddDlg" showEffect="fade" modal="true">
 				<h:form id="dialog_event_add_form">
 					<p:growl id="event_add_messages" />
-					<h:panelGrid id="event_add_display" columns="2" cellpadding="4"
+					<p:panelGrid styleClass="no_border" id="event_add_display" columns="2" cellpadding="4"
 						style="margin:0 auto;">
 
 						<h:outputLabel value="Etkinlik İsmi :" />
@@ -125,7 +125,7 @@
 						<h:outputLabel value="Bitiş Tarihi :" />
 						<p:calendar value="#{eventView.event.endDate}" showOn="button" />
 
-					</h:panelGrid>
+					</p:panelGrid>
 					<p:commandButton action="#{eventView.addEvent}" value="Ekle"
 						ajax="true" icon="ui-icon-disk" update=":dialog_event_add_form" />
 				</h:form>

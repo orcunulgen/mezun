@@ -30,8 +30,11 @@
 					</p:menubar>
 				</div>
 				<div class="welcome">
-					<h:outputLabel style="float:right;" value="Hoşgeldiniz , #{profileSettingsView.loggedUser.name} #{profileSettingsView.loggedUser.surname} "/>
-				
+					<h:outputLabel style="float:right;"
+						value="Hoşgeldiniz , #{profileSettingsView.loggedUser.name} #{profileSettingsView.loggedUser.surname} ">
+						<!-- <h:outputLink value="#{facesContext.externalContext.requestContextPath}/logout">Çıkış</h:outputLink> -->
+					</h:outputLabel>
+
 				</div>
 
 			</div>

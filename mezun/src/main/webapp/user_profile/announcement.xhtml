@@ -62,7 +62,7 @@
 				id="announcementUpdateDlg" showEffect="fade" modal="true">
 				<h:form id="announcement_dialog_form">
 					<p:growl id="selected_announcement_dialog_messages" />
-					<h:panelGrid id="announcement_detail_display" columns="2"
+					<p:panelGrid styleClass="no_border" id="announcement_detail_display" columns="2"
 						cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Duyuru Başlığı :" />
@@ -88,7 +88,7 @@
 								itemLabel="#{announcementType.announcementType}" />
 						</p:selectOneMenu>
 
-					</h:panelGrid>
+					</p:panelGrid>
 					<p:commandButton action="#{announcementView.updateAnnouncement}"
 						value="Kaydet" ajax="true" icon="ui-icon-disk"
 						update=":announcement_dialog_form" />
@@ -105,7 +105,7 @@
 				modal="true">
 				<h:form id="dialog_announcement_add_form">
 					<p:growl id="announcement_add_messages" />
-					<h:panelGrid id="announcement_add_display" columns="2"
+					<p:panelGrid styleClass="no_border" id="announcement_add_display" columns="2"
 						cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Duyuru Başlığı :" />
@@ -130,7 +130,7 @@
 								itemLabel="#{announcementType.announcementType}" />
 						</p:selectOneMenu>
 
-					</h:panelGrid>
+					</p:panelGrid>
 					<p:commandButton action="#{announcementView.addAnnouncement}"
 						value="Ekle" ajax="true" icon="ui-icon-disk"
 						update=":dialog_announcement_add_form" />

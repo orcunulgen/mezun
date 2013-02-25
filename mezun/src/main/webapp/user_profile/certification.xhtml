@@ -62,7 +62,7 @@
 				id="certificationUpdateDlg" showEffect="fade" modal="true">
 				<h:form id="certification_dialog_form">
 					<p:growl id="selected_certification_dialog_messages" />
-					<h:panelGrid id="certification_detail_display" columns="2"
+					<p:panelGrid styleClass="no_border" id="certification_detail_display" columns="2"
 						cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Sertifika İsmi :" />
@@ -87,7 +87,7 @@
 							value="#{certificationView.selectedCertification.institution}"
 							required="true" requiredMessage="Lütfen alındığı kurumu giriniz." />
 
-					</h:panelGrid>
+					</p:panelGrid>
 					<p:commandButton action="#{certificationView.updateCertification}"
 						value="Kaydet" ajax="true" icon="ui-icon-disk"
 						update=":certification_dialog_form" />
@@ -104,7 +104,7 @@
 				modal="true">
 				<h:form id="dialog_certification_add_form">
 					<p:growl id="certification_add_messages" />
-					<h:panelGrid id="certification_add_display" columns="2"
+					<p:panelGrid styleClass="no_border" id="certification_add_display" columns="2"
 						cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Sertifika İsmi :" />
@@ -129,7 +129,7 @@
 							required="true" requiredMessage="Lütfen alındığı kurumu giriniz." />
 
 
-					</h:panelGrid>
+					</p:panelGrid>
 					<p:commandButton action="#{certificationView.addCertification}"
 						value="Ekle" ajax="true" icon="ui-icon-disk"
 						update=":dialog_certification_add_form" />
