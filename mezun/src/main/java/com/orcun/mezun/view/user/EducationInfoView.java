@@ -35,63 +35,72 @@ public class EducationInfoView implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private User loggedUser;
-	
+
 	private EducationInfo educationInfo;
-	
-	private List<University> universities=new ArrayList<University>();
-	
-	private List<Faculty> universityAddFaculties=new ArrayList<Faculty>();
-	private List<Faculty> universityUpdateFaculties=new ArrayList<Faculty>();
-	
-	private List<Department> facultyAddDepartments=new ArrayList<Department>();
-	private List<Department> facultyUpdateDepartments=new ArrayList<Department>();
-	
-	private List<EducationLevel> educationLevels=new ArrayList<EducationLevel>();
-	
+
+	private Boolean isStudent = true;
+
+	private List<University> universities = new ArrayList<University>();
+
+	private List<Faculty> universityAddFaculties = new ArrayList<Faculty>();
+	private List<Faculty> universityUpdateFaculties = new ArrayList<Faculty>();
+
+	private List<Department> facultyAddDepartments = new ArrayList<Department>();
+	private List<Department> facultyUpdateDepartments = new ArrayList<Department>();
+
+	private List<EducationLevel> educationLevels = new ArrayList<EducationLevel>();
+
 	private List<GradingSystem> gradingSystems = new ArrayList<GradingSystem>();
 
-	
 	private List<EducationInfo> educations = new ArrayList<EducationInfo>();
 	private EducationInfo selectedEducationInfo;
-	
+	private Boolean selectedEduInfoIsStudent;
+
 	@ManagedProperty(value = "#{educationInfoService}")
 	private EducationInfoService educationInfoService;
-	
+
 	@PostConstruct
 	public void init() {
 		universities = educationInfoService.allUniversities();
 		educationLevels = educationInfoService.allEducationLevels();
-		educations=educationInfoService.allEducations(getLoggedUser());
+		educations = educationInfoService.allEducations(getLoggedUser());
 		gradingSystems = educationInfoService.allGradingSystems();
 		if (educationInfo == null) {
 			educationInfo = new EducationInfo();
 
 		}
 	}
-	
-	public void initSelectedEducationInfo(EducationInfo selectedEducationInfo){
-		this.selectedEducationInfo=selectedEducationInfo;
+
+	public void initSelectedEducationInfo(EducationInfo selectedEducationInfo) {
+		this.selectedEducationInfo = selectedEducationInfo;
+		if (getSelectedEducationInfo().getEndDate() == null) {
+			this.selectedEduInfoIsStudent = true;
+		} else {
+			this.selectedEduInfoIsStudent = false;
+		}
 		updateUniversityChangeFaculty();
 		updateFacultyChangeDepartment();
 	}
-	
-	public void deleteSelectedEducationInfo(EducationInfo selectedEducationInfo) throws IOException {
+
+	public void deleteSelectedEducationInfo(EducationInfo selectedEducationInfo)
+			throws IOException {
 		initSelectedEducationInfo(selectedEducationInfo);
 		try {
 			getEducationInfoService().deleteEducationInfo(
 					getSelectedEducationInfo());
-			
-			FacesContext.getCurrentInstance()
-			.getExternalContext()
-			.redirect(
-					"university.xhtml?user="
-							+ getLoggedUser().getTcno());
+
+			FacesContext
+					.getCurrentInstance()
+					.getExternalContext()
+					.redirect(
+							"university.xhtml?user="
+									+ getLoggedUser().getTcno());
 
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public User getLoggedUser() {
 		SecurityContext securityContext = (SecurityContext) FacesContext
 				.getCurrentInstance().getExternalContext().getSessionMap()
@@ -103,13 +112,21 @@ public class EducationInfoView implements Serializable {
 		return loggedUser;
 
 	}
-	
+
 	public EducationInfo getEducationInfo() {
 		return educationInfo;
 	}
 
 	public void setEducationInfo(EducationInfo educationInfo) {
 		this.educationInfo = educationInfo;
+	}
+
+	public Boolean getIsStudent() {
+		return isStudent;
+	}
+
+	public void setIsStudent(Boolean isStudent) {
+		this.isStudent = isStudent;
 	}
 
 	public List<University> getUniversities() {
@@ -132,7 +149,8 @@ public class EducationInfoView implements Serializable {
 		return universityUpdateFaculties;
 	}
 
-	public void setUniversityUpdateFaculties(List<Faculty> universityUpdateFaculties) {
+	public void setUniversityUpdateFaculties(
+			List<Faculty> universityUpdateFaculties) {
 		this.universityUpdateFaculties = universityUpdateFaculties;
 	}
 
@@ -189,143 +207,214 @@ public class EducationInfoView implements Serializable {
 		return educationInfoService;
 	}
 
-	public void setEducationInfoService(EducationInfoService educationInfoService) {
+	public void setEducationInfoService(
+			EducationInfoService educationInfoService) {
 		this.educationInfoService = educationInfoService;
 	}
 
-	public void addUniversityChangeFaculty(){
-		universityAddFaculties=getEducationInfoService().allFaculties(getEducationInfo().getUniversity());
-		facultyAddDepartments=new ArrayList<Department>();
+	public Boolean getSelectedEduInfoIsStudent() {
+		return selectedEduInfoIsStudent;
 	}
-	public void updateUniversityChangeFaculty(){
-		universityUpdateFaculties=getEducationInfoService().allFaculties(getSelectedEducationInfo().getUniversity());
-		facultyUpdateDepartments=new ArrayList<Department>();
+
+	public void setSelectedEduInfoIsStudent(Boolean selectedEduInfoIsStudent) {
+		this.selectedEduInfoIsStudent = selectedEduInfoIsStudent;
 	}
-	
-	public void addFacultyChangeDepartment(){
-		facultyAddDepartments=getEducationInfoService().allDepartments(getEducationInfo().getFaculty());
+
+	public void addUniversityChangeFaculty() {
+		universityAddFaculties = getEducationInfoService().allFaculties(
+				getEducationInfo().getUniversity());
+		facultyAddDepartments = new ArrayList<Department>();
 	}
-	public void updateFacultyChangeDepartment(){
-		facultyUpdateDepartments=getEducationInfoService().allDepartments(getSelectedEducationInfo().getFaculty());
+
+	public void updateUniversityChangeFaculty() {
+		universityUpdateFaculties = getEducationInfoService().allFaculties(
+				getSelectedEducationInfo().getUniversity());
+		facultyUpdateDepartments = new ArrayList<Department>();
 	}
-	
-	public void checkURL() throws IOException{
-		
-		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-		String userParameter=request.getParameter("user");
-		
-		if(userParameter==null || userParameter.equals("")){
-			
-			FacesContext.getCurrentInstance().getExternalContext()
-			.redirect("personal_info.xhtml?user="+getLoggedUser().getTcno());
-			
-		}else if(!userParameter.equals(getLoggedUser().getTcno().toString())){
-			FacesContext.getCurrentInstance().getExternalContext()
-			.redirect("personal_info.xhtml?user="+getLoggedUser().getTcno());
-			
+
+	public void addFacultyChangeDepartment() {
+		facultyAddDepartments = getEducationInfoService().allDepartments(
+				getEducationInfo().getFaculty());
+	}
+
+	public void updateFacultyChangeDepartment() {
+		facultyUpdateDepartments = getEducationInfoService().allDepartments(
+				getSelectedEducationInfo().getFaculty());
+	}
+
+	public void checkURL() throws IOException {
+
+		HttpServletRequest request = (HttpServletRequest) FacesContext
+				.getCurrentInstance().getExternalContext().getRequest();
+		String userParameter = request.getParameter("user");
+
+		if (userParameter == null || userParameter.equals("")) {
+
+			FacesContext
+					.getCurrentInstance()
+					.getExternalContext()
+					.redirect(
+							"personal_info.xhtml?user="
+									+ getLoggedUser().getTcno());
+
+		} else if (!userParameter.equals(getLoggedUser().getTcno().toString())) {
+			FacesContext
+					.getCurrentInstance()
+					.getExternalContext()
+					.redirect(
+							"personal_info.xhtml?user="
+									+ getLoggedUser().getTcno());
+
 		}
 	}
-	
+
 	public void addEducationInfo() throws IOException {
 		try {
 
-			int differenceStartEnd = Days.daysBetween(
-					new DateTime(getEducationInfo().getStartDate()),
-					new DateTime(getEducationInfo().getEndDate())).getDays();
+			if (getIsStudent()) {
+				getEducationInfo().setEndDate(null);
 
-			Date registeredDate = new Date();
+				Date registeredDate = new Date();
 
-			int differenceStartRegister = Days.daysBetween(
-					new DateTime(getEducationInfo().getStartDate()),
-					new DateTime(registeredDate)).getDays();
+				int differenceStartRegister = Days.daysBetween(
+						new DateTime(getEducationInfo().getStartDate()),
+						new DateTime(registeredDate)).getDays();
+				if (differenceStartRegister > 0) {
 
-			if (differenceStartEnd > 0 && differenceStartRegister > 0) {
+					getEducationInfo().setUser(getLoggedUser());
+					getEducationInfoService().addEducationInfo(
+							getEducationInfo());
 
-				getEducationInfo().setUser(getLoggedUser());
-				getEducationInfoService().addEducationInfo(getEducationInfo());
+					FacesContext
+							.getCurrentInstance()
+							.getExternalContext()
+							.redirect(
+									"university.xhtml?user="
+											+ getLoggedUser().getTcno());
 
-				/*
-				 * FacesMessage fm = new
-				 * FacesMessage(FacesMessage.SEVERITY_ERROR,
-				 * "Kaydınız tamamlandı.", "");
-				 * 
-				 * FacesContext.getCurrentInstance().addMessage(null, fm);
-				 */
+				} else {
+					FacesMessage fm = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"Başlangıç tarihi geçmiş zamana ait olmalıdır.",
+							"Lütfen yeniden deneyiniz.");
+					FacesContext.getCurrentInstance().addMessage(null, fm);
 
-				/*
-				 * FacesContext.getCurrentInstance().getExternalContext()
-				 * .getFlash().setKeepMessages(true);
-				 */
-				FacesContext
-						.getCurrentInstance()
-						.getExternalContext()
-						.redirect(
-								"university.xhtml?user="
-										+ getLoggedUser().getTcno());
-
+				}
 			} else {
-				FacesMessage fm = new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"Başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
-						"Lütfen yeniden deneyiniz.");
-				FacesContext.getCurrentInstance().addMessage(null, fm);
+				int differenceStartEnd = Days.daysBetween(
+						new DateTime(getEducationInfo().getStartDate()),
+						new DateTime(getEducationInfo().getEndDate()))
+						.getDays();
+
+				Date registeredDate = new Date();
+
+				int differenceStartRegister = Days.daysBetween(
+						new DateTime(getEducationInfo().getStartDate()),
+						new DateTime(registeredDate)).getDays();
+
+				if (differenceStartEnd > 0 && differenceStartRegister > 0) {
+
+					getEducationInfo().setUser(getLoggedUser());
+					getEducationInfoService().addEducationInfo(
+							getEducationInfo());
+
+					FacesContext
+							.getCurrentInstance()
+							.getExternalContext()
+							.redirect(
+									"university.xhtml?user="
+											+ getLoggedUser().getTcno());
+
+				} else {
+					FacesMessage fm = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"Başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
+							"Lütfen yeniden deneyiniz.");
+					FacesContext.getCurrentInstance().addMessage(null, fm);
+
+				}
 
 			}
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}
 
 	}
-	
+
 	public void updateEducationInfo() throws IOException {
 		try {
 
-			int differenceStartEnd = Days.daysBetween(
-					new DateTime(getSelectedEducationInfo().getStartDate()),
-					new DateTime(getSelectedEducationInfo().getEndDate())).getDays();
+			if (getSelectedEduInfoIsStudent()) {
+				getSelectedEducationInfo().setEndDate(null);
+				Date registeredDate = new Date();
 
-			Date registeredDate = new Date();
+				int differenceStartRegister = Days
+						.daysBetween(
+								new DateTime(getSelectedEducationInfo()
+										.getStartDate()),
+								new DateTime(registeredDate)).getDays();
 
-			int differenceStartRegister = Days.daysBetween(
-					new DateTime(getSelectedEducationInfo().getStartDate()),
-					new DateTime(registeredDate)).getDays();
+				if (differenceStartRegister > 0) {
 
-			if (differenceStartEnd > 0 && differenceStartRegister > 0) {
+					getEducationInfoService().updateEducationInfo(
+							getSelectedEducationInfo());
 
-				getEducationInfoService().updateEducationInfo(getSelectedEducationInfo());
-
-				/*
-				 * FacesMessage fm = new
-				 * FacesMessage(FacesMessage.SEVERITY_ERROR,
-				 * "Kaydınız tamamlandı.", "");
-				 * 
-				 * FacesContext.getCurrentInstance().addMessage(null, fm);
-				 */
-
-				/*
-				 * FacesContext.getCurrentInstance().getExternalContext()
-				 * .getFlash().setKeepMessages(true);
-				 */
-				FacesContext
-						.getCurrentInstance()
-						.getExternalContext()
-						.redirect(
-								"university.xhtml?user="
-										+ getLoggedUser().getTcno());
-
+					FacesContext
+							.getCurrentInstance()
+							.getExternalContext()
+							.redirect(
+									"university.xhtml?user="
+											+ getLoggedUser().getTcno());
+				} else {
+					FacesMessage fm = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"Başlangıç tarihi geçmiş zamana ait olmalıdır.",
+							"Lütfen yeniden deneyiniz.");
+					FacesContext.getCurrentInstance().addMessage(null, fm);
+				}
 			} else {
-				FacesMessage fm = new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"Başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
-						"Lütfen yeniden deneyiniz.");
-				FacesContext.getCurrentInstance().addMessage(null, fm);
+				int differenceStartEnd = Days
+						.daysBetween(
+								new DateTime(getSelectedEducationInfo()
+										.getStartDate()),
+								new DateTime(getSelectedEducationInfo()
+										.getEndDate())).getDays();
 
+				Date registeredDate = new Date();
+
+				int differenceStartRegister = Days
+						.daysBetween(
+								new DateTime(getSelectedEducationInfo()
+										.getStartDate()),
+								new DateTime(registeredDate)).getDays();
+
+				if (differenceStartEnd > 0 && differenceStartRegister > 0) {
+
+					getEducationInfoService().updateEducationInfo(
+							getSelectedEducationInfo());
+
+					FacesContext
+							.getCurrentInstance()
+							.getExternalContext()
+							.redirect(
+									"university.xhtml?user="
+											+ getLoggedUser().getTcno());
+
+				} else {
+					FacesMessage fm = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"Başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
+							"Lütfen yeniden deneyiniz.");
+					FacesContext.getCurrentInstance().addMessage(null, fm);
+
+				}
 			}
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}
 
 	}
-
 
 }

@@ -58,9 +58,15 @@
 						<f:facet name="header">
 							<h:outputLabel value="Bitiş Tarihi" />
 						</f:facet>
-						<h:outputLabel value="#{educationInfoList.endDate}">
+						<h:outputLabel value="#{educationInfoList.endDate}"
+							rendered="#{educationInfoList.endDate!=null}">
 							<f:convertDateTime pattern="dd/MM/yyyy" />
 						</h:outputLabel>
+
+						<h:outputLabel value="Devam Ediyor"
+							rendered="#{educationInfoList.endDate==null}">
+						</h:outputLabel>
+
 					</p:column>
 
 					<p:column>
@@ -80,8 +86,8 @@
 				id="universityUpdateDlg" showEffect="fade" modal="true">
 				<h:form id="university_dialog_form">
 					<p:growl id="selected_university_dialog_messages" />
-					<p:panelGrid styleClass="no_border" id="university_detail_display" columns="2"
-						cellpadding="4" style="margin:0 auto;">
+					<p:panelGrid styleClass="no_border" id="university_detail_display"
+						columns="2" cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Üniversite :" />
 						<p:selectOneMenu validator="universityValidator"
@@ -130,10 +136,20 @@
 							value="#{educationInfoView.selectedEducationInfo.startDate}"
 							showOn="button" />
 
-						<h:outputLabel value="Bitiş Tarihi :" />
+						<h:outputLabel value="Devam Ediyorum :" />
+						<p:selectBooleanButton
+							value="#{educationInfoView.selectedEduInfoIsStudent}"
+							onLabel="Evet" offLabel="Hayır" onIcon="ui-icon-check"
+							offIcon="ui-icon-close">
+							<p:ajax update="university_dialog_form" />
+						</p:selectBooleanButton>
+
+						<h:outputLabel value="Bitiş Tarihi :"
+							rendered="#{!educationInfoView.selectedEduInfoIsStudent}" />
 						<p:calendar
 							value="#{educationInfoView.selectedEducationInfo.endDate}"
-							showOn="button" />
+							showOn="button"
+							rendered="#{!educationInfoView.selectedEduInfoIsStudent}" />
 
 						<h:outputLabel value="Eğitim Seviyesi :" />
 						<p:selectOneMenu validator="educationLevelValidator"
@@ -146,9 +162,9 @@
 								itemLabel="#{educationLevel.educationLevel}" />
 						</p:selectOneMenu>
 
-						<h:outputLabel for="form_grading_system"
+						<h:outputLabel for="update_form_grading_system"
 							value="Diploma Not Sistemi" />
-						<p:selectOneMenu validator="gradingSystemValidator"
+						<p:selectOneMenu id="update_form_grading_system"  validator="gradingSystemValidator"
 							converter="gradingSystemConverter"
 							value="#{educationInfoView.selectedEducationInfo.gradingSystem}">
 							<f:selectItem itemValue="0"
@@ -159,13 +175,26 @@
 						</p:selectOneMenu>
 
 						<h:outputLabel for="form_graduation_degree"
-							value="Lise Mezuniyet Derecesi" />
+							value="Mezuniyet Derecesi"
+							rendered="#{!educationInfoView.selectedEduInfoIsStudent}" />
 
 						<p:inputText id="form_graduation_degree"
 							value="#{educationInfoView.selectedEducationInfo.graduationDegree}"
 							required="true"
-							requiredMessage="Lütfen mezuniyet derecenizi giriniz.">
+							requiredMessage="Lütfen mezuniyet derecenizi giriniz."
+							rendered="#{!educationInfoView.selectedEduInfoIsStudent}">
 						</p:inputText>
+
+						<h:outputLabel for="form_grade_mean" value="Ağırlıklı Ortalama"
+							rendered="#{educationInfoView.selectedEduInfoIsStudent}" />
+
+						<p:inputText id="form_grade_mean"
+							value="#{educationInfoView.selectedEducationInfo.graduationDegree}"
+							required="true"
+							requiredMessage="Lütfen mezuniyet derecenizi giriniz."
+							rendered="#{educationInfoView.selectedEduInfoIsStudent}">
+						</p:inputText>
+
 
 					</p:panelGrid>
 					<p:commandButton action="#{educationInfoView.updateEducationInfo}"
@@ -184,8 +213,8 @@
 				modal="true">
 				<h:form id="dialog_university_add_form">
 					<p:growl id="university_add_messages" />
-					<p:panelGrid styleClass="no_border" id="university_add_display" columns="2"
-						cellpadding="4" style="margin:0 auto;">
+					<p:panelGrid styleClass="no_border" id="university_add_display"
+						columns="2" cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Üniversite :" />
 						<p:selectOneMenu validator="universityValidator"
@@ -231,9 +260,17 @@
 						<p:calendar value="#{educationInfoView.educationInfo.startDate}"
 							showOn="button" />
 
-						<h:outputLabel value="Bitiş Tarihi :" />
+						<h:outputLabel value="Devam Ediyorum :" />
+						<p:selectBooleanButton value="#{educationInfoView.isStudent}"
+							onLabel="Evet" offLabel="Hayır" onIcon="ui-icon-check"
+							offIcon="ui-icon-close">
+							<p:ajax update="dialog_university_add_form" />
+						</p:selectBooleanButton>
+
+						<h:outputLabel value="Bitiş Tarihi :"
+							rendered="#{!educationInfoView.isStudent}" />
 						<p:calendar value="#{educationInfoView.educationInfo.endDate}"
-							showOn="button" />
+							rendered="#{!educationInfoView.isStudent}" showOn="button" />
 
 						<h:outputLabel value="Eğitim Seviyesi :" />
 						<p:selectOneMenu validator="educationLevelValidator"
@@ -247,9 +284,9 @@
 						</p:selectOneMenu>
 
 
-						<h:outputLabel for="form_grading_system"
+						<h:outputLabel for="add_form_grading_system"
 							value="Diploma Not Sistemi" />
-						<p:selectOneMenu validator="gradingSystemValidator"
+						<p:selectOneMenu id="add_form_grading_system" validator="gradingSystemValidator"
 							converter="gradingSystemConverter"
 							value="#{educationInfoView.educationInfo.gradingSystem}">
 							<f:selectItem itemValue="0"
@@ -259,14 +296,28 @@
 								itemLabel="#{gradingSystem.grade}" />
 						</p:selectOneMenu>
 
-						<h:outputLabel for="form_graduation_degree"
-							value="Lise Mezuniyet Derecesi" />
 
+
+						<h:outputLabel for="form_graduation_degree"
+							value="Mezuniyet Derecesi"
+							rendered="#{!educationInfoView.isStudent}" />
 						<p:inputText id="form_graduation_degree"
 							value="#{educationInfoView.educationInfo.graduationDegree}"
 							required="true"
-							requiredMessage="Lütfen mezuniyet derecenizi giriniz.">
+							requiredMessage="Lütfen mezuniyet derecenizi giriniz."
+							rendered="#{!educationInfoView.isStudent}">
 						</p:inputText>
+
+
+						<h:outputLabel for="form_grade_mean" value="Ağırlıklı Ortalama"
+							rendered="#{educationInfoView.isStudent}" />
+						<p:inputText id="form_grade_mean"
+							value="#{educationInfoView.educationInfo.graduationDegree}"
+							required="true"
+							requiredMessage="Lütfen ağırlıklı ortalamanızı giriniz."
+							rendered="#{educationInfoView.isStudent}">
+						</p:inputText>
+
 
 					</p:panelGrid>
 					<p:commandButton action="#{educationInfoView.addEducationInfo}"
