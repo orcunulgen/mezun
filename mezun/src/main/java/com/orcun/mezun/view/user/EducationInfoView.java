@@ -18,14 +18,17 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.orcun.mezun.model.Department;
 import com.orcun.mezun.model.EducationInfo;
 import com.orcun.mezun.model.EducationLevel;
 import com.orcun.mezun.model.Faculty;
 import com.orcun.mezun.model.GradingSystem;
+import com.orcun.mezun.model.Role;
 import com.orcun.mezun.model.University;
 import com.orcun.mezun.model.User;
+import com.orcun.mezun.service.SignUpService;
 import com.orcun.mezun.service.user.EducationInfoService;
 
 @ManagedBean
@@ -59,6 +62,9 @@ public class EducationInfoView implements Serializable {
 	@ManagedProperty(value = "#{educationInfoService}")
 	private EducationInfoService educationInfoService;
 
+	@ManagedProperty(value = "#{signUpService}")
+	private SignUpService signUpService;
+
 	@PostConstruct
 	public void init() {
 		universities = educationInfoService.allUniversities();
@@ -86,8 +92,19 @@ public class EducationInfoView implements Serializable {
 			throws IOException {
 		initSelectedEducationInfo(selectedEducationInfo);
 		try {
-			getEducationInfoService().deleteEducationInfo(
-					getSelectedEducationInfo());
+
+			if (getLoggedUser().getRoles().get(0).getRole()
+					.equals("ROLE_ALUMNI")
+					&& selectedUniversityIsLast(selectedEducationInfo)) {
+				changeRoleToStudent();
+				getEducationInfoService().deleteEducationInfo(
+						getSelectedEducationInfo());
+				SecurityContextHolder.clearContext();
+			} else {
+
+				getEducationInfoService().deleteEducationInfo(
+						getSelectedEducationInfo());
+			}
 
 			FacesContext
 					.getCurrentInstance()
@@ -212,6 +229,14 @@ public class EducationInfoView implements Serializable {
 		this.educationInfoService = educationInfoService;
 	}
 
+	public SignUpService getSignUpService() {
+		return signUpService;
+	}
+
+	public void setSignUpService(SignUpService signUpService) {
+		this.signUpService = signUpService;
+	}
+
 	public Boolean getSelectedEduInfoIsStudent() {
 		return selectedEduInfoIsStudent;
 	}
@@ -268,6 +293,41 @@ public class EducationInfoView implements Serializable {
 		}
 	}
 
+	public void changeRoleToAlumni() {
+
+		Role roleAlumni = new Role();
+		List<Role> roleList = new ArrayList<Role>();
+		roleAlumni = signUpService.getRoleInfo("ROLE_ALUMNI");
+		roleList.add(roleAlumni);
+
+		getLoggedUser().setRoles(roleList);
+
+		getEducationInfoService().updateUser(getLoggedUser());
+	}
+
+	public void changeRoleToStudent() {
+
+		Role roleStudent = new Role();
+		List<Role> roleList = new ArrayList<Role>();
+		roleStudent = signUpService.getRoleInfo("ROLE_STUDENT");
+		roleList.add(roleStudent);
+
+		getLoggedUser().setRoles(roleList);
+
+		getEducationInfoService().updateUser(getLoggedUser());
+	}
+
+	public boolean selectedUniversityIsLast(EducationInfo selectedEduInfo) {
+		List<EducationInfo> graduatedUniversities = getEducationInfoService()
+				.findGraduatedUniversities(getLoggedUser());
+		if (graduatedUniversities.size() == 1
+				&& graduatedUniversities.get(0).equals(selectedEduInfo)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public void addEducationInfo() throws IOException {
 		try {
 
@@ -318,6 +378,14 @@ public class EducationInfoView implements Serializable {
 					getEducationInfoService().addEducationInfo(
 							getEducationInfo());
 
+					if (getLoggedUser().getRoles().get(0).getRole()
+							.equals("ROLE_STUDENT")) {
+						
+						changeRoleToAlumni();
+						SecurityContextHolder.clearContext();
+					}
+					
+
 					FacesContext
 							.getCurrentInstance()
 							.getExternalContext()
@@ -357,6 +425,13 @@ public class EducationInfoView implements Serializable {
 
 				if (differenceStartRegister > 0) {
 
+					
+					if (getLoggedUser().getRoles().get(0).getRole()
+							.equals("ROLE_ALUMNI")
+							&& selectedUniversityIsLast(getSelectedEducationInfo())) {
+						changeRoleToStudent();
+						SecurityContextHolder.clearContext();
+					}
 					getEducationInfoService().updateEducationInfo(
 							getSelectedEducationInfo());
 
@@ -391,6 +466,13 @@ public class EducationInfoView implements Serializable {
 
 				if (differenceStartEnd > 0 && differenceStartRegister > 0) {
 
+					if (getLoggedUser().getRoles().get(0).getRole()
+							.equals("ROLE_STUDENT")) {
+						
+						changeRoleToAlumni();
+						SecurityContextHolder.clearContext();
+					}
+					
 					getEducationInfoService().updateEducationInfo(
 							getSelectedEducationInfo());
 

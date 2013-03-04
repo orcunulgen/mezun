@@ -85,6 +85,18 @@ public class EducationInfoDAO{
 	    .setParameter("id", selectedEducationInfo.getId())
 	    .executeUpdate();
 	}
+
+	public void updateUser(User loggedUser) {
+		getSession().update(loggedUser);
+		
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<EducationInfo> findGraduatedUniversities(User loggedUser) {
+		return getSession().createCriteria(EducationInfo.class)
+				.add(Restrictions.eq("user", loggedUser))
+				.add(Restrictions.isNotNull("endDate")).list();
+	}
 	
 	
 }

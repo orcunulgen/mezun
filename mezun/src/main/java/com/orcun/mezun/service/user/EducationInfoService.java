@@ -64,4 +64,12 @@ public class EducationInfoService {
 		getEducationInfoDAO().deleteEducationInfo(selectedEducationInfo);
 		
 	}
+
+	public void updateUser(User loggedUser) {
+		getEducationInfoDAO().updateUser(loggedUser);
+	}
+
+	public List<EducationInfo> findGraduatedUniversities(User loggedUser) {
+		return getEducationInfoDAO().findGraduatedUniversities(loggedUser);
+	}
 }
