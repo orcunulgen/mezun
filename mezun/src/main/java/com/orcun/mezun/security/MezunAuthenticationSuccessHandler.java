@@ -24,7 +24,7 @@ public class MezunAuthenticationSuccessHandler extends SavedRequestAwareAuthenti
 		if(authentication.getAuthorities().iterator().next().getAuthority().equals("ROLE_ADMIN")){
 			
 			ExternalContext exCtx = FacesContext.getCurrentInstance().getExternalContext();
-			response.sendRedirect(exCtx.getRequestContextPath()+"/admin/index.xhtml");
+			response.sendRedirect(exCtx.getRequestContextPath()+"/admin_profile/index.xhtml");
 			
 		}
 		super.onAuthenticationSuccess(request, response, authentication);

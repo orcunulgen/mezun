@@ -67,9 +67,13 @@
 								<h:outputLabel for="form_email" value="E-Mail" />
 							</p:column>
 							<p:column>
-								<p:inputText id="form_email" validator="emailValidator"
+								<p:inputText id="form_email"
 									value="#{signUpView.user.email}" required="true"
 									requiredMessage="Lütfen e-mail adresi giriniz.">
+									<f:validator validatorId="emailFormatValidator"/>
+									<f:validator validatorId="emailMatchValidator"/>
+  									<f:validator validatorId="emailUniquenessValidator" />
+  									  
 									<p:ajax event="blur" update="form_sign_up_messages" />
 									<f:attribute name="formName" value="form_sign_up_panel" />
 								</p:inputText>
@@ -106,7 +110,10 @@
 								<p:inputMask id="form_tcno" value="#{signUpView.user.tcno}"
 									mask="99999999999" required="true"
 									requiredMessage="Lütfen TC kimlik numaranızı giriniz.">
+									<f:validator validatorId="tcnoUniquenessValidator" />
+  									  
 									<p:ajax event="blur" update="form_sign_up_messages" />
+									<f:attribute name="formName" value="form_sign_up_panel" />
 								</p:inputMask>
 							</p:column>
 						</p:row>

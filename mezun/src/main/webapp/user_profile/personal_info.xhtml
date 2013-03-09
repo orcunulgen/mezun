@@ -10,7 +10,8 @@
 	</f:metadata> -->
 
 	<ui:define name="main_container">
-		<h:outputStylesheet library="css" name="user_profile/personal_info.css" />
+		<h:outputStylesheet library="css"
+			name="user_profile/personal_info.css" />
 		<div class="personal_info">
 			<h:form id="form_personal_info_panel" enctype="multipart/form-data"
 				prependId="false">
@@ -24,20 +25,16 @@
 								<h:outputLabel for="form_name" value="İsim" />
 							</p:column>
 							<p:column>
-								<p:inputText id="form_name"
-									value="#{personalInfoView.loggedUser.name}" required="true"
-									requiredMessage="Lütfen isminizi giriniz.">
-								</p:inputText>
+								<h:outputLabel id="form_name"
+									value="#{personalInfoView.loggedUser.name}" />
 							</p:column>
 
 							<p:column>
 								<h:outputLabel for="form_surname" value="Soyisim" />
 							</p:column>
 							<p:column>
-								<p:inputText id="form_surname"
-									value="#{personalInfoView.loggedUser.surname}" required="true"
-									requiredMessage="Lütfen soyisminizi giriniz.">
-								</p:inputText>
+								<h:outputLabel id="form_surname"
+									value="#{personalInfoView.loggedUser.surname}" />
 							</p:column>
 
 
@@ -70,9 +67,14 @@
 								<h:outputLabel for="form_email" value="E-Mail" />
 							</p:column>
 							<p:column>
-								<p:inputText id="form_email" validator="emailValidator"
+								<p:inputText id="form_email"
 									value="#{personalInfoView.loggedUser.email}" required="true"
 									requiredMessage="Lütfen e-mail adresi giriniz.">
+
+									<f:validator validatorId="emailFormatValidator" />
+									<f:validator validatorId="emailMatchValidator" />
+									<f:validator validatorId="emailUniquenessValidator" />
+
 									<p:ajax event="blur" update="form_personal_info_messages" />
 									<f:attribute name="formName" value="form_personal_info_panel" />
 								</p:inputText>
@@ -94,31 +96,22 @@
 								<h:outputLabel for="form_birthday_year" value="Doğum yılı" />
 							</p:column>
 							<p:column>
-								<p:selectOneMenu id="form_birthday_year" required="true"
-									requiredMessage="Lütfen doğum yılınızı seçiniz."
-									value="#{personalInfoView.loggedUser.birthdayYear}">
-									<f:selectItem itemLabel="Doğum yılınızı seçiniz..." />
-									<f:selectItems value="#{personalInfoView.birthdayYears}"
-										var="birthdayYear" itemValue="#{birthdayYear}" />
-								</p:selectOneMenu>
+								<h:outputLabel id="form_birthday_year"
+									value="#{personalInfoView.loggedUser.birthdayYear}" />
 							</p:column>
 
 							<p:column>
 								<h:outputLabel for="form_tcno" value="TC kimlik numarası" />
 							</p:column>
 							<p:column>
-								<p:inputMask id="form_tcno"
-									value="#{personalInfoView.loggedUser.tcno}" mask="99999999999"
-									required="true"
-									requiredMessage="Lütfen TC kimlik numaranızı giriniz.">
-									<p:ajax event="blur" update="form_personal_info_messages" />
-								</p:inputMask>
+								<h:outputLabel id="form_tcno"
+									value="#{personalInfoView.loggedUser.tcno}" />
 							</p:column>
 						</p:row>
 					</p:panelGrid>
 					<p:commandButton value="Kaydet"
-									action="#{personalInfoView.updatePersonalInfo}" ajax="false"
-									update="form_personal_info_messages" />
+						action="#{personalInfoView.updatePersonalInfo}" ajax="false"
+						update="form_personal_info_messages" />
 				</p:fieldset>
 			</h:form>
 		</div>

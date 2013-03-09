@@ -21,24 +21,26 @@ public class TcnoCheckValidator implements Validator {
 	public void validate(FacesContext context, UIComponent component, Object obj)
 			throws ValidatorException {
 
+		String formName=(String) component.getAttributes().get("formName");
+		
 		Long tcno = StringConvertUtil.stringToLong(obj.toString());
 
 		UIInput name_input = (UIInput) context.getViewRoot().findComponent(
-				"form_sign_up_panel:form_name");
+				formName+":form_name");
 		String name = null;
 		if (name_input.getSubmittedValue() != null) {
 			name = name_input.getSubmittedValue().toString();
 		}
 
 		UIInput surname_input = (UIInput) context.getViewRoot().findComponent(
-				"form_sign_up_panel:form_surname");
+			formName+":form_surname");
 		String surname = null;
 		if (surname_input.getSubmittedValue() != null) {
 			surname = surname_input.getSubmittedValue().toString();
 		}
 
 		UISelectItem birthdayYear_input = (UISelectItem) context.getViewRoot()
-				.findComponent("form_sign_up_panel:form_birtday_year");
+				.findComponent(formName+":form_birtday_year");
 		Integer birthdayYear = null;
 
 		if (birthdayYear_input.getItemValue() != null) {

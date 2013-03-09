@@ -67,4 +67,13 @@ public class SignUpService{
 		return signUpDAO.getRoles();
 	}
 
+	public boolean areThereSameTcno(Long tcno) {
+		
+		if(signUpDAO.areThereSameTcno(tcno)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
 }

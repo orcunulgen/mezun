@@ -1,9 +1,9 @@
-package com.orcun.mezun.dao;
+package com.orcun.mezun.dao.admin;
+
 
 
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -19,7 +19,7 @@ import com.orcun.mezun.model.User;
 
 @Repository
 @Transactional
-public class SignUpDAO{
+public class StudentDAO{
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -38,10 +38,10 @@ public class SignUpDAO{
 		return getSessionFactory().getCurrentSession();
 	}
 	
-	public void addUser(User user) {
-		getSession().save(user);
-	}	
-		
+	public void updateStudent(User student){
+		getSession().update(student);
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<Country> allCountries() {
 		return getSession().createCriteria(Country.class).list();
@@ -51,48 +51,24 @@ public class SignUpDAO{
 	public List<City> allCities(Country country) {
 		return getSession().createCriteria(City.class).add(Restrictions.eq("country", country)).list();
 	}
-	
-	public boolean areThereSameUsername(String username){
-		Query query=getSession().createSQLQuery("select * from user where username=:username");
-		query.setParameter("username", username);
-		
-		if(query.list().size()!=0){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	
-	public boolean areThereSameEmail(String email){
-		Query query=getSession().createSQLQuery("select * from user where email=:email");
-		query.setParameter("email", email);
-		
-		if(query.list().size()!=0){
-			return true;
-		}else{
-			return false;
-		}
-	}
 
 	@SuppressWarnings("unchecked")
-	public List<Role> getRoles() {
-		return getSession().createCriteria(Role.class).list();
-	}
-
-	public Role getRoleInfo(String role) {
-		return (Role) getSession().createCriteria(Role.class).
-				add(Restrictions.eq("role", role))
-				.uniqueResult();
-	}
-
-	public boolean areThereSameTcno(Long tcno) {
-		Query query=getSession().createSQLQuery("select * from user where tcno=:tcno");
-		query.setParameter("tcno", tcno);
+	public List<User> allStudents(List<Role> roles) {
 		
-		if(query.list().size()!=0){
-			return true;
-		}else{
-			return false;
-		}
+		return getSession().createCriteria(User.class)
+		        .createAlias("roles", "row")
+		        .add(Restrictions.conjunction()
+		            .add(Restrictions.eq("row.role", roles.get(0).getRole())))
+		        .list();
+		
+//		return getSession().createCriteria(User.class)
+	//			.add(Restrictions.eq("roles",roles )).list();
 	}
+	
+	public void deleteStudent(User selectedStudent) {
+		
+		getSession().delete(selectedStudent);
+	}
+	
+	
 }

@@ -2,11 +2,6 @@ package com.orcun.mezun.view.user;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -32,7 +27,6 @@ public class PersonalInfoView implements Serializable {
 	private String confirmEmail;
 	private String confirmPassword;
 	
-	private List<Integer> birthdayYears = new ArrayList<Integer>();
 	
 	@ManagedProperty(value = "#{personalInfoService}")
 	private PersonalInfoService personalInfoService;
@@ -48,24 +42,6 @@ public class PersonalInfoView implements Serializable {
 		
 	}
 
-	public List<Integer> getBirthdayYears() {
-		if (this.birthdayYears == null || this.birthdayYears.size() == 0) {
-			DateFormat dateFormat = new SimpleDateFormat("yyyy");
-			Date date = new Date();
-			int year = Integer.parseInt(dateFormat.format(date));
-			for (int i = 1950; i < year - 17; i++) {
-				this.birthdayYears.add(i);
-			}
-		}
-
-		return birthdayYears;
-	}
-
-	public void setBirthdayYears(List<Integer> birthdayYears) {
-		this.birthdayYears = birthdayYears;
-	}
-
-	
 	public PersonalInfoService getPersonalInfoService() {
 		return personalInfoService;
 	}

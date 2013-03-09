@@ -1,0 +1,231 @@
+<ui:composition template="/templates/admin/admin_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<!-- <f:metadata>
+		<f:event type="preRenderView" listener="#{personalInfoView.checkURL}" />
+	</f:metadata> -->
+
+	<ui:define name="main_container">
+		<h:outputStylesheet library="css" name="admin_profile/student.css" />
+		<div class="student">
+
+			<h:form id="list_student_form">
+				<p:growl id="list_student_messages" />
+				<p:dataTable var="studentList" value="#{studentView.students}"
+					paginator="true" rows="10">
+					<p:column style="width:15%">
+						<f:facet name="header">
+							<h:outputLabel value="İşlemler" />
+						</f:facet>
+						<p:commandButton id="selectButton"
+							actionListener="#{studentView.initSelectedStudent(studentList)}"
+							update=":student_dialog_form"
+							oncomplete="studentUpdateDialog.show()" icon="ui-icon-search"
+							title="View">
+						</p:commandButton>
+						<p:commandButton id="deleteButton"
+							actionListener="#{studentView.deleteSelectedStudent(studentList)}"
+							icon="ui-icon-close" title="Delete">
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="TC Kimlik" />
+						</f:facet>
+						<h:outputLabel value="#{studentList.tcno}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="İsim" />
+						</f:facet>
+						<h:outputLabel value="#{studentList.name}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Soyisim" />
+						</f:facet>
+						<h:outputLabel value="#{studentList.surname}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Email" />
+						</f:facet>
+						<h:outputLabel value="#{studentList.email}" />
+					</p:column>
+
+
+				</p:dataTable>
+			</h:form>
+
+			<p:dialog header="Öğrenci Ayrıntıları"
+				widgetVar="studentUpdateDialog" resizable="false"
+				id="studentUpdateDlg" showEffect="fade" modal="true">
+				<h:form id="student_dialog_form">
+					<p:growl id="selected_student_dialog_messages" />
+					<p:panelGrid styleClass="no_border" id="student_detail_display"
+						columns="2" cellpadding="4" style="margin:0 auto;">
+
+						<h:outputLabel value="TC Kimlik :" />
+						<h:outputLabel value="#{studentView.selectedStudent.tcno}" />
+
+						<h:outputLabel value="İsim" />
+						<h:outputLabel value="#{studentView.selectedStudent.name}" />
+
+						<h:outputLabel value="Soyisim" />
+						<h:outputLabel value="#{studentView.selectedStudent.surname}" />
+
+						<h:outputLabel for="form_email" value="E-Mail" />
+						<p:inputText id="form_email" value="#{studentView.selectedStudent.email}"
+							required="true" requiredMessage="Lütfen e-mail adresi giriniz.">
+							<f:validator validatorId="emailFormatValidator" />
+							<f:validator validatorId="emailMatchValidator" />
+							<f:validator validatorId="emailUniquenessValidator" />
+
+							<p:ajax event="blur" update="selected_student_dialog_messages" />
+							<f:attribute name="formName" value="student_dialog_form" />
+						</p:inputText>
+						<h:outputLabel for="form_confirm_email" value="E-Mail Tekrarı" />
+						<p:inputText id="form_confirm_email"
+							value="#{studentView.selectedStudent.email}" />
+							
+						<h:outputLabel for="form_password" value="Şifre" />
+						<p:password id="form_password"
+							value="#{studentView.selectedStudent.password}" required="true"
+							requiredMessage="Lütfen şifre giriniz."
+							validatorMessage="Şifreniz eşleşmiyor.Lütfen yeniden deneyiniz."
+							match="form_confirm_password" />
+						<h:outputLabel for="form_confirm_password" value="Şifre Tekrarı" />
+						<p:password id="form_confirm_password"
+							value="#{studentView.selectedStudent.password}" />
+
+						<h:outputLabel value="Doğum yılı" />
+						<h:outputLabel value="#{studentView.selectedStudent.birthdayYear}" />
+
+						<h:outputLabel value="Doğduğu Ülke " />
+						<p:selectOneMenu validator="countryValidator"
+							converter="countryConverter"
+							value="#{studentView.selectedStudent.country}">
+							<f:selectItem itemValue="0" itemLabel="Lütfen bir ülke seçiniz" />
+							<f:selectItems value="#{studentView.countries}" var="country"
+								itemValue="#{country}" itemLabel="#{country.countryName}" />
+							<p:ajax listener="#{studentView.updateStudentChangeCountry}"
+								event="change" update="form_update_student_city" />
+
+						</p:selectOneMenu>
+
+						<h:outputLabel value="Doğduğu Şehir " />
+						<p:selectOneMenu validator="cityValidator"
+							converter="cityConverter" id="form_update_student_city"
+							value="#{studentView.selectedStudent.city}">
+							<f:selectItem itemValue="0" itemLabel="Lütfen bir şehir seçiniz" />
+							<f:selectItems value="#{studentView.studentUpdateCities}"
+								var="city" itemValue="#{city}" itemLabel="#{city.cityName}" />
+						</p:selectOneMenu>
+
+					</p:panelGrid>
+					<p:commandButton action="#{studentView.updateStudent}"
+						value="Kaydet" ajax="true" icon="ui-icon-disk"
+						update=":student_dialog_form" />
+				</h:form>
+			</p:dialog>
+
+
+
+
+			<p:commandButton value="Yeni Öğrenci Ekle" type="button"
+				onclick="studentAddDialog.show()" />
+			<p:dialog header="Öğrenci Ekle" widgetVar="studentAddDialog"
+				resizable="false" id="studentAddDlg" showEffect="fade" modal="true">
+				<h:form id="dialog_student_add_form">
+					<p:growl id="student_add_messages" />
+					<p:panelGrid styleClass="no_border" id="student_add_display"
+						columns="2" cellpadding="4" style="margin:0 auto;">
+
+						<h:outputLabel value="TC Kimlik :" />
+						<p:inputMask id="form_tcno" value="#{studentView.student.tcno}"
+							mask="99999999999" required="true"
+							requiredMessage="Lütfen TC kimlik numaranızı giriniz.">
+							<f:validator validatorId="tcnoUniquenessValidator" />
+
+							<p:ajax event="blur" update="student_add_messages" />
+							<f:attribute name="formName" value="dialog_student_add_form" />
+						</p:inputMask>
+
+						<h:outputLabel value="İsim" />
+						<p:inputText value="#{studentView.student.name}" required="true"
+							requiredMessage="Lütfen isminizi giriniz.">
+						</p:inputText>
+
+						<h:outputLabel value="Soyisim" />
+						<p:inputText value="#{studentView.student.surname}"
+							required="true" requiredMessage="Lütfen soyisminizi giriniz.">
+						</p:inputText>
+
+						<h:outputLabel for="form_email" value="E-Mail" />
+						<p:inputText id="form_email" value="#{studentView.student.email}"
+							required="true" requiredMessage="Lütfen e-mail adresi giriniz.">
+							<f:validator validatorId="emailFormatValidator" />
+							<f:validator validatorId="emailMatchValidator" />
+							<f:validator validatorId="emailUniquenessValidator" />
+
+							<p:ajax event="blur" update="student_add_messages" />
+							<f:attribute name="formName" value="dialog_student_add_form" />
+						</p:inputText>
+						<h:outputLabel for="form_confirm_email" value="E-Mail Tekrarı" />
+						<p:inputText id="form_confirm_email"
+							value="#{studentView.student.email}" />
+
+						<h:outputLabel for="form_password" value="Şifre" />
+						<p:password id="form_password"
+							value="#{studentView.student.password}" required="true"
+							requiredMessage="Lütfen şifre giriniz."
+							validatorMessage="Şifreniz eşleşmiyor.Lütfen yeniden deneyiniz."
+							match="form_confirm_password" />
+						<h:outputLabel for="form_confirm_password" value="Şifre Tekrarı" />
+						<p:password id="form_confirm_password"
+							value="#{studentView.student.password}" />
+
+						<h:outputLabel value="Doğum yılı" />
+						<p:selectOneMenu required="true"
+							requiredMessage="Lütfen doğum yılınızı seçiniz."
+							value="#{studentView.student.birthdayYear}">
+							<f:selectItem itemLabel="Doğum yılınızı seçiniz..." />
+							<f:selectItems value="#{studentView.birthdayYears}"
+								var="birthdayYear" itemValue="#{birthdayYear}" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value="Doğduğu Ülke " />
+						<p:selectOneMenu validator="countryValidator"
+							converter="countryConverter"
+							value="#{studentView.student.country}">
+							<f:selectItem itemValue="0" itemLabel="Lütfen bir ülke seçiniz" />
+							<f:selectItems value="#{studentView.countries}" var="country"
+								itemValue="#{country}" itemLabel="#{country.countryName}" />
+							<p:ajax listener="#{studentView.addStudentChangeCountry}"
+								event="change" update="form_add_student_city" />
+
+						</p:selectOneMenu>
+
+						<h:outputLabel value="Doğduğu Şehir " />
+						<p:selectOneMenu validator="cityValidator"
+							converter="cityConverter" id="form_add_student_city"
+							value="#{studentView.student.city}">
+							<f:selectItem itemValue="0" itemLabel="Lütfen bir şehir seçiniz" />
+							<f:selectItems value="#{studentView.studentAddCities}" var="city"
+								itemValue="#{city}" itemLabel="#{city.cityName}" />
+						</p:selectOneMenu>
+
+
+					</p:panelGrid>
+					<p:commandButton action="#{studentView.addStudent}" value="Ekle"
+						ajax="true" icon="ui-icon-disk" update=":dialog_student_add_form" />
+				</h:form>
+			</p:dialog>
+		</div>
+	</ui:define>
+
+</ui:composition>
