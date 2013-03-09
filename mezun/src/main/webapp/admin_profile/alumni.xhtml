@@ -1,0 +1,230 @@
+<ui:composition template="/templates/admin/admin_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	
+	<ui:define name="main_container">
+		<h:outputStylesheet library="css" name="admin_profile/alumni.css" />
+		<div class="alumni">
+
+			<h:form id="list_alumni_form">
+				<p:growl id="list_alumni_messages" />
+				<p:dataTable var="alumniList" value="#{alumniView.alumnis}"
+					paginator="true" rows="10">
+					<p:column style="width:15%">
+						<f:facet name="header">
+							<h:outputLabel value="İşlemler" />
+						</f:facet>
+						<p:commandButton id="selectButton"
+							actionListener="#{alumniView.initSelectedAlumni(alumniList)}"
+							update=":alumni_dialog_form"
+							oncomplete="alumniUpdateDialog.show()" icon="ui-icon-search"
+							title="View">
+						</p:commandButton>
+						<p:commandButton id="deleteButton"
+							actionListener="#{alumniView.deleteSelectedAlumni(alumniList)}"
+							icon="ui-icon-close" title="Delete">
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="TC Kimlik" />
+						</f:facet>
+						<h:outputLabel value="#{alumniList.tcno}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="İsim" />
+						</f:facet>
+						<h:outputLabel value="#{alumniList.name}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Soyisim" />
+						</f:facet>
+						<h:outputLabel value="#{alumniList.surname}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Email" />
+						</f:facet>
+						<h:outputLabel value="#{alumniList.email}" />
+					</p:column>
+
+
+				</p:dataTable>
+			</h:form>
+
+			<p:dialog header="Mezun Ayrıntıları"
+				widgetVar="alumniUpdateDialog" resizable="false"
+				id="alumniUpdateDlg" showEffect="fade" modal="true">
+				<h:form id="alumni_dialog_form">
+					<p:growl id="selected_alumni_dialog_messages" />
+					<p:panelGrid styleClass="no_border" id="alumni_detail_display"
+						columns="2" cellpadding="4" style="margin:0 auto;">
+
+						<h:outputLabel value="TC Kimlik :" />
+						<h:outputLabel value="#{alumniView.selectedAlumni.tcno}" />
+
+						<h:outputLabel value="İsim" />
+						<h:outputLabel value="#{alumniView.selectedAlumni.name}" />
+
+						<h:outputLabel value="Soyisim" />
+						<h:outputLabel value="#{alumniView.selectedAlumni.surname}" />
+
+						<h:outputLabel for="form_email" value="E-Mail" />
+						<p:inputText id="form_email"
+							value="#{alumniView.selectedAlumni.email}" required="true"
+							requiredMessage="Lütfen e-mail adresi giriniz.">
+							<f:validator validatorId="emailFormatValidator" />
+							<f:validator validatorId="emailMatchValidator" />
+							<f:validator validatorId="emailUniquenessValidator" />
+
+							<p:ajax event="blur" update="selected_alumni_dialog_messages" />
+							<f:attribute name="formName" value="alumni_dialog_form" />
+						</p:inputText>
+						<h:outputLabel for="form_confirm_email" value="E-Mail Tekrarı" />
+						<p:inputText id="form_confirm_email"
+							value="#{alumniView.selectedAlumni.email}" />
+
+						<h:outputLabel for="form_password" value="Şifre" />
+						<p:password id="form_password"
+							value="#{alumniView.selectedAlumni.password}" required="true"
+							requiredMessage="Lütfen şifre giriniz."
+							validatorMessage="Şifreniz eşleşmiyor.Lütfen yeniden deneyiniz."
+							match="form_confirm_password" />
+						<h:outputLabel for="form_confirm_password" value="Şifre Tekrarı" />
+						<p:password id="form_confirm_password"
+							value="#{alumniView.selectedAlumni.password}" />
+
+						<h:outputLabel value="Doğum yılı" />
+						<h:outputLabel value="#{alumniView.selectedAlumni.birthdayYear}" />
+
+						<h:outputLabel value="Doğduğu Ülke " />
+						<p:selectOneMenu validator="countryValidator"
+							converter="countryConverter"
+							value="#{alumniView.selectedAlumni.country}">
+							<f:selectItem itemValue="0" itemLabel="Lütfen bir ülke seçiniz" />
+							<f:selectItems value="#{alumniView.countries}" var="country"
+								itemValue="#{country}" itemLabel="#{country.countryName}" />
+							<p:ajax listener="#{alumniView.updateAlumniChangeCountry}"
+								event="change" update="form_update_alumni_city" />
+
+						</p:selectOneMenu>
+
+						<h:outputLabel value="Doğduğu Şehir " />
+						<p:selectOneMenu validator="cityValidator"
+							converter="cityConverter" id="form_update_alumni_city"
+							value="#{alumniView.selectedAlumni.city}">
+							<f:selectItem itemValue="0" itemLabel="Lütfen bir şehir seçiniz" />
+							<f:selectItems value="#{alumniView.alumniUpdateCities}"
+								var="city" itemValue="#{city}" itemLabel="#{city.cityName}" />
+						</p:selectOneMenu>
+
+					</p:panelGrid>
+					<p:commandButton action="#{alumniView.updateAlumni}"
+						value="Kaydet" ajax="true" icon="ui-icon-disk"
+						update=":alumni_dialog_form" />
+				</h:form>
+			</p:dialog>
+
+
+
+
+			<p:commandButton value="Yeni Mezun Ekle" type="button"
+				onclick="alumniAddDialog.show()" />
+			<p:dialog header="Öğrenci Ekle" widgetVar="alumniAddDialog"
+				resizable="false" id="alumniAddDlg" showEffect="fade" modal="true">
+				<h:form id="dialog_alumni_add_form">
+					<p:growl id="alumni_add_messages" />
+					<p:panelGrid styleClass="no_border" id="alumni_add_display"
+						columns="2" cellpadding="4" style="margin:0 auto;">
+
+						<h:outputLabel value="TC Kimlik :" />
+						<p:inputMask id="form_tcno" value="#{alumniView.alumni.tcno}"
+							mask="99999999999" required="true"
+							requiredMessage="Lütfen TC kimlik numaranızı giriniz.">
+							<f:validator validatorId="tcnoUniquenessValidator" />
+
+							<p:ajax event="blur" update="alumni_add_messages" />
+							<f:attribute name="formName" value="dialog_alumni_add_form" />
+						</p:inputMask>
+
+						<h:outputLabel value="İsim" />
+						<p:inputText value="#{alumniView.alumni.name}" required="true"
+							requiredMessage="Lütfen isminizi giriniz.">
+						</p:inputText>
+
+						<h:outputLabel value="Soyisim" />
+						<p:inputText value="#{alumniView.alumni.surname}"
+							required="true" requiredMessage="Lütfen soyisminizi giriniz.">
+						</p:inputText>
+
+						<h:outputLabel for="form_email" value="E-Mail" />
+						<p:inputText id="form_email" value="#{alumniView.alumni.email}"
+							required="true" requiredMessage="Lütfen e-mail adresi giriniz.">
+							<f:validator validatorId="emailFormatValidator" />
+							<f:validator validatorId="emailMatchValidator" />
+							<f:validator validatorId="emailUniquenessValidator" />
+
+							<p:ajax event="blur" update="alumni_add_messages" />
+							<f:attribute name="formName" value="dialog_alumni_add_form" />
+						</p:inputText>
+						<h:outputLabel for="form_confirm_email" value="E-Mail Tekrarı" />
+						<p:inputText id="form_confirm_email"
+							value="#{alumniView.alumni.email}" />
+
+						<h:outputLabel for="form_password" value="Şifre" />
+						<p:password id="form_password"
+							value="#{alumniView.alumni.password}" required="true"
+							requiredMessage="Lütfen şifre giriniz."
+							validatorMessage="Şifreniz eşleşmiyor.Lütfen yeniden deneyiniz."
+							match="form_confirm_password" />
+						<h:outputLabel for="form_confirm_password" value="Şifre Tekrarı" />
+						<p:password id="form_confirm_password"
+							value="#{alumniView.alumni.password}" />
+
+						<h:outputLabel value="Doğum yılı" />
+						<p:selectOneMenu required="true"
+							requiredMessage="Lütfen doğum yılınızı seçiniz."
+							value="#{alumniView.alumni.birthdayYear}">
+							<f:selectItem itemLabel="Doğum yılınızı seçiniz..." />
+							<f:selectItems value="#{alumniView.birthdayYears}"
+								var="birthdayYear" itemValue="#{birthdayYear}" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value="Doğduğu Ülke " />
+						<p:selectOneMenu validator="countryValidator"
+							converter="countryConverter"
+							value="#{alumniView.alumni.country}">
+							<f:selectItem itemValue="0" itemLabel="Lütfen bir ülke seçiniz" />
+							<f:selectItems value="#{alumniView.countries}" var="country"
+								itemValue="#{country}" itemLabel="#{country.countryName}" />
+							<p:ajax listener="#{alumniView.addAlumniChangeCountry}"
+								event="change" update="form_add_alumni_city" />
+
+						</p:selectOneMenu>
+
+						<h:outputLabel value="Doğduğu Şehir " />
+						<p:selectOneMenu validator="cityValidator"
+							converter="cityConverter" id="form_add_alumni_city"
+							value="#{alumniView.alumni.city}">
+							<f:selectItem itemValue="0" itemLabel="Lütfen bir şehir seçiniz" />
+							<f:selectItems value="#{alumniView.alumniAddCities}" var="city"
+								itemValue="#{city}" itemLabel="#{city.cityName}" />
+						</p:selectOneMenu>
+
+
+					</p:panelGrid>
+					<p:commandButton action="#{alumniView.addAlumni}" value="Ekle"
+						ajax="true" icon="ui-icon-disk" update=":dialog_alumni_add_form" />
+				</h:form>
+			</p:dialog>
+		</div>
+
+	</ui:define>
+
+</ui:composition>
