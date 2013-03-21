@@ -12,7 +12,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -265,32 +264,6 @@ public class EducationInfoView implements Serializable {
 	public void updateFacultyChangeDepartment() {
 		facultyUpdateDepartments = getEducationInfoService().allDepartments(
 				getSelectedEducationInfo().getFaculty());
-	}
-
-	public void checkURL() throws IOException {
-
-		HttpServletRequest request = (HttpServletRequest) FacesContext
-				.getCurrentInstance().getExternalContext().getRequest();
-		String userParameter = request.getParameter("user");
-
-		if (userParameter == null || userParameter.equals("")) {
-
-			FacesContext
-					.getCurrentInstance()
-					.getExternalContext()
-					.redirect(
-							"personal_info.xhtml?user="
-									+ getLoggedUser().getTcno());
-
-		} else if (!userParameter.equals(getLoggedUser().getTcno().toString())) {
-			FacesContext
-					.getCurrentInstance()
-					.getExternalContext()
-					.redirect(
-							"personal_info.xhtml?user="
-									+ getLoggedUser().getTcno());
-
-		}
 	}
 
 	public void changeRoleToAlumni() {

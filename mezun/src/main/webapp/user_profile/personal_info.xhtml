@@ -5,9 +5,6 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<!-- <f:metadata>
-		<f:event type="preRenderView" listener="#{personalInfoView.checkURL}" />
-	</f:metadata> -->
 
 	<ui:define name="main_container">
 		<h:outputStylesheet library="css"
@@ -22,7 +19,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel for="form_name" value="İsim" />
+								<h:outputLabel value="İsim" />
 							</p:column>
 							<p:column>
 								<h:outputLabel id="form_name"
@@ -30,7 +27,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel for="form_surname" value="Soyisim" />
+								<h:outputLabel  value="Soyisim" />
 							</p:column>
 							<p:column>
 								<h:outputLabel id="form_surname"
@@ -43,7 +40,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel for="form_password" value="Şifre" />
+								<h:outputLabel value="Şifre" />
 							</p:column>
 							<p:column>
 								<p:password id="form_password"
@@ -54,7 +51,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel for="form_confirm_password" value="Şifre Tekrarı" />
+								<h:outputLabel  value="Şifre Tekrarı" />
 							</p:column>
 							<p:column>
 								<p:password id="form_confirm_password"
@@ -64,7 +61,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel for="form_email" value="E-Mail" />
+								<h:outputLabel value="E-Mail" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_email"
@@ -81,7 +78,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel for="form_confirm_email" value="E-Mail Tekrarı" />
+								<h:outputLabel  value="E-Mail Tekrarı" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_confirm_email"
@@ -93,7 +90,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel for="form_birthday_year" value="Doğum yılı" />
+								<h:outputLabel value="Doğum yılı" />
 							</p:column>
 							<p:column>
 								<h:outputLabel id="form_birthday_year"
@@ -101,7 +98,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel for="form_tcno" value="TC kimlik numarası" />
+								<h:outputLabel value="TC kimlik numarası" />
 							</p:column>
 							<p:column>
 								<h:outputLabel id="form_tcno"

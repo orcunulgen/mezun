@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,13 +33,13 @@ public class ChatGroup implements Serializable{
 	@Column(name="group_name",nullable=false,length=200)
 	private String groupName;
 	
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="chat_list_id")
     private ChatList chatList;
 	
 	@OneToMany(mappedBy="chatGroup",fetch= FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
-    private List<ChatPerson> chatPerson=new ArrayList<ChatPerson>();
+    private List<ChatPerson> chatPersons=new ArrayList<ChatPerson>();
 
 	public Long getId() {
 		return id;
@@ -64,12 +65,12 @@ public class ChatGroup implements Serializable{
 		this.chatList = chatList;
 	}
 
-	public List<ChatPerson> getChatPerson() {
-		return chatPerson;
+	public List<ChatPerson> getChatPersons() {
+		return chatPersons;
 	}
 
-	public void setChatPerson(List<ChatPerson> chatPerson) {
-		this.chatPerson = chatPerson;
+	public void setChatPersons(List<ChatPerson> chatPersons) {
+		this.chatPersons = chatPersons;
 	}
 
 	@Override

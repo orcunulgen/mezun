@@ -5,9 +5,6 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<!-- <f:metadata>
-		<f:event type="preRenderView" listener="#{parentInfoView.checkURL}" />
-	</f:metadata> -->
 
 	<ui:define name="main_container">
 		<h:outputStylesheet library="css" name="user_profile/parent_info.css" />
@@ -21,7 +18,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel for="form_father_name" value="Baba Adı" />
+								<h:outputLabel value="Baba Adı" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_father_name"
@@ -31,7 +28,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel for="form_mother_name" value="Anne Adı" />
+								<h:outputLabel value="Anne Adı" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_mother_name"
@@ -45,7 +42,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel for="form_father_job" value="Baba Mesleği" />
+								<h:outputLabel value="Baba Mesleği" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_father_job"
@@ -56,7 +53,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel for="form_mother_job" value="Anne Mesleği" />
+								<h:outputLabel value="Anne Mesleği" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_mother_job"
@@ -71,7 +68,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel for="form_father_birthday_year"
+								<h:outputLabel
 									value="Baba Doğum yılı" />
 							</p:column>
 							<p:column>
@@ -85,7 +82,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel for="form_mother_birthday_year"
+								<h:outputLabel
 									value="Anne Doğum yılı" />
 							</p:column>
 							<p:column>
@@ -101,7 +98,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel for="form_parent_monthly_income" value="Ailenin Aylık Gelir Düzeyi" />
+								<h:outputLabel value="Ailenin Aylık Gelir Düzeyi" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_parent_monthly_income"
@@ -112,7 +109,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel for="form_parent_phone_number" value="Aile Telefonu" />
+								<h:outputLabel value="Aile Telefonu" />
 							</p:column>
 							<p:column>
 								<p:inputMask mask="9999-999-99-99" id="form_parent_phone_number"
@@ -126,7 +123,7 @@
 						
 						<p:row>
 							<p:column>
-								<h:outputLabel for="form_parent_address" value="Aile Adresi" />
+								<h:outputLabel value="Aile Adresi" />
 							</p:column>
 							<p:column colspan="3">
 								<p:inputTextarea id="form_parent_address"

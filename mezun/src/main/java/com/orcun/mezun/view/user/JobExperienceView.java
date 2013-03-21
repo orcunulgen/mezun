@@ -12,7 +12,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -38,10 +37,12 @@ public class JobExperienceView implements Serializable {
 
 	private JobExperience jobExperience;
 
+	private Boolean jobExperienceIsContinue = true;
+
 	private List<Country> countries = new ArrayList<Country>();
 
 	private List<City> jobAddCities = new ArrayList<City>();
-	
+
 	private List<City> jobUpdateCities = new ArrayList<City>();
 
 	private List<Position> positions = new ArrayList<Position>();
@@ -52,6 +53,7 @@ public class JobExperienceView implements Serializable {
 
 	private List<JobExperience> jobExperiences = new ArrayList<JobExperience>();
 	private JobExperience selectedJobExperience;
+	private Boolean selectedJobExperienceIsContinue;
 
 	@ManagedProperty(value = "#{jobExperienceService}")
 	private JobExperienceService jobExperienceService;
@@ -59,34 +61,41 @@ public class JobExperienceView implements Serializable {
 	@PostConstruct
 	public void init() {
 		countries = jobExperienceService.allCountries();
-		//cities = jobExperienceService.allCities();
+		// cities = jobExperienceService.allCities();
 		positions = jobExperienceService.allPositions();
 		sectors = jobExperienceService.allSectors();
 		workingTypes = jobExperienceService.allWorkingTypes();
-		jobExperiences=jobExperienceService.allJobExperience(getLoggedUser());
-		
+		jobExperiences = jobExperienceService.allJobExperience(getLoggedUser());
+
 		if (jobExperience == null) {
 			jobExperience = new JobExperience();
 
 		}
 	}
-	
-	public void initSelectedJobEx(JobExperience selectedJobExperience){
-		this.selectedJobExperience=selectedJobExperience;
+
+	public void initSelectedJobEx(JobExperience selectedJobExperience) {
+		this.selectedJobExperience = selectedJobExperience;
+		if (getSelectedJobExperience().getEndDate() == null) {
+			this.selectedJobExperienceIsContinue = true;
+		} else {
+			this.selectedJobExperienceIsContinue = false;
+		}
 		updateJobChangeCountry();
 	}
-	
-	public void deleteSelectedJobEx(JobExperience selectedJobExperience) throws IOException {
+
+	public void deleteSelectedJobEx(JobExperience selectedJobExperience)
+			throws IOException {
 		initSelectedJobEx(selectedJobExperience);
 		try {
 			getJobExperienceService().deleteJobExperience(
 					getSelectedJobExperience());
-			
-			FacesContext.getCurrentInstance()
-			.getExternalContext()
-			.redirect(
-					"job_experience.xhtml?user="
-							+ getLoggedUser().getTcno());
+
+			FacesContext
+					.getCurrentInstance()
+					.getExternalContext()
+					.redirect(
+							"job_experience.xhtml?user="
+									+ getLoggedUser().getTcno());
 
 		} catch (DataAccessException e) {
 			e.printStackTrace();
@@ -94,7 +103,7 @@ public class JobExperienceView implements Serializable {
 	}
 
 	public JobExperience getJobExperience() {
-		
+
 		return jobExperience;
 	}
 
@@ -102,6 +111,13 @@ public class JobExperienceView implements Serializable {
 		this.jobExperience = jobExperience;
 	}
 
+	public Boolean getJobExperienceIsContinue() {
+		return jobExperienceIsContinue;
+	}
+
+	public void setJobExperienceIsContinue(Boolean jobExperienceIsContinue) {
+		this.jobExperienceIsContinue = jobExperienceIsContinue;
+	}
 
 	public List<Country> getCountries() {
 		return countries;
@@ -167,6 +183,15 @@ public class JobExperienceView implements Serializable {
 		this.selectedJobExperience = selectedJobExperience;
 	}
 
+	public Boolean getSelectedJobExperienceIsContinue() {
+		return selectedJobExperienceIsContinue;
+	}
+
+	public void setSelectedJobExperienceIsContinue(
+			Boolean selectedJobExperienceIsContinue) {
+		this.selectedJobExperienceIsContinue = selectedJobExperienceIsContinue;
+	}
+
 	public JobExperienceService getJobExperienceService() {
 		return jobExperienceService;
 	}
@@ -175,14 +200,17 @@ public class JobExperienceView implements Serializable {
 			JobExperienceService jobExperienceService) {
 		this.jobExperienceService = jobExperienceService;
 	}
-	
-	public void addJobChangeCountry(){
-		jobAddCities=getJobExperienceService().allCities(getJobExperience().getCountry());
+
+	public void addJobChangeCountry() {
+		jobAddCities = getJobExperienceService().allCities(
+				getJobExperience().getCountry());
 	}
-	public void updateJobChangeCountry(){
-		jobUpdateCities=getJobExperienceService().allCities(getSelectedJobExperience().getCountry());
+
+	public void updateJobChangeCountry() {
+		jobUpdateCities = getJobExperienceService().allCities(
+				getSelectedJobExperience().getCountry());
 	}
-	
+
 	public User getLoggedUser() {
 		SecurityContext securityContext = (SecurityContext) FacesContext
 				.getCurrentInstance().getExternalContext().getSessionMap()
@@ -194,77 +222,75 @@ public class JobExperienceView implements Serializable {
 		return loggedUser;
 
 	}
-	
-	public void checkURL() throws IOException {
-
-		HttpServletRequest request = (HttpServletRequest) FacesContext
-				.getCurrentInstance().getExternalContext().getRequest();
-		String userParameter = request.getParameter("user");
-
-		if (userParameter == null || userParameter.equals("")) {
-
-			FacesContext
-					.getCurrentInstance()
-					.getExternalContext()
-					.redirect(
-							"personal_info.xhtml?user="
-									+ getLoggedUser().getTcno());
-
-		} else if (!userParameter.equals(getLoggedUser().getTcno().toString())) {
-			FacesContext
-					.getCurrentInstance()
-					.getExternalContext()
-					.redirect(
-							"personal_info.xhtml?user="
-									+ getLoggedUser().getTcno());
-
-		}
-	}
 
 	public void addJobExperience() throws IOException {
 		try {
 
-			int differenceStartEnd = Days.daysBetween(
-					new DateTime(getJobExperience().getStartDate()),
-					new DateTime(getJobExperience().getEndDate())).getDays();
+			if (getJobExperienceIsContinue()) {
+				Date registeredDate = new Date();
 
-			Date registeredDate = new Date();
+				int differenceStartRegister = Days.daysBetween(
+						new DateTime(getJobExperience().getStartDate()),
+						new DateTime(registeredDate)).getDays();
 
-			int differenceStartRegister = Days.daysBetween(
-					new DateTime(getJobExperience().getStartDate()),
-					new DateTime(registeredDate)).getDays();
+				if (differenceStartRegister > 0) {
 
-			if (differenceStartEnd > 0 && differenceStartRegister > 0) {
+					getJobExperience().setEndDate(null);
+					getJobExperience().setUser(getLoggedUser());
+					getJobExperience().setRegisteredDate(registeredDate);
+					getJobExperienceService().addJobExperience(
+							getJobExperience());
 
-				getJobExperience().setUser(getLoggedUser());
-				getJobExperience().setRegisteredDate(registeredDate);
-				getJobExperienceService().addJobExperience(getJobExperience());
+					FacesContext
+							.getCurrentInstance()
+							.getExternalContext()
+							.redirect(
+									"job_experience.xhtml?user="
+											+ getLoggedUser().getTcno());
 
-				/*
-				 * FacesMessage fm = new
-				 * FacesMessage(FacesMessage.SEVERITY_ERROR,
-				 * "Kaydınız tamamlandı.", "");
-				 * 
-				 * FacesContext.getCurrentInstance().addMessage(null, fm);
-				 */
+				} else {
+					FacesMessage fm = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"Başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
+							"Lütfen yeniden deneyiniz.");
+					FacesContext.getCurrentInstance().addMessage(null, fm);
 
-				/*
-				 * FacesContext.getCurrentInstance().getExternalContext()
-				 * .getFlash().setKeepMessages(true);
-				 */
-				FacesContext
-						.getCurrentInstance()
-						.getExternalContext()
-						.redirect(
-								"job_experience.xhtml?user="
-										+ getLoggedUser().getTcno());
+				}
 
 			} else {
-				FacesMessage fm = new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"Başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
-						"Lütfen yeniden deneyiniz.");
-				FacesContext.getCurrentInstance().addMessage(null, fm);
+				int differenceStartEnd = Days.daysBetween(
+						new DateTime(getJobExperience().getStartDate()),
+						new DateTime(getJobExperience().getEndDate()))
+						.getDays();
+
+				Date registeredDate = new Date();
+
+				int differenceStartRegister = Days.daysBetween(
+						new DateTime(getJobExperience().getStartDate()),
+						new DateTime(registeredDate)).getDays();
+
+				if (differenceStartEnd > 0 && differenceStartRegister > 0) {
+
+					getJobExperience().setUser(getLoggedUser());
+					getJobExperience().setRegisteredDate(registeredDate);
+					getJobExperienceService().addJobExperience(
+							getJobExperience());
+
+					FacesContext
+							.getCurrentInstance()
+							.getExternalContext()
+							.redirect(
+									"job_experience.xhtml?user="
+											+ getLoggedUser().getTcno());
+
+				} else {
+					FacesMessage fm = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"Başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
+							"Lütfen yeniden deneyiniz.");
+					FacesContext.getCurrentInstance().addMessage(null, fm);
+
+				}
 
 			}
 		} catch (DataAccessException e) {
@@ -272,49 +298,75 @@ public class JobExperienceView implements Serializable {
 		}
 
 	}
-	
+
 	public void updateJobExperience() throws IOException {
 		try {
 
-			int differenceStartEnd = Days.daysBetween(
-					new DateTime(getSelectedJobExperience().getStartDate()),
-					new DateTime(getSelectedJobExperience().getEndDate())).getDays();
+			if (getSelectedJobExperienceIsContinue()) {
 
-			Date registeredDate = new Date();
+				Date registeredDate = new Date();
 
-			int differenceStartRegister = Days.daysBetween(
-					new DateTime(getSelectedJobExperience().getStartDate()),
-					new DateTime(registeredDate)).getDays();
+				int differenceStartRegister = Days.daysBetween(
+						new DateTime(getSelectedJobExperience().getStartDate()),
+						new DateTime(registeredDate)).getDays();
 
-			if (differenceStartEnd > 0 && differenceStartRegister > 0) {
+				if (differenceStartRegister > 0) {
 
-				getJobExperienceService().updateJobExperience(getSelectedJobExperience());
+					getSelectedJobExperience().setEndDate(null);
+					getJobExperienceService().updateJobExperience(
+							getSelectedJobExperience());
 
-				/*
-				 * FacesMessage fm = new
-				 * FacesMessage(FacesMessage.SEVERITY_ERROR,
-				 * "Kaydınız tamamlandı.", "");
-				 * 
-				 * FacesContext.getCurrentInstance().addMessage(null, fm);
-				 */
+					FacesContext
+							.getCurrentInstance()
+							.getExternalContext()
+							.redirect(
+									"job_experience.xhtml?user="
+											+ getLoggedUser().getTcno());
 
-				/*
-				 * FacesContext.getCurrentInstance().getExternalContext()
-				 * .getFlash().setKeepMessages(true);
-				 */
-				FacesContext
-						.getCurrentInstance()
-						.getExternalContext()
-						.redirect(
-								"job_experience.xhtml?user="
-										+ getLoggedUser().getTcno());
+				} else {
+					FacesMessage fm = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"Başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
+							"Lütfen yeniden deneyiniz.");
+					FacesContext.getCurrentInstance().addMessage(null, fm);
+
+				}
+
 
 			} else {
-				FacesMessage fm = new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"Başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
-						"Lütfen yeniden deneyiniz.");
-				FacesContext.getCurrentInstance().addMessage(null, fm);
+				
+				int differenceStartEnd = Days.daysBetween(
+						new DateTime(getSelectedJobExperience().getStartDate()),
+						new DateTime(getSelectedJobExperience().getEndDate()))
+						.getDays();
+
+				Date registeredDate = new Date();
+
+				int differenceStartRegister = Days.daysBetween(
+						new DateTime(getSelectedJobExperience().getStartDate()),
+						new DateTime(registeredDate)).getDays();
+
+				if (differenceStartEnd > 0 && differenceStartRegister > 0) {
+
+					getJobExperienceService().updateJobExperience(
+							getSelectedJobExperience());
+
+					FacesContext
+							.getCurrentInstance()
+							.getExternalContext()
+							.redirect(
+									"job_experience.xhtml?user="
+											+ getLoggedUser().getTcno());
+
+				} else {
+					FacesMessage fm = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"Başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
+							"Lütfen yeniden deneyiniz.");
+					FacesContext.getCurrentInstance().addMessage(null, fm);
+
+				}
+
 
 			}
 		} catch (DataAccessException e) {

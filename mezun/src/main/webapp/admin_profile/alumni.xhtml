@@ -75,7 +75,7 @@
 						<h:outputLabel value="Soyisim" />
 						<h:outputLabel value="#{alumniView.selectedAlumni.surname}" />
 
-						<h:outputLabel for="form_email" value="E-Mail" />
+						<h:outputLabel value="E-Mail" />
 						<p:inputText id="form_email"
 							value="#{alumniView.selectedAlumni.email}" required="true"
 							requiredMessage="Lütfen e-mail adresi giriniz.">
@@ -86,17 +86,17 @@
 							<p:ajax event="blur" update="selected_alumni_dialog_messages" />
 							<f:attribute name="formName" value="alumni_dialog_form" />
 						</p:inputText>
-						<h:outputLabel for="form_confirm_email" value="E-Mail Tekrarı" />
+						<h:outputLabel  value="E-Mail Tekrarı" />
 						<p:inputText id="form_confirm_email"
 							value="#{alumniView.selectedAlumni.email}" />
 
-						<h:outputLabel for="form_password" value="Şifre" />
+						<h:outputLabel value="Şifre" />
 						<p:password id="form_password"
 							value="#{alumniView.selectedAlumni.password}" required="true"
 							requiredMessage="Lütfen şifre giriniz."
 							validatorMessage="Şifreniz eşleşmiyor.Lütfen yeniden deneyiniz."
 							match="form_confirm_password" />
-						<h:outputLabel for="form_confirm_password" value="Şifre Tekrarı" />
+						<h:outputLabel value="Şifre Tekrarı" />
 						<p:password id="form_confirm_password"
 							value="#{alumniView.selectedAlumni.password}" />
 
@@ -163,7 +163,7 @@
 							required="true" requiredMessage="Lütfen soyisminizi giriniz.">
 						</p:inputText>
 
-						<h:outputLabel for="form_email" value="E-Mail" />
+						<h:outputLabel value="E-Mail" />
 						<p:inputText id="form_email" value="#{alumniView.alumni.email}"
 							required="true" requiredMessage="Lütfen e-mail adresi giriniz.">
 							<f:validator validatorId="emailFormatValidator" />
@@ -173,17 +173,17 @@
 							<p:ajax event="blur" update="alumni_add_messages" />
 							<f:attribute name="formName" value="dialog_alumni_add_form" />
 						</p:inputText>
-						<h:outputLabel for="form_confirm_email" value="E-Mail Tekrarı" />
+						<h:outputLabel value="E-Mail Tekrarı" />
 						<p:inputText id="form_confirm_email"
 							value="#{alumniView.alumni.email}" />
 
-						<h:outputLabel for="form_password" value="Şifre" />
+						<h:outputLabel value="Şifre" />
 						<p:password id="form_password"
 							value="#{alumniView.alumni.password}" required="true"
 							requiredMessage="Lütfen şifre giriniz."
 							validatorMessage="Şifreniz eşleşmiyor.Lütfen yeniden deneyiniz."
 							match="form_confirm_password" />
-						<h:outputLabel for="form_confirm_password" value="Şifre Tekrarı" />
+						<h:outputLabel  value="Şifre Tekrarı" />
 						<p:password id="form_confirm_password"
 							value="#{alumniView.alumni.password}" />
 

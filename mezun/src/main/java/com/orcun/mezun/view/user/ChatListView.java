@@ -2,15 +2,23 @@ package com.orcun.mezun.view.user;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
+import com.orcun.mezun.model.ChatGroup;
+import com.orcun.mezun.model.ChatList;
+import com.orcun.mezun.model.ChatPerson;
 import com.orcun.mezun.model.User;
+import com.orcun.mezun.service.user.ChatListService;
 
 @ManagedBean
 @ViewScoped
@@ -20,6 +28,39 @@ public class ChatListView implements Serializable {
 
 	private User loggedUser;
 
+	private ChatList chatList;
+
+	private ChatGroup chatGroup;
+
+	private ChatGroup selectedChatGroup;
+
+	private List<ChatGroup> chatGroups = new ArrayList<ChatGroup>();
+
+	private User searchedPerson;
+
+	@ManagedProperty(value = "#{chatListService}")
+	private ChatListService chatListService;
+
+	@PostConstruct
+	public void init() {
+		if (getChatListService().findChatListByUser(getLoggedUser()) == null) {
+			this.chatList = new ChatList();
+			getChatList().setUser(getLoggedUser());
+			getChatListService().addChatList(getChatList());
+		} else {
+			setChatList(getChatListService()
+					.findChatListByUser(getLoggedUser()));
+		}
+
+		if (chatGroup == null) {
+			chatGroup = new ChatGroup();
+		}
+
+	}
+
+	public void initSelectedChatGroup(ChatGroup selectedChatGroup) {
+		this.selectedChatGroup = selectedChatGroup;
+	}
 
 	public User getLoggedUser() {
 		SecurityContext securityContext = (SecurityContext) FacesContext
@@ -32,22 +73,84 @@ public class ChatListView implements Serializable {
 		return loggedUser;
 
 	}
-	
-	public void checkURL() throws IOException{
-		
-		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-		String userParameter=request.getParameter("user");
-		
-		if(userParameter==null || userParameter.equals("")){
-			
-			FacesContext.getCurrentInstance().getExternalContext()
-			.redirect("personal_info.xhtml?user="+getLoggedUser().getTcno());
-			
-		}else if(!userParameter.equals(getLoggedUser().getTcno().toString())){
-			FacesContext.getCurrentInstance().getExternalContext()
-			.redirect("personal_info.xhtml?user="+getLoggedUser().getTcno());
-			
+
+	public ChatList getChatList() {
+		return chatList;
+	}
+
+	public void setChatList(ChatList chatList) {
+		this.chatList = chatList;
+	}
+
+	public ChatGroup getChatGroup() {
+		return chatGroup;
+	}
+
+	public void setChatGroup(ChatGroup chatGroup) {
+		this.chatGroup = chatGroup;
+	}
+
+	public ChatGroup getSelectedChatGroup() {
+		return selectedChatGroup;
+	}
+
+	public void setSelectedChatGroup(ChatGroup selectedChatGroup) {
+		this.selectedChatGroup = selectedChatGroup;
+	}
+
+	public List<ChatGroup> getChatGroups() {
+		return chatGroups;
+	}
+
+	public void setChatGroups(List<ChatGroup> chatGroups) {
+		this.chatGroups = chatGroups;
+	}
+
+	public User getSearchedPerson() {
+		return searchedPerson;
+	}
+
+	public void setSearchedPerson(User searchedPerson) {
+		this.searchedPerson = searchedPerson;
+	}
+
+	public ChatListService getChatListService() {
+		return chatListService;
+	}
+
+	public void setChatListService(ChatListService chatListService) {
+		this.chatListService = chatListService;
+	}
+
+	public void followSearchedPerson(User searchedPerson) throws IOException {
+		this.searchedPerson = searchedPerson;
+
+		ChatPerson newChatPerson = new ChatPerson();
+		newChatPerson.setUser(searchedPerson);
+		newChatPerson.setChatGroup(getSelectedChatGroup());
+
+		getChatListService().addChatPerson(newChatPerson);
+
+		FacesContext.getCurrentInstance().getExternalContext()
+				.redirect("chat_list.xhtml?user=" + getLoggedUser().getTcno());
+
+	}
+
+	public void addChatGroup() throws IOException {
+		try {
+
+			getChatGroup().setChatList(getChatList());
+			getChatListService().addChatGroup(getChatGroup());
+
+			FacesContext
+					.getCurrentInstance()
+					.getExternalContext()
+					.redirect(
+							"chat_list.xhtml?user=" + getLoggedUser().getTcno());
+		} catch (DataAccessException e) {
+			e.printStackTrace();
 		}
+
 	}
 
 }

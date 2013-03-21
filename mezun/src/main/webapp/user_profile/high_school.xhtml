@@ -5,9 +5,6 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<!-- <f:metadata>
-		<f:event type="preRenderView" listener="#{highSchoolView.checkURL}" />
-	</f:metadata> -->
 
 	<ui:define name="main_container">
 
@@ -22,7 +19,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel for="form_high_school_name" value="Lise İsimi" />
+								<h:outputLabel value="Lise İsimi" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_high_school_name"
@@ -32,7 +29,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel for="form_high_school_department"
+								<h:outputLabel 
 									value="Lisedeki Bölümü" />
 							</p:column>
 							<p:column>
@@ -49,7 +46,7 @@
 						<p:row>
 
 							<p:column>
-								<h:outputLabel for="form_end_date" value="Bitiş Tarihi" />
+								<h:outputLabel value="Bitiş Tarihi" />
 							</p:column>
 							<p:column>
 								<p:calendar value="#{highSchoolView.highSchool.endDate}"
@@ -57,7 +54,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel for="form_high_school_type" value="Lise Tipi" />
+								<h:outputLabel value="Lise Tipi" />
 							</p:column>
 							<p:column>
 								<p:selectOneMenu validator="highSchoolTypeValidator"
@@ -75,7 +72,7 @@
 						<p:row>
 
 							<p:column>
-								<h:outputLabel for="form_grading_system"
+								<h:outputLabel
 									value="Diploma Not Sistemi" />
 							</p:column>
 							<p:column>
@@ -91,7 +88,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel for="form_graduation_degree"
+								<h:outputLabel
 									value="Lise Mezuniyet Derecesi" />
 							</p:column>
 							<p:column>
@@ -107,7 +104,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel for="form_oss_degree"
+								<h:outputLabel
 									value="Öss Puanı " />
 							</p:column>
 
@@ -116,7 +113,7 @@
 									value="#{highSchoolView.highSchool.ossDegree}"/>
 							</p:column>
 							<p:column>
-								<h:outputLabel for="form_ytu_ce_order_of_preference"
+								<h:outputLabel
 									value="YTÜ Bilgisayar Tercih Sırası" />
 							</p:column>
 							<p:column>
@@ -127,7 +124,7 @@
 						
 						<p:row>
 							<p:column colspan="2">
-								<h:outputLabel for="form_oss_first_choise"
+								<h:outputLabel 
 									value="Öss 1.Tercihi ( Üniversite/Bölüm ) " />
 							</p:column>
 							<p:column colspan="2">
@@ -138,7 +135,7 @@
 						
 						<p:row>
 							<p:column colspan="2">
-								<h:outputLabel for="form_oss_second_choise"
+								<h:outputLabel
 									value="Öss 2.Tercihi ( Üniversite/Bölüm ) "  />
 							</p:column>
 							<p:column colspan="2">
@@ -149,7 +146,7 @@
 						
 						<p:row>
 							<p:column colspan="2">
-								<h:outputLabel for="form_oss_third_choise"
+								<h:outputLabel
 									value="Öss 3.Tercihi ( Üniversite/Bölüm ) " />
 							</p:column>
 							<p:column colspan="2">

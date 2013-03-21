@@ -13,7 +13,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
@@ -104,23 +103,6 @@ public class ParentInfoView implements Serializable {
 		this.parentInfo = parentInfo;
 	}
 
-	public void checkURL() throws IOException{
-		
-		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-		String userParameter=request.getParameter("user");
-		
-		if(userParameter==null || userParameter.equals("")){
-			
-			FacesContext.getCurrentInstance().getExternalContext()
-			.redirect("parent_info.xhtml?user="+getLoggedUser().getTcno());
-			
-		}else if(!userParameter.equals(getLoggedUser().getTcno().toString())){
-			FacesContext.getCurrentInstance().getExternalContext()
-			.redirect("parent_info.xhtml?user="+getLoggedUser().getTcno());
-			
-		}
-	}
-	
 	public void saveParentInfo() throws IOException {
 		try {
 			if (getParentInfoService().findParentInfoByUser(getLoggedUser()) != null) {

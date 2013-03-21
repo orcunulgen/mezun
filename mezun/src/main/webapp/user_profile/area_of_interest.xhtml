@@ -5,9 +5,6 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<!-- <f:metadata>
-		<f:event type="preRenderView" listener="#{personalInfoView.checkURL}" />
-	</f:metadata> -->
 
 	<ui:define name="main_container">
 		<h:outputStylesheet library="css"
@@ -49,7 +46,7 @@
 				</p:dataTable>
 			</h:form>
 
-			<p:dialog header="İlgi Alanı Ayrıntıları"
+			<p:dialog position="top" header="İlgi Alanı Ayrıntıları"
 				widgetVar="areaOfInterestUpdateDialog" resizable="false"
 				id="areaOfInterestUpdateDlg" showEffect="fade" modal="true">
 				<h:form id="area_of_interest_dialog_form">
@@ -89,7 +86,7 @@
 
 			<p:commandButton value="Yeni İlgi Alanı Ekle" type="button"
 				onclick="areaOfInterestAddDialog.show()" />
-			<p:dialog header="Yeni İlgi Alanı Ekle"
+			<p:dialog position="top" header="Yeni İlgi Alanı Ekle"
 				widgetVar="areaOfInterestAddDialog" resizable="false"
 				id="areaOfInterestAddDlg" showEffect="fade" modal="true">
 				<h:form id="dialog_area_of_interest_add_form">

@@ -5,9 +5,6 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<!-- <f:metadata>
-		<f:event type="preRenderView" listener="#{personalInfoView.checkURL}" />
-	</f:metadata> -->
 
 	<ui:define name="main_container">
 		<h:outputStylesheet library="css"
@@ -52,8 +49,13 @@
 						<f:facet name="header">
 							<h:outputLabel value="Bitiş Tarihi" />
 						</f:facet>
-						<h:outputLabel value="#{jobExperienceList.endDate}">
+						<h:outputLabel rendered="#{jobExperienceList.endDate!=null}"
+							value="#{jobExperienceList.endDate}">
 							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputLabel>
+
+						<h:outputLabel value="Devam Ediyor"
+							rendered="#{jobExperienceList.endDate==null}">
 						</h:outputLabel>
 					</p:column>
 					<p:column>
@@ -78,8 +80,8 @@
 				id="jobExperienceUpdateDlg" showEffect="fade" modal="true">
 				<h:form id="job_ex_dialog_form">
 					<p:growl id="selected_job_ex_dialog_messages" />
-					<p:panelGrid styleClass="no_border" id="job_ex_detail_display" columns="2" cellpadding="4"
-						style="margin:0 auto;">
+					<p:panelGrid styleClass="no_border" id="job_ex_detail_display"
+						columns="2" cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Şirket İsmi :" />
 						<p:inputText
@@ -98,8 +100,19 @@
 							value="#{jobExperienceView.selectedJobExperience.startDate}"
 							showOn="button" />
 
-						<h:outputLabel value="Bitiş Tarihi :" />
+						<h:outputLabel value="Devam Ediyorum :" />
+						<p:selectBooleanButton
+							value="#{jobExperienceView.selectedJobExperienceIsContinue}"
+							onLabel="Evet" offLabel="Hayır" onIcon="ui-icon-check"
+							offIcon="ui-icon-close">
+							<p:ajax update="job_ex_dialog_form" />
+						</p:selectBooleanButton>
+
+						<h:outputLabel
+							rendered="#{!jobExperienceView.selectedJobExperienceIsContinue}"
+							value="Bitiş Tarihi :" />
 						<p:calendar
+							rendered="#{!jobExperienceView.selectedJobExperienceIsContinue}"
 							value="#{jobExperienceView.selectedJobExperience.endDate}"
 							showOn="button" />
 
@@ -175,8 +188,8 @@
 				id="jobExperienceAddDlg" showEffect="fade" modal="true">
 				<h:form id="dialog_job_experience_add_form">
 					<p:growl id="job_experience_add_messages" />
-					<p:panelGrid styleClass="no_border" id="job_experience_add_display" columns="2"
-						cellpadding="4" style="margin:0 auto;">
+					<p:panelGrid styleClass="no_border" id="job_experience_add_display"
+						columns="2" cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Şirket İsmi :" />
 						<p:inputText
@@ -193,9 +206,17 @@
 						<p:calendar value="#{jobExperienceView.jobExperience.startDate}"
 							showOn="button" />
 
-						<h:outputLabel value="Bitiş Tarihi :" />
+						<h:outputLabel value="Devam Ediyorum :" />
+						<p:selectBooleanButton value="#{jobExperienceView.jobExperienceIsContinue}"
+							onLabel="Evet" offLabel="Hayır" onIcon="ui-icon-check"
+							offIcon="ui-icon-close">
+							<p:ajax update="dialog_job_experience_add_form" />
+						</p:selectBooleanButton>
+
+						<h:outputLabel value="Bitiş Tarihi :"
+							rendered="#{!jobExperienceView.jobExperienceIsContinue}" />
 						<p:calendar value="#{jobExperienceView.jobExperience.endDate}"
-							showOn="button" />
+							rendered="#{!jobExperienceView.jobExperienceIsContinue}" showOn="button" />
 
 						<h:outputLabel value="Ülke :" />
 						<p:selectOneMenu validator="countryValidator"

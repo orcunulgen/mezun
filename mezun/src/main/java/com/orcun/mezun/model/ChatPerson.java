@@ -34,9 +34,9 @@ public class ChatPerson implements Serializable{
 	@Column(name="activation")
 	private Boolean activation=false;
 	
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="chat_group_id")
-    private ChatGroup chatGroup;
+	private ChatGroup chatGroup;
 	
 	@OneToOne(cascade=CascadeType.ALL)
 	@OnDelete(action=OnDeleteAction.CASCADE)

@@ -2,6 +2,7 @@ package com.orcun.mezun.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 
 @Entity
 @Table(name="department")
@@ -33,7 +35,7 @@ public class Department implements Serializable {
 	@JoinColumn(name="education_type_id")
 	private EducationType educationType;
 	
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="faculty_id")
 	private Faculty faculty;
 
