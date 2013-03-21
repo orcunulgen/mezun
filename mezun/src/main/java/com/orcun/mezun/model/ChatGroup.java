@@ -33,11 +33,11 @@ public class ChatGroup implements Serializable{
 	@Column(name="group_name",nullable=false,length=200)
 	private String groupName;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="chat_list_id")
     private ChatList chatList;
 	
-	@OneToMany(mappedBy="chatGroup",fetch= FetchType.EAGER)
+	@OneToMany(mappedBy="chatGroup",fetch= FetchType.EAGER,cascade=CascadeType.ALL)
 	@Fetch(value = FetchMode.SUBSELECT)
     private List<ChatPerson> chatPersons=new ArrayList<ChatPerson>();
 

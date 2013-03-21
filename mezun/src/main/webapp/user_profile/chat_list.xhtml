@@ -24,9 +24,24 @@
 								value="Kişi Ekle">
 							</p:commandButton>
 
+							<p:commandButton id="deleteChatGroupButton"
+								actionListener="#{chatListView.deleteSelectedChatGroup(chatGroupList)}"
+								icon="ui-icon-close" value="Grubu Sil">
+							</p:commandButton>
+
+
 							<p:dataTable var="chatPersonList"
 								value="#{chatGroupList.chatPersons}">
 
+								<p:column>
+									<f:facet name="header" style="width:10%;">
+										<h:outputLabel value="İşlemler" />
+									</f:facet>
+									<p:commandButton id="deleteChatPersonButton"
+										actionListener="#{chatListView.deleteSelectedChatPerson(chatPersonList)}"
+										icon="ui-icon-close" value="Sil">
+									</p:commandButton>
+								</p:column>
 								<p:column>
 									<f:facet name="header">
 										<h:outputLabel value="İsim" />
@@ -71,7 +86,7 @@
 				</h:form>
 			</p:dialog>
 
-			<p:dialog  header="Kişi Ara" widgetVar="searchChatPersonDialog"
+			<p:dialog header="Kişi Ara" widgetVar="searchChatPersonDialog"
 				resizable="false" id="searchChatPersonDlg" showEffect="fade"
 				modal="true">
 				<h:form id="dialog_search_chat_person_form">

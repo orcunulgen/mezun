@@ -55,4 +55,19 @@ public class ChatListDAO {
 		getSession().save(newChatPerson);
 	}
 
+	public void deleteChatGroup(ChatGroup selectedChatGroup) {
+		
+		getSession().delete(selectedChatGroup);
+	}
+
+	public void updateChatGroup(ChatGroup chatGroup) {
+		getSession().update(chatGroup);
+	}
+
+	public void deleteChatPerson(ChatPerson selectedChatPerson) {
+		
+		getSession().delete(selectedChatPerson);
+		
+	}
+
 }

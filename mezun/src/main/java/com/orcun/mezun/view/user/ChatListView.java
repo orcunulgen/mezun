@@ -61,6 +61,24 @@ public class ChatListView implements Serializable {
 	public void initSelectedChatGroup(ChatGroup selectedChatGroup) {
 		this.selectedChatGroup = selectedChatGroup;
 	}
+	
+	public void deleteSelectedChatGroup(ChatGroup selectedChatGroup) throws IOException{
+		
+		getChatListService().deleteChatGrup(selectedChatGroup);
+		
+		FacesContext.getCurrentInstance().getExternalContext()
+		.redirect("chat_list.xhtml?user=" + getLoggedUser().getTcno());
+		
+	}
+	
+	public void deleteSelectedChatPerson(ChatPerson selectedChatPerson) throws IOException{
+		
+		getChatListService().deleteChatPerson(selectedChatPerson);
+		
+		FacesContext.getCurrentInstance().getExternalContext()
+		.redirect("chat_list.xhtml?user=" + getLoggedUser().getTcno());
+		
+	}
 
 	public User getLoggedUser() {
 		SecurityContext securityContext = (SecurityContext) FacesContext
@@ -128,9 +146,12 @@ public class ChatListView implements Serializable {
 		ChatPerson newChatPerson = new ChatPerson();
 		newChatPerson.setUser(searchedPerson);
 		newChatPerson.setChatGroup(getSelectedChatGroup());
-
-		getChatListService().addChatPerson(newChatPerson);
-
+		
+		int indexChatGroupInChatList=getChatList().getChatGroups().indexOf(getSelectedChatGroup());
+		getChatList().getChatGroups().get(indexChatGroupInChatList).getChatPersons().add(newChatPerson);
+		
+		getChatListService().updateChatList(getChatList());
+		
 		FacesContext.getCurrentInstance().getExternalContext()
 				.redirect("chat_list.xhtml?user=" + getLoggedUser().getTcno());
 
@@ -139,8 +160,11 @@ public class ChatListView implements Serializable {
 	public void addChatGroup() throws IOException {
 		try {
 
+			
 			getChatGroup().setChatList(getChatList());
-			getChatListService().addChatGroup(getChatGroup());
+			getChatList().getChatGroups().add(getChatGroup());
+			getChatListService().updateChatList(getChatList());
+			
 
 			FacesContext
 					.getCurrentInstance()

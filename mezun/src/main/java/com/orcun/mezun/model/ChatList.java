@@ -34,7 +34,7 @@ public class ChatList implements Serializable{
 	@OnDelete(action=OnDeleteAction.CASCADE)
 	private User user;
 	
-	@OneToMany(mappedBy="chatList",fetch= FetchType.EAGER)
+	@OneToMany(mappedBy="chatList",fetch= FetchType.EAGER,cascade=CascadeType.ALL)
 	@Fetch(value = FetchMode.SUBSELECT)
     private List<ChatGroup> chatGroups=new ArrayList<ChatGroup>();
 

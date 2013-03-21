@@ -3,7 +3,6 @@ package com.orcun.mezun.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,11 +33,11 @@ public class ChatPerson implements Serializable{
 	@Column(name="activation")
 	private Boolean activation=false;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="chat_group_id")
 	private ChatGroup chatGroup;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne
 	@OnDelete(action=OnDeleteAction.CASCADE)
 	private User user;
 

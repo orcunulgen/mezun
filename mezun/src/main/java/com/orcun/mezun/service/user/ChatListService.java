@@ -58,6 +58,22 @@ public class ChatListService {
 	}
 
 
+	public void deleteChatGrup(ChatGroup selectedChatGroup) {
+		getChatListDAO().deleteChatGroup(selectedChatGroup);
+	}
+
+
+	public void updateChatGroup(ChatGroup chatGroup) {
+		getChatListDAO().updateChatGroup(chatGroup);
+	}
+
+
+	public void deleteChatPerson(ChatPerson selectedChatPerson) {
+		getChatListDAO().deleteChatPerson(selectedChatPerson);
+		
+	}
+
+
 
 
 }
