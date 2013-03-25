@@ -98,14 +98,13 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel value="Ailenin Aylık Gelir Düzeyi" />
+								<h:outputLabel value="Ailenin Aylık Gelir Düzeyi(TL)" />
 							</p:column>
 							<p:column>
-								<p:inputText id="form_parent_monthly_income"
+								<p:inputMask mask="99999" id="form_parent_monthly_income"
 									value="#{parentInfoView.parentInfo.parentMonthlyIncome}"
 									required="true"
-									requiredMessage="Lütfen aile gelir düzeyini giriniz.">
-								</p:inputText>
+									requiredMessage="Lütfen aile gelir düzeyini giriniz."/>
 							</p:column>
 
 							<p:column>

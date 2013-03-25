@@ -67,13 +67,12 @@
 								<h:outputLabel value="E-Mail" />
 							</p:column>
 							<p:column>
-								<p:inputText id="form_email"
-									value="#{signUpView.user.email}" required="true"
-									requiredMessage="Lütfen e-mail adresi giriniz.">
-									<f:validator validatorId="emailFormatValidator"/>
-									<f:validator validatorId="emailMatchValidator"/>
-  									<f:validator validatorId="emailUniquenessValidator" />
-  									  
+								<p:inputText id="form_email" value="#{signUpView.user.email}"
+									required="true" requiredMessage="Lütfen e-mail adresi giriniz.">
+									<f:validator validatorId="emailFormatValidator" />
+									<f:validator validatorId="emailMatchValidator" />
+									<f:validator validatorId="emailUniquenessValidator" />
+
 									<p:ajax event="blur" update="form_sign_up_messages" />
 									<f:attribute name="formName" value="form_sign_up_panel" />
 								</p:inputText>
@@ -111,7 +110,7 @@
 									mask="99999999999" required="true"
 									requiredMessage="Lütfen TC kimlik numaranızı giriniz.">
 									<f:validator validatorId="tcnoUniquenessValidator" />
-  									  
+
 									<p:ajax event="blur" update="form_sign_up_messages" />
 									<f:attribute name="formName" value="form_sign_up_panel" />
 								</p:inputMask>
@@ -149,9 +148,23 @@
 							</p:column>
 						</p:row>
 
+						<p:row>
+							<p:column colspan="3">
+								<h:outputLabel
+									value="YTÜ Bilgisayar Mühendisliği mezunu musunuz? " />
+							</p:column>
+							<p:column>
+								<p:selectBooleanButton
+									value="#{signUpView.isAlumni}"
+									onLabel="Evet" offLabel="Hayır" onIcon="ui-icon-check"
+									offIcon="ui-icon-close">
+								</p:selectBooleanButton>
+							</p:column>
+						</p:row>
+
 					</p:panelGrid>
 					<p:commandButton value="Kaydet" action="#{signUpView.saveUser}"
-									ajax="false" update="form_sign_up_messages" />
+						ajax="false" update="form_sign_up_messages" />
 				</p:fieldset>
 
 			</h:form>

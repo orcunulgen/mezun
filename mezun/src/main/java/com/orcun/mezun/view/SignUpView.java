@@ -15,6 +15,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.primefaces.event.FlowEvent;
 import org.springframework.dao.DataAccessException;
 
 import tr.gov.nvi.tckimlik.WS.KPSPublicSoapProxy;
@@ -34,18 +35,20 @@ public class SignUpView implements Serializable {
 	private User user;
 
 	private List<Integer> birthdayYears = new ArrayList<Integer>();
-	
+
 	private List<Country> countries = new ArrayList<Country>();
 
 	private List<City> userCities = new ArrayList<City>();
 
+	private Boolean isAlumni = false;
+
 	@ManagedProperty(value = "#{signUpService}")
 	private SignUpService signUpService;
-	
+
 	@PostConstruct
 	public void init() {
 		countries = signUpService.allCountries();
-		
+
 		if (user == null)
 			user = new User();
 	}
@@ -91,6 +94,14 @@ public class SignUpView implements Serializable {
 		this.userCities = userCities;
 	}
 
+	public Boolean getIsAlumni() {
+		return isAlumni;
+	}
+
+	public void setIsAlumni(Boolean isAlumni) {
+		this.isAlumni = isAlumni;
+	}
+
 	public SignUpService getSignUpService() {
 		return signUpService;
 	}
@@ -98,32 +109,35 @@ public class SignUpView implements Serializable {
 	public void setSignUpService(SignUpService signUpService) {
 		this.signUpService = signUpService;
 	}
-	
-	public void updateUserChangeCountry(){
-		userCities=getSignUpService().allCities(getUser().getCountry());
+
+	public void updateUserChangeCountry() {
+		userCities = getSignUpService().allCities(getUser().getCountry());
 	}
 
 	public String saveUser() {
 		try {
-			
-			if(!checkUserTcno(user)){ // geçici olarak devre dışı
-				
-				List<Role> userRoles=new ArrayList<Role>();
-				
-				Role defaultRole=new Role();
-				defaultRole=signUpService.getRoleInfo("ROLE_STUDENT");
-				
+
+			if (!checkUserTcno(user)) { // geçici olarak devre dışı
+
+				List<Role> userRoles = new ArrayList<Role>();
+
+				Role defaultRole = new Role();
+
+				if (getIsAlumni()) {
+					defaultRole = signUpService.getRoleInfo("ROLE_ALUMNI");
+				} else {
+					defaultRole = signUpService.getRoleInfo("ROLE_STUDENT");
+				}
+
 				userRoles.add(defaultRole);
 				user.setRoles(userRoles);
-				
+
 				getSignUpService().addUser(user);
 				return ("login.xhtml?faces-redirect=true");
-			}else{
-				return("fail.xhtml?faces-redirect=true");
+			} else {
+				return ("fail.xhtml?faces-redirect=true");
 			}
-			
-			
-			
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}
@@ -157,8 +171,7 @@ public class SignUpView implements Serializable {
 			} catch (RemoteException e) {
 				e.printStackTrace();
 				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
-						"Bağlantı hatası",
-						"TC kimlik numarası sorgulanamıyor.");
+						"Bağlantı hatası", "TC kimlik numarası sorgulanamıyor.");
 				FacesContext.getCurrentInstance().addMessage("form_tcno", fm);
 			}
 
@@ -176,4 +189,9 @@ public class SignUpView implements Serializable {
 
 	}
 
+	public String onFlowProcess(FlowEvent event) {
+
+			return event.getNewStep();
+	}
+	
 }

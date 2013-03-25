@@ -44,11 +44,7 @@ public class HighSchoolView implements Serializable {
 	public void init() {
 		highSchoolTypes = highSchoolService.allHighSchoolTypes();
 		gradingSystems = highSchoolService.allGradingSystems();
-
-	}
-
-	public HighSchool getHighSchool() {
-
+		
 		if (highSchool == null) {
 			highSchool = new HighSchool();
 
@@ -60,6 +56,10 @@ public class HighSchoolView implements Serializable {
 						getLoggedUser()));
 			}
 		}
+
+	}
+
+	public HighSchool getHighSchool() {
 		return highSchool;
 	}
 
