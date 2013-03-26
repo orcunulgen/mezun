@@ -72,4 +72,16 @@ public class EducationInfoService {
 	public List<EducationInfo> findGraduatedUniversities(User loggedUser) {
 		return getEducationInfoDAO().findGraduatedUniversities(loggedUser);
 	}
+
+	public University getYTU(Long l) {
+		return getEducationInfoDAO().getYTU(l);
+	}
+
+	public Faculty getYTUFaculty(long l) {
+		return getEducationInfoDAO().getYTUFaculty(l);
+	}
+
+	public Department getYTUCE(long l) {
+		return getEducationInfoDAO().getYTUCE(l);
+	}
 }

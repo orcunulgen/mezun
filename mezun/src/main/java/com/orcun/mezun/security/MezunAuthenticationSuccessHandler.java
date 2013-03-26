@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.transaction.annotation.Transactional;
 
 import com.orcun.mezun.model.User;
+import com.orcun.mezun.service.user.InitAlumniInfoService;
 import com.orcun.mezun.service.user.InitStudentInfoService;
 
 public class MezunAuthenticationSuccessHandler extends
@@ -54,8 +55,15 @@ public class MezunAuthenticationSuccessHandler extends
 		} else if (authentication.getAuthorities().iterator().next()
 				.getAuthority().equals("ROLE_ALUMNI")) {
 
-			// contact_info
-			// university
+			InitAlumniInfoService initAlumniInfoService = (InitAlumniInfoService) appContext
+					.getBean("initAlumniInfoService");
+			
+			if(!initAlumniInfoService.IsValidInitAlumniInfo(loggedUser)){
+				ExternalContext exCtx = FacesContext.getCurrentInstance()
+						.getExternalContext();
+				response.sendRedirect(exCtx.getRequestContextPath()
+						+ "/user_profile/init_alumni_info.xhtml");
+			}
 
 		}
 		super.onAuthenticationSuccess(request, response, authentication);
