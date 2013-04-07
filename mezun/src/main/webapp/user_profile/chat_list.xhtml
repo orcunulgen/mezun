@@ -90,13 +90,21 @@
 				resizable="false" id="searchChatPersonDlg" showEffect="fade"
 				modal="true">
 				<h:form id="dialog_search_chat_person_form">
-					<p:growl id="search_chat_person_messages" />
+					<p:growl id="search_chat_person_messages" showDetail="true"/>
 					<p:panelGrid styleClass="no_border" id="searchChatPersonPanelGrid"
 						columns="2">
 
-						<h:outputLabel value="Kişi İsmi :" />
-						<p:inputText value="#{searchChatPersonHelper.searchByName}"
-							required="true" requiredMessage="Lütfen bir isim giriniz." />
+						<h:outputLabel value="İsim :" />
+						<p:inputText
+							value="#{searchChatPersonHelper.searchCriteria.searchByName}" />
+
+						<h:outputLabel value="Soyisim :" />
+						<p:inputText
+							value="#{searchChatPersonHelper.searchCriteria.searchBySurname}" />
+
+						<h:outputLabel value="E-Mail Adresi :" />
+						<p:inputText
+							value="#{searchChatPersonHelper.searchCriteria.searchByEmail}" />
 
 					</p:panelGrid>
 					<p:commandButton
@@ -115,7 +123,7 @@
 							</f:facet>
 							<p:commandButton id="followChatPersonButton"
 								actionListener="#{chatListView.followSearchedPerson(searchedPersonList)}"
-								icon="ui-icon-search" value="Ekle">
+								icon="ui-icon-disk" value="Ekle" update=":dialog_search_chat_person_form">
 							</p:commandButton>
 						</p:column>
 						<p:column>

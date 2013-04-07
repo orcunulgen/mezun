@@ -12,54 +12,57 @@
 
 			<h:form id="list_event_form">
 				<p:growl id="list_event_messages" />
-				<p:dataTable var="eventList" value="#{eventView.events}"
-					paginator="true" rows="10">
-					<p:column style="width:15%">
-						<f:facet name="header">
-							<h:outputLabel value="İşlemler" />
-						</f:facet>
-						<p:commandButton id="selectButton"
-							actionListener="#{eventView.initSelectedEvent(eventList)}"
-							update=":event_dialog_form" oncomplete="eventUpdateDialog.show()"
-							icon="ui-icon-search" title="View">
-						</p:commandButton>
-						<p:commandButton id="deleteButton"
-							actionListener="#{eventView.deleteSelectedEvent(eventList)}"
-							icon="ui-icon-close" title="Delete">
-						</p:commandButton>
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Etkinlik İsmi" />
-						</f:facet>
-						<h:outputLabel value="#{eventList.title}" />
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Başlangıç Tarihi" />
-						</f:facet>
-						<h:outputLabel value="#{eventList.startDate}">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputLabel>
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Bitiş Tarihi" />
-						</f:facet>
-						<h:outputLabel value="#{eventList.endDate}">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputLabel>
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Etkinliğin Eklendiği Tarih" />
-						</f:facet>
-						<h:outputLabel value="#{eventList.registeredDate}">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputLabel>
-					</p:column>
+				<p:fieldset legend="Etkinlik Listesi">
+					<p:dataTable var="eventList" value="#{eventView.events}"
+						paginator="true" rows="10">
+						<p:column style="width:15%">
+							<f:facet name="header">
+								<h:outputLabel value="İşlemler" />
+							</f:facet>
+							<p:commandButton id="selectButton"
+								actionListener="#{eventView.initSelectedEvent(eventList)}"
+								update=":event_dialog_form"
+								oncomplete="eventUpdateDialog.show()" icon="ui-icon-search"
+								title="View">
+							</p:commandButton>
+							<p:commandButton id="deleteButton"
+								actionListener="#{eventView.deleteSelectedEvent(eventList)}"
+								icon="ui-icon-close" title="Delete">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Etkinlik İsmi" />
+							</f:facet>
+							<h:outputLabel value="#{eventList.title}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Başlangıç Tarihi" />
+							</f:facet>
+							<h:outputLabel value="#{eventList.startDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Bitiş Tarihi" />
+							</f:facet>
+							<h:outputLabel value="#{eventList.endDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Etkinliğin Eklendiği Tarih" />
+							</f:facet>
+							<h:outputLabel value="#{eventList.registeredDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
 
-				</p:dataTable>
+					</p:dataTable>
+				</p:fieldset>
 			</h:form>
 
 			<p:dialog header="Etkinliğin Ayrıntıları"
@@ -67,8 +70,8 @@
 				showEffect="fade" modal="true">
 				<h:form id="event_dialog_form">
 					<p:growl id="selected_event_dialog_messages" />
-					<p:panelGrid styleClass="no_border" id="event_detail_display" columns="2" cellpadding="4"
-						style="margin:0 auto;">
+					<p:panelGrid styleClass="no_border" id="event_detail_display"
+						columns="2" cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Etkinlik İsmi :" />
 						<p:inputText value="#{eventView.selectedEvent.title}"
@@ -98,13 +101,13 @@
 
 
 			<p:commandButton value="Yeni Etkinlik Ekle" type="button"
-				onclick="eventAddDialog.show()" />
+				onclick="eventAddDialog.show()" icon="ui-icon-plus" />
 			<p:dialog header="Etkinlik Ekle" widgetVar="eventAddDialog"
 				resizable="false" id="eventAddDlg" showEffect="fade" modal="true">
 				<h:form id="dialog_event_add_form">
 					<p:growl id="event_add_messages" />
-					<p:panelGrid styleClass="no_border" id="event_add_display" columns="2" cellpadding="4"
-						style="margin:0 auto;">
+					<p:panelGrid styleClass="no_border" id="event_add_display"
+						columns="2" cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Etkinlik İsmi :" />
 						<p:inputText value="#{eventView.event.title}" required="true"

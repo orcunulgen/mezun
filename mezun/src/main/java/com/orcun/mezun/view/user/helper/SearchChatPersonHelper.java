@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -12,6 +13,7 @@ import javax.faces.context.FacesContext;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
+import com.orcun.mezun.model.SearchCriteria;
 import com.orcun.mezun.model.User;
 import com.orcun.mezun.service.user.helper.SearchChatPersonHelperService;
 
@@ -23,14 +25,17 @@ public class SearchChatPersonHelper implements Serializable {
 
 	private User loggedUser;
 
-	private String searchByName;
+	private SearchCriteria searchCriteria;
 	
-	
-	private List<User> searchedPersons=new ArrayList<User>();
-	
-	
+	private List<User> searchedPersons = new ArrayList<User>();
+
 	@ManagedProperty(value = "#{searchChatPersonHelperService}")
 	private SearchChatPersonHelperService searchChatPersonHelperService;
+	
+	@PostConstruct
+	public void init(){
+		this.searchCriteria=new SearchCriteria();
+	}
 
 	public User getLoggedUser() {
 		SecurityContext securityContext = (SecurityContext) FacesContext
@@ -44,12 +49,12 @@ public class SearchChatPersonHelper implements Serializable {
 
 	}
 
-	public String getSearchByName() {
-		return searchByName;
+	public SearchCriteria getSearchCriteria() {
+		return searchCriteria;
 	}
 
-	public void setSearchByName(String searchByName) {
-		this.searchByName = searchByName;
+	public void setSearchCriteria(SearchCriteria searchCriteria) {
+		this.searchCriteria = searchCriteria;
 	}
 
 	public List<User> getSearchedPersons() {
@@ -68,12 +73,13 @@ public class SearchChatPersonHelper implements Serializable {
 			SearchChatPersonHelperService searchChatPersonHelperService) {
 		this.searchChatPersonHelperService = searchChatPersonHelperService;
 	}
-	
+
 	public void searchChatPerson() {
 		try {
-			
-			searchedPersons=getSearchChatPersonHelperService().searchChatPersonByName(getSearchByName());
-			
+
+			searchedPersons = getSearchChatPersonHelperService()
+					.searchChatPersonByName(getSearchCriteria());
+
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}

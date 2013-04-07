@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -139,22 +140,50 @@ public class ChatListView implements Serializable {
 	public void setChatListService(ChatListService chatListService) {
 		this.chatListService = chatListService;
 	}
+	
+	public boolean findPersonInChatGroup(User user){
+		
+		int size=getSelectedChatGroup().getChatPersons().size();
+		boolean validate=false;
+		
+		for(int i=0;i<size;i++){
+			
+			if(getSelectedChatGroup().getChatPersons().get(i).getUser().equals(user)){
+				validate=true;
+			}			
+		}
+		
+		if(validate){
+			return true;
+		}else{
+			return false;
+		}
+		
+	}
 
 	public void followSearchedPerson(User searchedPerson) throws IOException {
-		this.searchedPerson = searchedPerson;
+		
+		if(!findPersonInChatGroup(searchedPerson)){
+			this.searchedPerson = searchedPerson;
 
-		ChatPerson newChatPerson = new ChatPerson();
-		newChatPerson.setUser(searchedPerson);
-		newChatPerson.setChatGroup(getSelectedChatGroup());
-		
-		int indexChatGroupInChatList=getChatList().getChatGroups().indexOf(getSelectedChatGroup());
-		getChatList().getChatGroups().get(indexChatGroupInChatList).getChatPersons().add(newChatPerson);
-		
-		getChatListService().updateChatList(getChatList());
-		
-		FacesContext.getCurrentInstance().getExternalContext()
-				.redirect("chat_list.xhtml?user=" + getLoggedUser().getTcno());
+			ChatPerson newChatPerson = new ChatPerson();
+			newChatPerson.setUser(searchedPerson);
+			newChatPerson.setChatGroup(getSelectedChatGroup());
+			
+			int indexChatGroupInChatList=getChatList().getChatGroups().indexOf(getSelectedChatGroup());
+			getChatList().getChatGroups().get(indexChatGroupInChatList).getChatPersons().add(newChatPerson);
+			
+			getChatListService().updateChatList(getChatList());
+			
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect("chat_list.xhtml?user=" + getLoggedUser().getTcno());
 
+		}else{
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Ekleme Hatası", "Eklemek istediğiniz kişi grubunuzun içerisinde bulunmaktadır.");
+			FacesContext.getCurrentInstance().addMessage("form_tcno", fm);
+		}
+		
 	}
 
 	public void addChatGroup() throws IOException {

@@ -13,37 +13,40 @@
 
 			<h:form id="list_area_of_interest_form">
 				<p:growl id="list_area_of_interest_messages" />
-				<p:dataTable var="areaOfInterestList"
-					value="#{areaOfInterestView.areaOfInterests}" paginator="true"
-					rows="10">
-					<p:column style="width:15%">
-						<f:facet name="header">
-							<h:outputLabel value="İşlemler" />
-						</f:facet>
-						<p:commandButton id="selectButton"
-							actionListener="#{areaOfInterestView.initSelectedAreaOfInterest(areaOfInterestList)}"
-							update=":area_of_interest_dialog_form"
-							oncomplete="areaOfInterestUpdateDialog.show()"
-							icon="ui-icon-search" title="View">
-						</p:commandButton>
-						<p:commandButton id="deleteButton"
-							actionListener="#{areaOfInterestView.deleteSelectedAreaOfInterest(areaOfInterestList)}"
-							icon="ui-icon-close" title="Delete">
-						</p:commandButton>
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Başlık" />
-						</f:facet>
-						<h:outputLabel value="#{areaOfInterestList.areaOfInterestTitle}" />
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Deneyim Seviyesi" />
-						</f:facet>
-						<p:rating value="#{areaOfInterestList.experienceLevel}" stars="10" />
-					</p:column>
-				</p:dataTable>
+				<p:fieldset legend="İlgi Alanları">
+					<p:dataTable var="areaOfInterestList"
+						value="#{areaOfInterestView.areaOfInterests}" paginator="true"
+						rows="10">
+						<p:column style="width:15%">
+							<f:facet name="header">
+								<h:outputLabel value="İşlemler" />
+							</f:facet>
+							<p:commandButton id="selectButton"
+								actionListener="#{areaOfInterestView.initSelectedAreaOfInterest(areaOfInterestList)}"
+								update=":area_of_interest_dialog_form"
+								oncomplete="areaOfInterestUpdateDialog.show()"
+								icon="ui-icon-search" title="View">
+							</p:commandButton>
+							<p:commandButton id="deleteButton"
+								actionListener="#{areaOfInterestView.deleteSelectedAreaOfInterest(areaOfInterestList)}"
+								icon="ui-icon-close" title="Delete">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Başlık" />
+							</f:facet>
+							<h:outputLabel value="#{areaOfInterestList.areaOfInterestTitle}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Deneyim Seviyesi" />
+							</f:facet>
+							<p:rating value="#{areaOfInterestList.experienceLevel}"
+								stars="10" />
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
 			</h:form>
 
 			<p:dialog position="top" header="İlgi Alanı Ayrıntıları"
@@ -51,8 +54,9 @@
 				id="areaOfInterestUpdateDlg" showEffect="fade" modal="true">
 				<h:form id="area_of_interest_dialog_form">
 					<p:growl id="selected_area_of_interest_dialog_messages" />
-					<p:panelGrid styleClass="no_border" id="area_of_interest_detail_display" columns="2"
-						cellpadding="4" style="margin:0 auto;">
+					<p:panelGrid styleClass="no_border"
+						id="area_of_interest_detail_display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
 
 						<h:outputLabel value="Başlık :" />
 						<p:inputText
@@ -85,14 +89,15 @@
 
 
 			<p:commandButton value="Yeni İlgi Alanı Ekle" type="button"
-				onclick="areaOfInterestAddDialog.show()" />
-			<p:dialog position="top" header="Yeni İlgi Alanı Ekle"
+				onclick="areaOfInterestAddDialog.show()" icon="ui-icon-plus" />
+			<p:dialog header="Yeni İlgi Alanı Ekle"
 				widgetVar="areaOfInterestAddDialog" resizable="false"
 				id="areaOfInterestAddDlg" showEffect="fade" modal="true">
 				<h:form id="dialog_area_of_interest_add_form">
 					<p:growl id="area_of_interest_add_messages" />
-					<p:panelGrid styleClass="no_border" id="area_of_interest_add_display" columns="2"
-						cellpadding="4" style="margin:0 auto;">
+					<p:panelGrid styleClass="no_border"
+						id="area_of_interest_add_display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
 
 						<h:outputLabel value="Başlık :" />
 						<p:inputText

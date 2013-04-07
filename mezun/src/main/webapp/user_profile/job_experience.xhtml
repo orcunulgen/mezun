@@ -13,66 +13,68 @@
 
 			<h:form id="list_job_ex_form">
 				<p:growl id="list_job_ex_messages" />
-				<p:dataTable var="jobExperienceList"
-					value="#{jobExperienceView.jobExperiences}" paginator="true"
-					rows="10">
-					<p:column style="width:15%">
-						<f:facet name="header">
-							<h:outputLabel value="İşlemler" />
-						</f:facet>
-						<p:commandButton id="selectButton"
-							actionListener="#{jobExperienceView.initSelectedJobEx(jobExperienceList)}"
-							update=":job_ex_dialog_form"
-							oncomplete="jobExperienceUpdateDialog.show()"
-							icon="ui-icon-search" title="View">
-						</p:commandButton>
-						<p:commandButton id="deleteButton"
-							actionListener="#{jobExperienceView.deleteSelectedJobEx(jobExperienceList)}"
-							icon="ui-icon-close" title="Delete">
-						</p:commandButton>
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Şirketin İsmi" />
-						</f:facet>
-						<h:outputLabel value="#{jobExperienceList.companyName}" />
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Başlangıç Tarihi" />
-						</f:facet>
-						<h:outputLabel value="#{jobExperienceList.startDate}">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputLabel>
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Bitiş Tarihi" />
-						</f:facet>
-						<h:outputLabel rendered="#{jobExperienceList.endDate!=null}"
-							value="#{jobExperienceList.endDate}">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputLabel>
+				<p:fieldset legend="İş Tecrübeleri">
+					<p:dataTable var="jobExperienceList"
+						value="#{jobExperienceView.jobExperiences}" paginator="true"
+						rows="10">
+						<p:column style="width:15%">
+							<f:facet name="header">
+								<h:outputLabel value="İşlemler" />
+							</f:facet>
+							<p:commandButton id="selectButton"
+								actionListener="#{jobExperienceView.initSelectedJobEx(jobExperienceList)}"
+								update=":job_ex_dialog_form"
+								oncomplete="jobExperienceUpdateDialog.show()"
+								icon="ui-icon-search" title="View">
+							</p:commandButton>
+							<p:commandButton id="deleteButton"
+								actionListener="#{jobExperienceView.deleteSelectedJobEx(jobExperienceList)}"
+								icon="ui-icon-close" title="Delete">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Şirketin İsmi" />
+							</f:facet>
+							<h:outputLabel value="#{jobExperienceList.companyName}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Başlangıç Tarihi" />
+							</f:facet>
+							<h:outputLabel value="#{jobExperienceList.startDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Bitiş Tarihi" />
+							</f:facet>
+							<h:outputLabel rendered="#{jobExperienceList.endDate!=null}"
+								value="#{jobExperienceList.endDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
 
-						<h:outputLabel value="Devam Ediyor"
-							rendered="#{jobExperienceList.endDate==null}">
-						</h:outputLabel>
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Sektör" />
-						</f:facet>
-						<h:outputLabel value="#{jobExperienceList.sector.sectorName}" />
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Çalıştığı Pozisyon" />
-						</f:facet>
-						<h:outputLabel value="#{jobExperienceList.position.positionName}" />
-					</p:column>
+							<h:outputLabel value="Devam Ediyor"
+								rendered="#{jobExperienceList.endDate==null}">
+							</h:outputLabel>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Sektör" />
+							</f:facet>
+							<h:outputLabel value="#{jobExperienceList.sector.sectorName}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Çalıştığı Pozisyon" />
+							</f:facet>
+							<h:outputLabel value="#{jobExperienceList.position.positionName}" />
+						</p:column>
 
 
-				</p:dataTable>
+					</p:dataTable>
+				</p:fieldset>
 			</h:form>
 
 			<p:dialog header="İş Tecrübesi Ayrıntıları"
@@ -182,7 +184,7 @@
 
 
 			<p:commandButton value="Yeni İş Tecrübesi Ekle" type="button"
-				onclick="jobExperienceAddDialog.show()" />
+				onclick="jobExperienceAddDialog.show()" icon="ui-icon-plus" />
 			<p:dialog header="İş Tecrübesi Ekle"
 				widgetVar="jobExperienceAddDialog" resizable="false"
 				id="jobExperienceAddDlg" showEffect="fade" modal="true">
@@ -207,7 +209,8 @@
 							showOn="button" />
 
 						<h:outputLabel value="Devam Ediyorum :" />
-						<p:selectBooleanButton value="#{jobExperienceView.jobExperienceIsContinue}"
+						<p:selectBooleanButton
+							value="#{jobExperienceView.jobExperienceIsContinue}"
 							onLabel="Evet" offLabel="Hayır" onIcon="ui-icon-check"
 							offIcon="ui-icon-close">
 							<p:ajax update="dialog_job_experience_add_form" />
@@ -216,7 +219,8 @@
 						<h:outputLabel value="Bitiş Tarihi :"
 							rendered="#{!jobExperienceView.jobExperienceIsContinue}" />
 						<p:calendar value="#{jobExperienceView.jobExperience.endDate}"
-							rendered="#{!jobExperienceView.jobExperienceIsContinue}" showOn="button" />
+							rendered="#{!jobExperienceView.jobExperienceIsContinue}"
+							showOn="button" />
 
 						<h:outputLabel value="Ülke :" />
 						<p:selectOneMenu validator="countryValidator"

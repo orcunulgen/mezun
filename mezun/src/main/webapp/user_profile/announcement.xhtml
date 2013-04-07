@@ -12,46 +12,48 @@
 
 			<h:form id="list_announcement_form">
 				<p:growl id="list_announcement_messages" />
-				<p:dataTable var="announcementList"
-					value="#{announcementView.announcements}" paginator="true"
-					rows="10">
-					<p:column style="width:15%">
-						<f:facet name="header">
-							<h:outputLabel value="İşlemler" />
-						</f:facet>
-						<p:commandButton id="selectButton"
-							actionListener="#{announcementView.initSelectedAnnouncement(announcementList)}"
-							update=":announcement_dialog_form"
-							oncomplete="announcementUpdateDialog.show()"
-							icon="ui-icon-search" title="View">
-						</p:commandButton>
-						<p:commandButton id="deleteButton"
-							actionListener="#{announcementView.deleteSelectedAnnouncement(announcementList)}"
-							icon="ui-icon-close" title="Delete">
-						</p:commandButton>
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Duyuru Başlığı" />
-						</f:facet>
-						<h:outputLabel value="#{announcementList.title}" />
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Açıklama" />
-						</f:facet>
-						<h:outputLabel value="#{announcementList.description}" />
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Duyuru Tipi" />
-						</f:facet>
-						<h:outputLabel
-							value="#{announcementList.announcementType.announcementType}" />
-					</p:column>
+				<p:fieldset legend="Duyuru Listesi">
+					<p:dataTable var="announcementList"
+						value="#{announcementView.announcements}" paginator="true"
+						rows="10">
+						<p:column style="width:15%">
+							<f:facet name="header">
+								<h:outputLabel value="İşlemler" />
+							</f:facet>
+							<p:commandButton id="selectButton"
+								actionListener="#{announcementView.initSelectedAnnouncement(announcementList)}"
+								update=":announcement_dialog_form"
+								oncomplete="announcementUpdateDialog.show()"
+								icon="ui-icon-search" title="View">
+							</p:commandButton>
+							<p:commandButton id="deleteButton"
+								actionListener="#{announcementView.deleteSelectedAnnouncement(announcementList)}"
+								icon="ui-icon-close" title="Delete">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Duyuru Başlığı" />
+							</f:facet>
+							<h:outputLabel value="#{announcementList.title}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Açıklama" />
+							</f:facet>
+							<h:outputLabel value="#{announcementList.description}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Duyuru Tipi" />
+							</f:facet>
+							<h:outputLabel
+								value="#{announcementList.announcementType.announcementType}" />
+						</p:column>
 
 
-				</p:dataTable>
+					</p:dataTable>
+				</p:fieldset>
 			</h:form>
 
 			<p:dialog header="Duyuru Ayrıntıları"
@@ -59,8 +61,9 @@
 				id="announcementUpdateDlg" showEffect="fade" modal="true">
 				<h:form id="announcement_dialog_form">
 					<p:growl id="selected_announcement_dialog_messages" />
-					<p:panelGrid styleClass="no_border" id="announcement_detail_display" columns="2"
-						cellpadding="4" style="margin:0 auto;">
+					<p:panelGrid styleClass="no_border"
+						id="announcement_detail_display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
 
 						<h:outputLabel value="Duyuru Başlığı :" />
 						<p:inputText
@@ -96,14 +99,14 @@
 
 
 			<p:commandButton value="Yeni Duyuru Ekle" type="button"
-				onclick="announcementAddDialog.show()" />
-			<p:dialog  header="Duyuru Ekle" widgetVar="announcementAddDialog"
+				onclick="announcementAddDialog.show()" icon="ui-icon-plus" />
+			<p:dialog header="Duyuru Ekle" widgetVar="announcementAddDialog"
 				resizable="false" id="announcementAddDlg" showEffect="fade"
 				modal="true">
 				<h:form id="dialog_announcement_add_form">
 					<p:growl id="announcement_add_messages" />
-					<p:panelGrid styleClass="no_border" id="announcement_add_display" columns="2"
-						cellpadding="4" style="margin:0 auto;">
+					<p:panelGrid styleClass="no_border" id="announcement_add_display"
+						columns="2" cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Duyuru Başlığı :" />
 						<p:inputText value="#{announcementView.announcement.title}"

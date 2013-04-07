@@ -14,49 +14,51 @@
 
 			<h:form id="list_foreign_language_form">
 				<p:growl id="list_foreign_language_messages" />
-				<p:dataTable var="foreignLanguageList"
-					value="#{foreignLanguageView.foreignLanguages}" paginator="true"
-					rows="10">
-					<p:column style="width:15%">
-						<f:facet name="header">
-							<h:outputLabel value="İşlemler" />
-						</f:facet>
-						<p:commandButton id="selectButton"
-							actionListener="#{foreignLanguageView.initSelectedForeignLanguage(foreignLanguageList)}"
-							update=":foreign_language_dialog_form"
-							oncomplete="foreignLanguageUpdateDialog.show()"
-							icon="ui-icon-search" title="View">
-						</p:commandButton>
-						<p:commandButton id="deleteButton"
-							actionListener="#{foreignLanguageView.deleteSelectedForeignLanguage(foreignLanguageList)}"
-							icon="ui-icon-close" title="Delete">
-						</p:commandButton>
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Yabancı Dil" />
-						</f:facet>
-						<h:outputLabel value="#{foreignLanguageList.language.language}" />
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Okuma Seviyesi" />
-						</f:facet>
-						<p:rating value="#{foreignLanguageList.readingRank}" stars="10" />
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Yazma Seviyesi" />
-						</f:facet>
-						<p:rating value="#{foreignLanguageList.writingRank}" stars="10" />
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Konuşma Seviyesi" />
-						</f:facet>
-						<p:rating value="#{foreignLanguageList.speakingRank}" stars="10" />
-					</p:column>
-				</p:dataTable>
+				<p:fieldset legend="Yabancı Dil Bilgileri">
+					<p:dataTable var="foreignLanguageList"
+						value="#{foreignLanguageView.foreignLanguages}" paginator="true"
+						rows="10">
+						<p:column style="width:15%">
+							<f:facet name="header">
+								<h:outputLabel value="İşlemler" />
+							</f:facet>
+							<p:commandButton id="selectButton"
+								actionListener="#{foreignLanguageView.initSelectedForeignLanguage(foreignLanguageList)}"
+								update=":foreign_language_dialog_form"
+								oncomplete="foreignLanguageUpdateDialog.show()"
+								icon="ui-icon-search" title="View">
+							</p:commandButton>
+							<p:commandButton id="deleteButton"
+								actionListener="#{foreignLanguageView.deleteSelectedForeignLanguage(foreignLanguageList)}"
+								icon="ui-icon-close" title="Delete">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Yabancı Dil" />
+							</f:facet>
+							<h:outputLabel value="#{foreignLanguageList.language.language}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Okuma Seviyesi" />
+							</f:facet>
+							<p:rating value="#{foreignLanguageList.readingRank}" stars="10" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Yazma Seviyesi" />
+							</f:facet>
+							<p:rating value="#{foreignLanguageList.writingRank}" stars="10" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Konuşma Seviyesi" />
+							</f:facet>
+							<p:rating value="#{foreignLanguageList.speakingRank}" stars="10" />
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
 			</h:form>
 
 			<p:dialog header="Yabancı Dil Ayrıntıları"
@@ -64,8 +66,9 @@
 				id="foreignLanguageUpdateDlg" showEffect="fade" modal="true">
 				<h:form id="foreign_language_dialog_form">
 					<p:growl id="selected_foreign_language_dialog_messages" />
-					<p:panelGrid styleClass="no_border" id="foreign_language_detail_display" columns="2"
-						cellpadding="4" style="margin:0 auto;">
+					<p:panelGrid styleClass="no_border"
+						id="foreign_language_detail_display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
 
 						<h:outputLabel value="Yabancı Dil :" />
 						<p:selectOneMenu validator="languageValidator"
@@ -108,14 +111,15 @@
 
 
 			<p:commandButton value="Yeni Yabancı Dil Ekle" type="button"
-				onclick="foreignLanguageAddDialog.show()" />
+				onclick="foreignLanguageAddDialog.show()" icon="ui-icon-plus" />
 			<p:dialog header="Yeni Yabancı Dil Ekle"
 				widgetVar="foreignLanguageAddDialog" resizable="false"
 				id="foreignLanguageAddDlg" showEffect="fade" modal="true">
 				<h:form id="dialog_foreign_language_add_form">
 					<p:growl id="foreing_language_add_messages" />
-					<p:panelGrid styleClass="no_border" id="foreign_language_add_display" columns="2"
-						cellpadding="4" style="margin:0 auto;">
+					<p:panelGrid styleClass="no_border"
+						id="foreign_language_add_display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
 
 						<h:outputLabel value="Yabancı Dil :" />
 						<p:selectOneMenu validator="languageValidator"

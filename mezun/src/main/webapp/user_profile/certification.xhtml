@@ -13,45 +13,47 @@
 
 			<h:form id="list_certification_form">
 				<p:growl id="list_certification_messages" />
-				<p:dataTable var="certificationList"
-					value="#{certificationView.certifications}" paginator="true"
-					rows="10">
-					<p:column style="width:15%">
-						<f:facet name="header">
-							<h:outputLabel value="İşlemler" />
-						</f:facet>
-						<p:commandButton id="selectButton"
-							actionListener="#{certificationView.initSelectedCertification(certificationList)}"
-							update=":certification_dialog_form"
-							oncomplete="certificationUpdateDialog.show()"
-							icon="ui-icon-search" title="View">
-						</p:commandButton>
-						<p:commandButton id="deleteButton"
-							actionListener="#{certificationView.deleteSelectedCertification(certificationList)}"
-							icon="ui-icon-close" title="Delete">
-						</p:commandButton>
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Sertifika İsmi" />
-						</f:facet>
-						<h:outputLabel value="#{certificationList.certificateName}" />
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Alınma Tarihi" />
-						</f:facet>
-						<h:outputLabel value="#{certificationList.certificateDate}">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputLabel>
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Alındığı Kurum" />
-						</f:facet>
-						<h:outputLabel value="#{certificationList.institution}" />
-					</p:column>
-				</p:dataTable>
+				<p:fieldset legend="Sertifikalar">
+					<p:dataTable var="certificationList"
+						value="#{certificationView.certifications}" paginator="true"
+						rows="10">
+						<p:column style="width:15%">
+							<f:facet name="header">
+								<h:outputLabel value="İşlemler" />
+							</f:facet>
+							<p:commandButton id="selectButton"
+								actionListener="#{certificationView.initSelectedCertification(certificationList)}"
+								update=":certification_dialog_form"
+								oncomplete="certificationUpdateDialog.show()"
+								icon="ui-icon-search" title="View">
+							</p:commandButton>
+							<p:commandButton id="deleteButton"
+								actionListener="#{certificationView.deleteSelectedCertification(certificationList)}"
+								icon="ui-icon-close" title="Delete">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Sertifika İsmi" />
+							</f:facet>
+							<h:outputLabel value="#{certificationList.certificateName}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Alınma Tarihi" />
+							</f:facet>
+							<h:outputLabel value="#{certificationList.certificateDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Alındığı Kurum" />
+							</f:facet>
+							<h:outputLabel value="#{certificationList.institution}" />
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
 			</h:form>
 
 			<p:dialog header="Sertifika Ayrıntıları"
@@ -59,8 +61,9 @@
 				id="certificationUpdateDlg" showEffect="fade" modal="true">
 				<h:form id="certification_dialog_form">
 					<p:growl id="selected_certification_dialog_messages" />
-					<p:panelGrid styleClass="no_border" id="certification_detail_display" columns="2"
-						cellpadding="4" style="margin:0 auto;">
+					<p:panelGrid styleClass="no_border"
+						id="certification_detail_display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
 
 						<h:outputLabel value="Sertifika İsmi :" />
 						<p:inputText
@@ -95,14 +98,14 @@
 
 
 			<p:commandButton value="Yeni Sertifika Ekle" type="button"
-				onclick="certificationAddDialog.show()" />
+				onclick="certificationAddDialog.show()" icon="ui-icon-plus" />
 			<p:dialog header="Sertifika Ekle" widgetVar="certificationAddDialog"
 				resizable="false" id="certificationAddDlg" showEffect="fade"
 				modal="true">
 				<h:form id="dialog_certification_add_form">
 					<p:growl id="certification_add_messages" />
-					<p:panelGrid styleClass="no_border" id="certification_add_display" columns="2"
-						cellpadding="4" style="margin:0 auto;">
+					<p:panelGrid styleClass="no_border" id="certification_add_display"
+						columns="2" cellpadding="4" style="margin:0 auto;">
 
 						<h:outputLabel value="Sertifika İsmi :" />
 						<p:inputText

@@ -12,70 +12,72 @@
 
 			<h:form id="list_university_form">
 				<p:growl id="list_university_messages" />
-				<p:dataTable var="educationInfoList"
-					value="#{educationInfoView.educations}" paginator="true" rows="10">
-					<p:column style="width:15%">
-						<f:facet name="header">
-							<h:outputLabel value="İşlemler" />
-						</f:facet>
-						<p:commandButton id="selectButton"
-							actionListener="#{educationInfoView.initSelectedEducationInfo(educationInfoList)}"
-							update=":university_dialog_form"
-							oncomplete="universityUpdateDialog.show()" icon="ui-icon-search"
-							title="View">
-						</p:commandButton>
-						<p:commandButton id="deleteButton"
-							actionListener="#{educationInfoView.deleteSelectedEducationInfo(educationInfoList)}"
-							icon="ui-icon-close" title="Delete">
-						</p:commandButton>
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Üniversitenin İsmi" />
-						</f:facet>
-						<h:outputLabel
-							value="#{educationInfoList.university.universityName}" />
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Bölüm" />
-						</f:facet>
-						<h:outputLabel
-							value="#{educationInfoList.department.departmentName}" />
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Başlangıç Tarihi" />
-						</f:facet>
-						<h:outputLabel value="#{educationInfoList.startDate}">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputLabel>
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Bitiş Tarihi" />
-						</f:facet>
-						<h:outputLabel value="#{educationInfoList.endDate}"
-							rendered="#{educationInfoList.endDate!=null}">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputLabel>
+				<p:fieldset legend="Üniversite Bilgileri">
+					<p:dataTable var="educationInfoList"
+						value="#{educationInfoView.educations}" paginator="true" rows="10">
+						<p:column style="width:15%">
+							<f:facet name="header">
+								<h:outputLabel value="İşlemler" />
+							</f:facet>
+							<p:commandButton id="selectButton"
+								actionListener="#{educationInfoView.initSelectedEducationInfo(educationInfoList)}"
+								update=":university_dialog_form"
+								oncomplete="universityUpdateDialog.show()" icon="ui-icon-search"
+								title="View">
+							</p:commandButton>
+							<p:commandButton id="deleteButton"
+								actionListener="#{educationInfoView.deleteSelectedEducationInfo(educationInfoList)}"
+								icon="ui-icon-close" title="Delete">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Üniversitenin İsmi" />
+							</f:facet>
+							<h:outputLabel
+								value="#{educationInfoList.university.universityName}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Bölüm" />
+							</f:facet>
+							<h:outputLabel
+								value="#{educationInfoList.department.departmentName}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Başlangıç Tarihi" />
+							</f:facet>
+							<h:outputLabel value="#{educationInfoList.startDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Bitiş Tarihi" />
+							</f:facet>
+							<h:outputLabel value="#{educationInfoList.endDate}"
+								rendered="#{educationInfoList.endDate!=null}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
 
-						<h:outputLabel value="Devam Ediyor"
-							rendered="#{educationInfoList.endDate==null}">
-						</h:outputLabel>
+							<h:outputLabel value="Devam Ediyor"
+								rendered="#{educationInfoList.endDate==null}">
+							</h:outputLabel>
 
-					</p:column>
+						</p:column>
 
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Eğitim Seviyesi" />
-						</f:facet>
-						<h:outputLabel
-							value="#{educationInfoList.educationLevel.educationLevel}" />
-					</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Eğitim Seviyesi" />
+							</f:facet>
+							<h:outputLabel
+								value="#{educationInfoList.educationLevel.educationLevel}" />
+						</p:column>
 
 
-				</p:dataTable>
+					</p:dataTable>
+				</p:fieldset>
 			</h:form>
 
 			<p:dialog header="Eğitim Ayrıntıları"
@@ -159,9 +161,9 @@
 								itemLabel="#{educationLevel.educationLevel}" />
 						</p:selectOneMenu>
 
-						<h:outputLabel 
-							value="Diploma Not Sistemi" />
-						<p:selectOneMenu id="update_form_grading_system"  validator="gradingSystemValidator"
+						<h:outputLabel value="Diploma Not Sistemi" />
+						<p:selectOneMenu id="update_form_grading_system"
+							validator="gradingSystemValidator"
 							converter="gradingSystemConverter"
 							value="#{educationInfoView.selectedEducationInfo.gradingSystem}">
 							<f:selectItem itemValue="0"
@@ -171,8 +173,7 @@
 								itemLabel="#{gradingSystem.grade}" />
 						</p:selectOneMenu>
 
-						<h:outputLabel 
-							value="Mezuniyet Derecesi"
+						<h:outputLabel value="Mezuniyet Derecesi"
 							rendered="#{!educationInfoView.selectedEduInfoIsStudent}" />
 
 						<p:inputText id="form_graduation_degree"
@@ -182,7 +183,7 @@
 							rendered="#{!educationInfoView.selectedEduInfoIsStudent}">
 						</p:inputText>
 
-						<h:outputLabel  value="Ağırlıklı Ortalama"
+						<h:outputLabel value="Ağırlıklı Ortalama"
 							rendered="#{educationInfoView.selectedEduInfoIsStudent}" />
 
 						<p:inputText id="form_grade_mean"
@@ -204,7 +205,7 @@
 
 
 			<p:commandButton value="Yeni Üniversite Ekle" type="button"
-				onclick="universityAddDialog.show()" />
+				onclick="universityAddDialog.show()" icon="ui-icon-plus" />
 			<p:dialog header="Üniversite Ekle" widgetVar="universityAddDialog"
 				resizable="false" id="universityAddDlg" showEffect="fade"
 				modal="true">
@@ -281,9 +282,9 @@
 						</p:selectOneMenu>
 
 
-						<h:outputLabel 
-							value="Diploma Not Sistemi" />
-						<p:selectOneMenu id="add_form_grading_system" validator="gradingSystemValidator"
+						<h:outputLabel value="Diploma Not Sistemi" />
+						<p:selectOneMenu id="add_form_grading_system"
+							validator="gradingSystemValidator"
 							converter="gradingSystemConverter"
 							value="#{educationInfoView.educationInfo.gradingSystem}">
 							<f:selectItem itemValue="0"
@@ -295,8 +296,7 @@
 
 
 
-						<h:outputLabel 
-							value="Mezuniyet Derecesi"
+						<h:outputLabel value="Mezuniyet Derecesi"
 							rendered="#{!educationInfoView.isStudent}" />
 						<p:inputText id="form_graduation_degree"
 							value="#{educationInfoView.educationInfo.graduationDegree}"
