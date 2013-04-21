@@ -19,7 +19,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel value="Lise İsimi" />
+								<h:outputLabel value="Lise İsimi *" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_high_school_name"
@@ -29,7 +29,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel value="Lisedeki Bölümü" />
+								<h:outputLabel value="Lisedeki Bölümü *" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_high_school_department"
@@ -45,7 +45,7 @@
 						<p:row>
 
 							<p:column>
-								<h:outputLabel value="Bitiş Tarihi" />
+								<h:outputLabel value="Bitiş Tarihi *" />
 							</p:column>
 							<p:column>
 								<p:calendar value="#{highSchoolView.highSchool.endDate}"
@@ -53,7 +53,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel value="Lise Tipi" />
+								<h:outputLabel value="Lise Tipi *" />
 							</p:column>
 							<p:column>
 								<p:selectOneMenu validator="highSchoolTypeValidator"
@@ -71,7 +71,7 @@
 						<p:row>
 
 							<p:column>
-								<h:outputLabel value="Diploma Not Sistemi" />
+								<h:outputLabel value="Diploma Not Sistemi *" />
 							</p:column>
 							<p:column>
 								<p:selectOneMenu validator="gradingSystemValidator"
@@ -86,7 +86,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel value="Lise Mezuniyet Derecesi" />
+								<h:outputLabel value="Lise Mezuniyet Derecesi *" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_graduation_degree"
@@ -100,20 +100,12 @@
 						</p:row>
 
 						<p:row>
-							<p:column>
-								<h:outputLabel value="Öss Puanı " />
+							
+							<p:column colspan="2">
+								<h:outputLabel value="YTÜ Bilgisayar Tercih Sırası *" />
 							</p:column>
-
-							<p:column>
-								<p:inputMask mask="999,9" id="form_oss_degree"
-									value="#{highSchoolView.highSchool.ossDegree}" required="true"
-									requiredMessage="Lütfen öss puanınızı belirtiniz." />
-							</p:column>
-							<p:column>
-								<h:outputLabel value="YTÜ Bilgisayar Tercih Sırası" />
-							</p:column>
-							<p:column>
-								<p:inputMask mask="99" id="form_ytu_ce_order_of_preference"
+							<p:column colspan="2">
+								<p:inputText id="form_ytu_ce_order_of_preference"
 									value="#{highSchoolView.highSchool.ytuCeOrderOfPreference}"
 									required="true"
 									requiredMessage="Lütfen YTÜ Bilgisayar Mühendisliği tercih sıranızı belirtiniz." />
@@ -122,34 +114,32 @@
 
 						<p:row>
 							<p:column colspan="2">
-								<h:outputLabel value="Öss 1.Tercihi ( Üniversite/Bölüm ) " />
+								<h:outputLabel value="1.Tercihi ( Üniversite/Bölüm ) *" />
 							</p:column>
 							<p:column colspan="2">
 								<p:inputText id="form_oss_first_choise"
 									value="#{highSchoolView.highSchool.ossFirstChoise}"
-									required="true" requiredMessage="Öss 1.Tercihinizi belirtiniz." />
+									required="true" requiredMessage="1.Tercihinizi belirtiniz." />
 							</p:column>
 						</p:row>
 
 						<p:row>
 							<p:column colspan="2">
-								<h:outputLabel value="Öss 2.Tercihi ( Üniversite/Bölüm ) " />
+								<h:outputLabel value="2.Tercihi ( Üniversite/Bölüm ) " />
 							</p:column>
 							<p:column colspan="2">
 								<p:inputText id="form_oss_second_choise"
-									value="#{highSchoolView.highSchool.ossSecondChoise}"
-									required="true" requiredMessage="Öss 2.Tercihinizi belirtiniz." />
+									value="#{highSchoolView.highSchool.ossSecondChoise}"/>
 							</p:column>
 						</p:row>
 
 						<p:row>
 							<p:column colspan="2">
-								<h:outputLabel value="Öss 3.Tercihi ( Üniversite/Bölüm ) " />
+								<h:outputLabel value="3.Tercihi ( Üniversite/Bölüm ) " />
 							</p:column>
 							<p:column colspan="2">
 								<p:inputText id="form_oss_third_choise"
-									value="#{highSchoolView.highSchool.ossThirdChoise}"
-									required="true" requiredMessage="Öss 3.Tercihinizi belirtiniz." />
+									value="#{highSchoolView.highSchool.ossThirdChoise}"/>
 							</p:column>
 						</p:row>
 

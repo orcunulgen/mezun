@@ -13,6 +13,7 @@ import org.primefaces.model.mindmap.MindmapNode;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.User;
+import com.orcun.mezun.security.MezunAuthenticationSuccessHandler;
 
 @ManagedBean
 @ViewScoped
@@ -25,6 +26,10 @@ public class AdminPanelView implements Serializable {
 	private MindmapNode selectedNode;
 
 	private User loggedUser;
+	
+	private Boolean isAdmin;
+	
+	private MezunAuthenticationSuccessHandler mezunAuthenticationSuccessHandler;
 
 	public AdminPanelView() {
 
@@ -34,6 +39,15 @@ public class AdminPanelView implements Serializable {
 		 * String[]{"appContext/appContext-mezun.xml"
 		 * ,"appContext/securityContext.xml"});
 		 */
+		this.mezunAuthenticationSuccessHandler=new MezunAuthenticationSuccessHandler();
+		
+		SecurityContext securityContext = (SecurityContext) FacesContext
+				.getCurrentInstance().getExternalContext().getSessionMap()
+				.get("SPRING_SECURITY_CONTEXT");
+
+		this.loggedUser = (User) securityContext.getAuthentication()
+				.getPrincipal();
+
 
 		root = new DefaultMindmapNode(getLoggedUser().getName() + " "
 				+ loggedUser.getSurname(), "", "FFCC00", false);
@@ -69,14 +83,21 @@ public class AdminPanelView implements Serializable {
 
 	public User getLoggedUser() {
 
-		SecurityContext securityContext = (SecurityContext) FacesContext
-				.getCurrentInstance().getExternalContext().getSessionMap()
-				.get("SPRING_SECURITY_CONTEXT");
-
-		this.loggedUser = (User) securityContext.getAuthentication()
-				.getPrincipal();
-
 		return loggedUser;
+	}
+
+	public Boolean getIsAdmin() {
+		
+		if(this.mezunAuthenticationSuccessHandler.hasRole("ROLE_ADMIN", getLoggedUser())){
+			isAdmin=true;
+		}else{
+			isAdmin=false;
+		}
+		return isAdmin;
+	}
+
+	public void setIsAdmin(Boolean isAdmin) {
+		this.isAdmin = isAdmin;
 	}
 
 	public void onNodeSelect(SelectEvent event) throws IOException {

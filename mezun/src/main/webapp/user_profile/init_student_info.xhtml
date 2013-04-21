@@ -170,7 +170,7 @@
 										<h:outputLabel value="Ailenin Aylık Gelir Düzeyi(TL)" />
 									</p:column>
 									<p:column>
-										<p:inputMask mask="99999" id="form_parent_monthly_income"
+										<p:inputText id="form_parent_monthly_income"
 											value="#{initStudentInfoView.parentInfo.parentMonthlyIncome}"
 											required="true"
 											requiredMessage="Lütfen aile gelir düzeyini giriniz." />
@@ -293,21 +293,11 @@
 								</p:row>
 
 								<p:row>
-									<p:column>
-										<h:outputLabel value="Öss Puanı " />
-									</p:column>
-
-									<p:column>
-										<p:inputMask mask="999,9" id="form_oss_degree"
-											value="#{initStudentInfoView.highSchool.ossDegree}"
-											required="true"
-											requiredMessage="Lütfen öss puanınızı belirtiniz." />
-									</p:column>
-									<p:column>
+									<p:column colspan="2">
 										<h:outputLabel value="YTÜ Bilgisayar Tercih Sırası" />
 									</p:column>
-									<p:column>
-										<p:inputMask mask="99" id="form_ytu_ce_order_of_preference"
+									<p:column colspan="2">
+										<p:inputText id="form_ytu_ce_order_of_preference"
 											value="#{initStudentInfoView.highSchool.ytuCeOrderOfPreference}"
 											required="true"
 											requiredMessage="Lütfen YTÜ Bilgisayar Mühendisliği tercih sıranızı belirtiniz." />
@@ -316,37 +306,37 @@
 
 								<p:row>
 									<p:column colspan="2">
-										<h:outputLabel value="Öss 1.Tercihi ( Üniversite/Bölüm ) " />
+										<h:outputLabel value="1.Tercihi ( Üniversite/Bölüm ) " />
 									</p:column>
 									<p:column colspan="2">
 										<p:inputText id="form_oss_first_choise"
 											value="#{initStudentInfoView.highSchool.ossFirstChoise}"
 											required="true"
-											requiredMessage="Öss 1.Tercihinizi belirtiniz." />
+											requiredMessage="1.Tercihinizi belirtiniz." />
 									</p:column>
 								</p:row>
 
 								<p:row>
 									<p:column colspan="2">
-										<h:outputLabel value="Öss 2.Tercihi ( Üniversite/Bölüm ) " />
+										<h:outputLabel value="2.Tercihi ( Üniversite/Bölüm ) " />
 									</p:column>
 									<p:column colspan="2">
 										<p:inputText id="form_oss_second_choise"
 											value="#{initStudentInfoView.highSchool.ossSecondChoise}"
 											required="true"
-											requiredMessage="Öss 2.Tercihinizi belirtiniz." />
+											requiredMessage="2.Tercihinizi belirtiniz." />
 									</p:column>
 								</p:row>
 
 								<p:row>
 									<p:column colspan="2">
-										<h:outputLabel value="Öss 3.Tercihi ( Üniversite/Bölüm ) " />
+										<h:outputLabel value="3.Tercihi ( Üniversite/Bölüm ) " />
 									</p:column>
 									<p:column colspan="2">
 										<p:inputText id="form_oss_third_choise"
 											value="#{initStudentInfoView.highSchool.ossThirdChoise}"
 											required="true"
-											requiredMessage="Öss 3.Tercihinizi belirtiniz." />
+											requiredMessage="3.Tercihinizi belirtiniz." />
 									</p:column>
 								</p:row>
 							</p:panelGrid>
@@ -407,7 +397,7 @@
 									showOn="button" />
 
 								<h:outputLabel value="Devam Ediyorum :" />
-								<p:selectBooleanButton value="#{initStudentInfoView.isStudent}"
+								<p:selectBooleanButton disabled="true" value="#{initStudentInfoView.isStudent}"
 									onLabel="Evet" offLabel="Hayır" onIcon="ui-icon-check"
 									offIcon="ui-icon-close">
 									<p:ajax update="university_add_display" />
@@ -420,12 +410,12 @@
 									id="form_add_university_end_date_calendar"
 									rendered="#{!initStudentInfoView.isStudent}" showOn="button" />
 
-								<h:outputLabel value="Eğitim Seviyesi :" />
+								<h:outputLabel value="Eğitim Programı :" />
 								<p:selectOneMenu validator="educationLevelValidator"
 									converter="educationLevelConverter"
 									value="#{initStudentInfoView.educationInfo.educationLevel}">
 									<f:selectItem itemValue="0"
-										itemLabel="Lütfen eğitim seviyesi seçiniz." />
+										itemLabel="Lütfen eğitim programınızı seçiniz." />
 									<f:selectItems value="#{initStudentInfoView.educationLevels}"
 										var="educationLevel" itemValue="#{educationLevel}"
 										itemLabel="#{educationLevel.educationLevel}" />

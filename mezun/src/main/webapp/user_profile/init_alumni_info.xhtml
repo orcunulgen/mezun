@@ -149,12 +149,12 @@
 									id="form_add_university_end_date_calendar"
 									rendered="#{!initAlumniInfoView.isStudent}" showOn="button" />
 
-								<h:outputLabel value="Eğitim Seviyesi :" />
+								<h:outputLabel value="Eğitim Programı :" />
 								<p:selectOneMenu validator="educationLevelValidator"
 									converter="educationLevelConverter"
 									value="#{initAlumniInfoView.educationInfo.educationLevel}">
 									<f:selectItem itemValue="0"
-										itemLabel="Lütfen eğitim seviyesi seçiniz." />
+										itemLabel="Lütfen eğitim programınızı seçiniz." />
 									<f:selectItems value="#{initAlumniInfoView.educationLevels}"
 										var="educationLevel" itemValue="#{educationLevel}"
 										itemLabel="#{educationLevel.educationLevel}" />

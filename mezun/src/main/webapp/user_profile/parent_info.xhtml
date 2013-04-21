@@ -18,7 +18,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel value="Baba Adı" />
+								<h:outputLabel value="Baba Adı *" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_father_name"
@@ -28,7 +28,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel value="Anne Adı" />
+								<h:outputLabel value="Anne Adı *" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_mother_name"
@@ -42,7 +42,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel value="Baba Mesleği" />
+								<h:outputLabel value="Baba Mesleği *" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_father_job"
@@ -53,7 +53,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel value="Anne Mesleği" />
+								<h:outputLabel value="Anne Mesleği *" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_mother_job"
@@ -69,7 +69,7 @@
 						<p:row>
 							<p:column>
 								<h:outputLabel
-									value="Baba Doğum yılı" />
+									value="Baba Doğum yılı *" />
 							</p:column>
 							<p:column>
 								<p:selectOneMenu id="form_father_birthday_year" required="true"
@@ -83,7 +83,7 @@
 
 							<p:column>
 								<h:outputLabel
-									value="Anne Doğum yılı" />
+									value="Anne Doğum yılı *" />
 							</p:column>
 							<p:column>
 								<p:selectOneMenu id="form_mother_birthday_year" required="true"
@@ -98,17 +98,17 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel value="Ailenin Aylık Gelir Düzeyi(TL)" />
+								<h:outputLabel value="Ailenin Aylık Gelir Düzeyi(TL) *" />
 							</p:column>
 							<p:column>
-								<p:inputMask mask="99999" id="form_parent_monthly_income"
+								<p:inputText id="form_parent_monthly_income"
 									value="#{parentInfoView.parentInfo.parentMonthlyIncome}"
 									required="true"
 									requiredMessage="Lütfen aile gelir düzeyini giriniz."/>
 							</p:column>
 
 							<p:column>
-								<h:outputLabel value="Aile Telefonu" />
+								<h:outputLabel value="Aile Telefonu *" />
 							</p:column>
 							<p:column>
 								<p:inputMask mask="9999-999-99-99" id="form_parent_phone_number"
@@ -122,7 +122,7 @@
 						
 						<p:row>
 							<p:column>
-								<h:outputLabel value="Aile Adresi" />
+								<h:outputLabel value="Aile Adresi *" />
 							</p:column>
 							<p:column colspan="3">
 								<p:inputTextarea id="form_parent_address"

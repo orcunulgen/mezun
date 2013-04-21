@@ -19,7 +19,7 @@
 		<intercept-url pattern="/resources/**" access="permitAll" />
 		<intercept-url pattern="/error/**" access="permitAll" />
 		<intercept-url pattern="/user_profile/**" access="hasRole('ROLE_STUDENT') or hasRole('ROLE_ALUMNI')" />
-		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/admin_profile/**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/**" access="permitAll" />
 
 		<form-login login-processing-url="/j_spring_security_user_check"

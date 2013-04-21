@@ -3,6 +3,7 @@ package com.orcun.mezun.view.user;
 import java.io.IOException;
 import java.io.Serializable;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -13,6 +14,7 @@ import org.primefaces.model.mindmap.MindmapNode;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.User;
+import com.orcun.mezun.security.MezunAuthenticationSuccessHandler;
 
 @ManagedBean
 @ViewScoped
@@ -25,7 +27,11 @@ public class ProfileSettingsView implements Serializable {
 	private MindmapNode selectedNode;
 
 	private User loggedUser;
-
+	
+	private MezunAuthenticationSuccessHandler mezunAuthenticationSuccessHandler;
+	
+	private Boolean isAlumni;
+	
 	public ProfileSettingsView() {
 
 		/*
@@ -113,6 +119,11 @@ public class ProfileSettingsView implements Serializable {
 		root.addNode(contactInfo);
 
 	}
+	
+	@PostConstruct
+	public void init(){
+		this.mezunAuthenticationSuccessHandler=new MezunAuthenticationSuccessHandler();
+	}
 
 	public MindmapNode getRoot() {
 		return root;
@@ -136,6 +147,29 @@ public class ProfileSettingsView implements Serializable {
 				.getPrincipal();
 
 		return loggedUser;
+	}
+
+	public MezunAuthenticationSuccessHandler getMezunAuthenticationSuccessHandler() {
+		return mezunAuthenticationSuccessHandler;
+	}
+
+	public void setMezunAuthenticationSuccessHandler(
+			MezunAuthenticationSuccessHandler mezunAuthenticationSuccessHandler) {
+		this.mezunAuthenticationSuccessHandler = mezunAuthenticationSuccessHandler;
+	}
+
+	public Boolean getIsAlumni() {
+		
+		if(this.mezunAuthenticationSuccessHandler.hasRole("ROLE_ALUMNI", getLoggedUser())){
+			isAlumni=true;
+		}else{
+			isAlumni=false;
+		}
+		return isAlumni;
+	}
+
+	public void setIsAlumni(Boolean isAlumni) {
+		this.isAlumni = isAlumni;
 	}
 
 	public void onNodeSelect(SelectEvent event) throws IOException {

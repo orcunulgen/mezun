@@ -46,9 +46,6 @@ public class HighSchool implements Serializable{
 	@Column(name="graduation_degree")
 	private String graduationDegree;
 	
-	@Column(name="oss_degree",nullable=true)
-	private String ossDegree;
-	
 	@Column(name="ytu_ce_order_of_preference",nullable=true)
 	private Integer ytuCeOrderOfPreference;
 	
@@ -107,14 +104,6 @@ public class HighSchool implements Serializable{
 
 	public void setGraduationDegree(String graduationDegree) {
 		this.graduationDegree = graduationDegree;
-	}
-
-	public String getOssDegree() {
-		return ossDegree;
-	}
-
-	public void setOssDegree(String ossDegree) {
-		this.ossDegree = ossDegree;
 	}
 
 	public Integer getYtuCeOrderOfPreference() {

@@ -317,84 +317,40 @@ public class InitStudentInfoView implements Serializable {
 
 			if (differenceEndRegisterHighSchool > 0) {
 
-				if (getIsStudent()) {
-					getEducationInfo().setEndDate(null);
+				getEducationInfo().setEndDate(null);
 
-					int differenceStartRegister = Days.daysBetween(
-							new DateTime(getEducationInfo().getStartDate()),
-							new DateTime(registeredDate)).getDays();
-					if (differenceStartRegister > 0) {
-						
-						if (getInitStudentInfoService().saveInitStudentInfo(getContact(),
-								getParentInfo(), getHighSchool(), getEducationInfo())) {
-							FacesContext
-							.getCurrentInstance()
-							.getExternalContext()
-							.redirect(
-									"index.xhtml?user="
-											+ getLoggedUser().getTcno());
+				int differenceStartRegister = Days.daysBetween(
+						new DateTime(getEducationInfo().getStartDate()),
+						new DateTime(registeredDate)).getDays();
+				if (differenceStartRegister > 0) {
 
-						} else {
-							FacesMessage fm = new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"Yeni öğrenci kaydı tamamlanamadı.",
-									"Lütfen daha sonra yeniden deneyiniz.");
-							FacesContext.getCurrentInstance().addMessage(null, fm);
-
-						}
-						
+					if (getInitStudentInfoService().saveInitStudentInfo(
+							getContact(), getParentInfo(), getHighSchool(),
+							getEducationInfo())) {
+						FacesContext
+								.getCurrentInstance()
+								.getExternalContext()
+								.redirect(
+										"index.xhtml?user="
+												+ getLoggedUser().getTcno());
 
 					} else {
 						FacesMessage fm = new FacesMessage(
 								FacesMessage.SEVERITY_ERROR,
-								"Üniversite başlangıç tarihi geçmiş zamana ait olmalıdır.",
-								"Lütfen yeniden deneyiniz.");
+								"Yeni öğrenci kaydı tamamlanamadı.",
+								"Lütfen daha sonra yeniden deneyiniz.");
 						FacesContext.getCurrentInstance().addMessage(null, fm);
 
 					}
+
 				} else {
-					int differenceStartEnd = Days.daysBetween(
-							new DateTime(getEducationInfo().getStartDate()),
-							new DateTime(getEducationInfo().getEndDate()))
-							.getDays();
-
-					int differenceStartRegister = Days.daysBetween(
-							new DateTime(getEducationInfo().getStartDate()),
-							new DateTime(registeredDate)).getDays();
-
-					if (differenceStartEnd > 0 && differenceStartRegister > 0) {
-						
-						
-						if (getInitStudentInfoService().saveInitStudentInfo(getContact(),
-								getParentInfo(), getHighSchool(), getEducationInfo())) {
-							FacesContext
-							.getCurrentInstance()
-							.getExternalContext()
-							.redirect(
-									"index.xhtml?user="
-											+ getLoggedUser().getTcno());
-
-						} else {
-							FacesMessage fm = new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"Yeni öğrenci kaydı tamamlanamadı.",
-									"Lütfen daha sonra yeniden deneyiniz.");
-							FacesContext.getCurrentInstance().addMessage(null, fm);
-
-						}
-
-
-					} else {
-						FacesMessage fm = new FacesMessage(
-								FacesMessage.SEVERITY_ERROR,
-								"Üniversite başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
-								"Lütfen yeniden deneyiniz.");
-						FacesContext.getCurrentInstance().addMessage(null, fm);
-
-					}
+					FacesMessage fm = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"Üniversite başlangıç tarihi geçmiş zamana ait olmalıdır.",
+							"Lütfen yeniden deneyiniz.");
+					FacesContext.getCurrentInstance().addMessage(null, fm);
 
 				}
-
 			} else {
 				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
 						"Lise bitiş tarihi geçmiş zamana ait olmalıdır.",

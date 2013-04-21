@@ -53,6 +53,9 @@ public class User implements Serializable,UserDetails{
 	@Column(name="enabled",nullable = false)
 	private boolean enabled=true;
 	
+	@Column(name="send_mail",nullable = false)
+	private boolean sendMail=true;
+	
 	@OneToOne(fetch=FetchType.EAGER)
 	private Country country;
 	
@@ -115,6 +118,12 @@ public class User implements Serializable,UserDetails{
 	}
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+	public boolean isSendMail() {
+		return sendMail;
+	}
+	public void setSendMail(boolean sendMail) {
+		this.sendMail = sendMail;
 	}
 	public Country getCountry() {
 		return country;

@@ -27,10 +27,11 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel value="Cep Telefonunuz" />
+								<h:outputLabel value="Cep Telefonunuz *" />
 							</p:column>
 							<p:column>
-								<p:inputMask id="form_mobile_phone"
+								<p:inputMask id="form_mobile_phone" required="true"
+								requiredMessage="Lütfen cep telefonunuzu belirtiniz."
 									value="#{contactInfoView.contact.mobilePhone}"
 									mask="9999-999-99-99" />
 							</p:column>
@@ -59,10 +60,11 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel value="Adresiniz" />
+								<h:outputLabel value="Adresiniz *" />
 							</p:column>
 							<p:column colspan="3">
-								<p:inputTextarea id="form_address"
+								<p:inputTextarea id="form_address" required="true"
+								requiredMessage="Lütfen adresinizi belirtiniz."
 									value="#{contactInfoView.contact.address}" rows="5" cols="50"
 									maxlength="100" autoResize="false" />
 							</p:column>

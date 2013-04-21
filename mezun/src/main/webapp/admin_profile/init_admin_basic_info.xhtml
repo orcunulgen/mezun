@@ -1,0 +1,87 @@
+<ui:composition template="/templates/admin/admin_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<ui:define name="main_container">
+		<h:outputStylesheet library="css"
+			name="admin_profile/init_admin_basic_info.css" />
+
+
+		<div class="init_admin_basic_info">
+			<h:form id="form_init_admin_basic_info">
+				<p:growl id="form_init_admin_basic_info_messages" autoUpdate="true" />
+				<p:wizard widgetVar="wiz"
+					flowListener="#{initAdminBasicInfoView.onFlowProcess}"
+					nextLabel="İleri" backLabel="Geri">
+
+					<p:tab id="init_admin_basic_info_tab" title="Üniversite Bilgileri">
+						<p:fieldset legend="Üniversite Bilgileri">
+							<p:panelGrid styleClass="no_border" id="university_add_display"
+								columns="2" cellpadding="4" style="margin:0 auto;">
+
+								<h:outputLabel value="Üniversite :" />
+								<p:selectOneMenu validator="universityValidator"
+									converter="universityConverter"
+									value="#{initAdminBasicInfoView.adminBasicInfo.university}">
+									<f:selectItem itemValue="0"
+										itemLabel="Lütfen bir üniversite seçiniz" />
+									<f:selectItems value="#{initAdminBasicInfoView.universities}"
+										var="university" itemValue="#{university}"
+										itemLabel="#{university.universityName}" />
+									<p:ajax
+										listener="#{initAdminBasicInfoView.addUniversityChangeFaculty}"
+										event="change"
+										update="form_add_university_faculty form_add_faculty_department" />
+								</p:selectOneMenu>
+
+								<h:outputLabel value="Fakülte :" />
+								<p:selectOneMenu validator="facultyValidator"
+									converter="facultyConverter" id="form_add_university_faculty"
+									value="#{initAdminBasicInfoView.adminBasicInfo.faculty}">
+									<f:selectItem itemValue="0"
+										itemLabel="Lütfen bir fakülte seçiniz" />
+									<f:selectItems
+										value="#{initAdminBasicInfoView.universityAddFaculties}"
+										var="faculty" itemValue="#{faculty}"
+										itemLabel="#{faculty.facultyName}" />
+									<p:ajax
+										listener="#{initAdminBasicInfoView.addFacultyChangeDepartment}"
+										event="change" update="form_add_faculty_department" />
+								</p:selectOneMenu>
+
+								<h:outputLabel value="Bölüm :" />
+								<p:selectOneMenu validator="departmentValidator"
+									converter="departmentConverter"
+									id="form_add_faculty_department"
+									value="#{initAdminBasicInfoView.adminBasicInfo.department}">
+									<f:selectItem itemValue="0"
+										itemLabel="Lütfen bir bölüm seçiniz" />
+									<f:selectItems
+										value="#{initAdminBasicInfoView.facultyAddDepartments}"
+										var="department" itemValue="#{department}"
+										itemLabel="#{department.departmentName}" />
+								</p:selectOneMenu>
+
+
+							</p:panelGrid>
+							<p:commandButton value="Kaydet"
+								action="#{initAdminBasicInfoView.saveInitAdminBasicInfo}"
+								icon="ui-icon-disk" ajax="false"
+								update="form_init_admin_basic_info" />
+						</p:fieldset>
+					</p:tab>
+
+
+				</p:wizard>
+			</h:form>
+
+
+
+		</div>
+
+	</ui:define>
+</ui:composition>

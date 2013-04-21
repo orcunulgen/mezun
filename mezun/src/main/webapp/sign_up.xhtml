@@ -18,7 +18,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel value="İsim" />
+								<h:outputLabel value="İsim *" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_name" value="#{signUpView.user.name}"
@@ -27,7 +27,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel value="Soyisim" />
+								<h:outputLabel value="Soyisim *" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_surname"
@@ -42,7 +42,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel value="Şifre" />
+								<h:outputLabel value="Şifre *" />
 							</p:column>
 							<p:column>
 								<p:password id="form_password"
@@ -53,7 +53,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel value="Şifre Tekrarı" />
+								<h:outputLabel value="Şifre Tekrarı *" />
 							</p:column>
 							<p:column>
 								<p:password id="form_confirm_password"
@@ -64,7 +64,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel value="E-Mail" />
+								<h:outputLabel value="E-Mail *" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_email" value="#{signUpView.user.email}"
@@ -79,7 +79,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel value="E-Mail Tekrarı" />
+								<h:outputLabel value="E-Mail Tekrarı *" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_confirm_email"
@@ -90,7 +90,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel value="Doğum yılı" />
+								<h:outputLabel value="Doğum yılı *" />
 							</p:column>
 							<p:column>
 								<p:selectOneMenu id="form_birthday_year" required="true"
@@ -103,7 +103,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel value="TC kimlik numarası" />
+								<h:outputLabel value="TC kimlik numarası *" />
 							</p:column>
 							<p:column>
 								<p:inputMask id="form_tcno" value="#{signUpView.user.tcno}"
@@ -118,7 +118,7 @@
 						</p:row>
 						<p:row>
 							<p:column>
-								<h:outputLabel value="Doğduğu Ülke " />
+								<h:outputLabel value="Doğduğu Ülke *" />
 							</p:column>
 							<p:column colspan="3">
 								<p:selectOneMenu validator="countryValidator"
@@ -134,7 +134,7 @@
 						</p:row>
 						<p:row>
 							<p:column>
-								<h:outputLabel value="Doğduğu Şehir " />
+								<h:outputLabel value="Doğduğu Şehir *" />
 							</p:column>
 							<p:column colspan="3">
 								<p:selectOneMenu validator="cityValidator"
@@ -154,8 +154,19 @@
 									value="YTÜ Bilgisayar Mühendisliği mezunu musunuz? " />
 							</p:column>
 							<p:column>
-								<p:selectBooleanButton
-									value="#{signUpView.isAlumni}"
+								<p:selectBooleanButton value="#{signUpView.isAlumni}"
+									onLabel="Evet" offLabel="Hayır" onIcon="ui-icon-check"
+									offIcon="ui-icon-close">
+								</p:selectBooleanButton>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="3">
+								<h:outputLabel
+									value="Duyuru ve Etkinliklerden haberdar olmak ister misiniz? " />
+							</p:column>
+							<p:column>
+								<p:selectBooleanButton value="#{signUpView.user.sendMail}"
 									onLabel="Evet" offLabel="Hayır" onIcon="ui-icon-check"
 									offIcon="ui-icon-close">
 								</p:selectBooleanButton>

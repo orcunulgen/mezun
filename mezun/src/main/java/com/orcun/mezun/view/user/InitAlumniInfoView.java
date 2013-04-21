@@ -83,10 +83,13 @@ public class InitAlumniInfoView implements Serializable {
 
 		if (educationInfo == null) {
 			educationInfo = new EducationInfo();
-			educationInfo.setUniversity(getEducationInfoService().getYTU((long) 1));
-			educationInfo.setFaculty(getEducationInfoService().getYTUFaculty((long)1));
-			educationInfo.setDepartment(getEducationInfoService().getYTUCE((long)1));
-			
+			educationInfo.setUniversity(getEducationInfoService().getYTU(
+					(long) 1));
+			educationInfo.setFaculty(getEducationInfoService().getYTUFaculty(
+					(long) 2));
+			educationInfo.setDepartment(getEducationInfoService().getYTUCE(
+					(long) 4));
+
 			addUniversityChangeFaculty();
 			addFacultyChangeDepartment();
 		}
@@ -220,78 +223,40 @@ public class InitAlumniInfoView implements Serializable {
 
 			Date registeredDate = new Date();
 
-			if (getIsStudent()) {
-				getEducationInfo().setEndDate(null);
+			int differenceStartEnd = Days.daysBetween(
+					new DateTime(getEducationInfo().getStartDate()),
+					new DateTime(getEducationInfo().getEndDate())).getDays();
 
-				int differenceStartRegister = Days.daysBetween(
-						new DateTime(getEducationInfo().getStartDate()),
-						new DateTime(registeredDate)).getDays();
-				if (differenceStartRegister > 0) {
+			int differenceStartRegister = Days.daysBetween(
+					new DateTime(getEducationInfo().getStartDate()),
+					new DateTime(registeredDate)).getDays();
 
-					if (getInitAlumniInfoService().saveInitAlumniInfo(
-							getContact(), getEducationInfo())) {
-						FacesContext
-								.getCurrentInstance()
-								.getExternalContext()
-								.redirect(
-										"index.xhtml?user="
-												+ getLoggedUser().getTcno());
+			if (differenceStartEnd > 0 && differenceStartRegister > 0) {
 
-					} else {
-						FacesMessage fm = new FacesMessage(
-								FacesMessage.SEVERITY_ERROR,
-								"Yeni mezun kaydı tamamlanamadı.",
-								"Lütfen daha sonra yeniden deneyiniz.");
-						FacesContext.getCurrentInstance().addMessage(null, fm);
-
-					}
+				if (getInitAlumniInfoService().saveInitAlumniInfo(getContact(),
+						getEducationInfo())) {
+					FacesContext
+							.getCurrentInstance()
+							.getExternalContext()
+							.redirect(
+									"index.xhtml?user="
+											+ getLoggedUser().getTcno());
 
 				} else {
 					FacesMessage fm = new FacesMessage(
 							FacesMessage.SEVERITY_ERROR,
-							"Üniversite başlangıç tarihi geçmiş zamana ait olmalıdır.",
-							"Lütfen yeniden deneyiniz.");
+							"Yeni mezun kaydı tamamlanamadı.",
+							"Lütfen daha sonra yeniden deneyiniz.");
 					FacesContext.getCurrentInstance().addMessage(null, fm);
 
 				}
+
 			} else {
-				int differenceStartEnd = Days.daysBetween(
-						new DateTime(getEducationInfo().getStartDate()),
-						new DateTime(getEducationInfo().getEndDate()))
-						.getDays();
-
-				int differenceStartRegister = Days.daysBetween(
-						new DateTime(getEducationInfo().getStartDate()),
-						new DateTime(registeredDate)).getDays();
-
-				if (differenceStartEnd > 0 && differenceStartRegister > 0) {
-
-					if (getInitAlumniInfoService().saveInitAlumniInfo(
-							getContact(), getEducationInfo())) {
-						FacesContext
-								.getCurrentInstance()
-								.getExternalContext()
-								.redirect(
-										"index.xhtml?user="
-												+ getLoggedUser().getTcno());
-
-					} else {
-						FacesMessage fm = new FacesMessage(
-								FacesMessage.SEVERITY_ERROR,
-								"Yeni mezun kaydı tamamlanamadı.",
-								"Lütfen daha sonra yeniden deneyiniz.");
-						FacesContext.getCurrentInstance().addMessage(null, fm);
-
-					}
-
-				} else {
-					FacesMessage fm = new FacesMessage(
-							FacesMessage.SEVERITY_ERROR,
-							"Üniversite başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
-							"Lütfen yeniden deneyiniz.");
-					FacesContext.getCurrentInstance().addMessage(null, fm);
-
-				}
+				FacesMessage fm = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR,
+						"Üniversite başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
+						"Lütfen yeniden deneyiniz.");
+				FacesContext.getCurrentInstance().addMessage(null, fm);
 
 			}
 
