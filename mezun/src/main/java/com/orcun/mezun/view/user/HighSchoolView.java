@@ -3,7 +3,6 @@ package com.orcun.mezun.view.user;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -14,7 +13,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
@@ -44,7 +42,7 @@ public class HighSchoolView implements Serializable {
 	public void init() {
 		highSchoolTypes = highSchoolService.allHighSchoolTypes();
 		gradingSystems = highSchoolService.allGradingSystems();
-		
+
 		if (highSchool == null) {
 			highSchool = new HighSchool();
 
@@ -106,11 +104,10 @@ public class HighSchoolView implements Serializable {
 	public void saveHighSchool() throws IOException {
 		try {
 
-			Date registeredDate = new Date();
+			DateTime registeredDate = new DateTime();
 
-			int differenceEndRegister = Days.daysBetween(
-					new DateTime(getHighSchool().getEndDate()),
-					new DateTime(registeredDate)).getDays();
+			int differenceEndRegister = registeredDate.getYear()
+					- getHighSchool().getEndYear();
 
 			if (differenceEndRegister > 0) {
 				if (getHighSchoolService()
@@ -120,16 +117,15 @@ public class HighSchoolView implements Serializable {
 					getHighSchool().setUser(getLoggedUser());
 					getHighSchoolService().addHighSchool(getHighSchool());
 				}
-				
+
 				FacesContext
-				.getCurrentInstance()
-				.getExternalContext()
-				.redirect(
-						"high_school.xhtml?user="
-								+ getLoggedUser().getTcno());
+						.getCurrentInstance()
+						.getExternalContext()
+						.redirect(
+								"high_school.xhtml?user="
+										+ getLoggedUser().getTcno());
 			} else {
-				FacesMessage fm = new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
+				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
 						"Bitiş tarihi geçmiş zamana ait olmalıdır.",
 						"Lütfen yeniden deneyiniz.");
 				FacesContext.getCurrentInstance().addMessage(null, fm);

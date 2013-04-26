@@ -45,11 +45,13 @@
 						<p:row>
 
 							<p:column>
-								<h:outputLabel value="Bitiş Tarihi *" />
+								<h:outputLabel value="Mezuniyet Yılı *" />
 							</p:column>
 							<p:column>
-								<p:calendar value="#{highSchoolView.highSchool.endDate}"
-									showOn="button" />
+								<p:inputMask mask="9999" id="form_high_school_end_year"
+									value="#{highSchoolView.highSchool.endYear}"
+									required="true"
+									requiredMessage="Lütfen lise mezuniyet yılınızı belirtiniz."/>
 							</p:column>
 
 							<p:column>

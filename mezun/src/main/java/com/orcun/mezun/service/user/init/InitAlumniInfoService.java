@@ -1,9 +1,9 @@
-package com.orcun.mezun.service.user;
+package com.orcun.mezun.service.user.init;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.orcun.mezun.dao.user.InitAlumniInfoDAO;
+import com.orcun.mezun.dao.user.init.InitAlumniInfoDAO;
 import com.orcun.mezun.model.Contact;
 import com.orcun.mezun.model.EducationInfo;
 import com.orcun.mezun.model.User;

@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.orcun.mezun.dao.user.helper.SearchChatPersonHelperDAO;
+import com.orcun.mezun.model.EducationInfo;
 import com.orcun.mezun.model.SearchCriteria;
-import com.orcun.mezun.model.User;
 
 @Service
 public class SearchChatPersonHelperService {
@@ -27,8 +27,8 @@ public class SearchChatPersonHelperService {
 	}
 
 
-	public List<User> searchChatPersonByName(SearchCriteria searchCriteria) {
-		return getSearchChatPersonHelperDAO().searchChatPersonByName(searchCriteria);
+	public List<EducationInfo> searchChatPerson(SearchCriteria searchCriteria) {
+		return getSearchChatPersonHelperDAO().searchChatPerson(searchCriteria);
 	}
 
 

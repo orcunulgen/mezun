@@ -3,7 +3,6 @@ package com.orcun.mezun.view.user;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -14,10 +13,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.orcun.mezun.model.Department;
 import com.orcun.mezun.model.EducationInfo;
@@ -54,6 +51,8 @@ public class EducationInfoView implements Serializable {
 
 	private List<GradingSystem> gradingSystems = new ArrayList<GradingSystem>();
 
+	private List<Integer> classInfos = new ArrayList<Integer>();
+
 	private List<EducationInfo> educations = new ArrayList<EducationInfo>();
 	private EducationInfo selectedEducationInfo;
 	private Boolean selectedEduInfoIsStudent;
@@ -78,7 +77,7 @@ public class EducationInfoView implements Serializable {
 
 	public void initSelectedEducationInfo(EducationInfo selectedEducationInfo) {
 		this.selectedEducationInfo = selectedEducationInfo;
-		if (getSelectedEducationInfo().getEndDate() == null) {
+		if (getSelectedEducationInfo().getEndYear() == null) {
 			this.selectedEduInfoIsStudent = true;
 		} else {
 			this.selectedEduInfoIsStudent = false;
@@ -92,18 +91,18 @@ public class EducationInfoView implements Serializable {
 		initSelectedEducationInfo(selectedEducationInfo);
 		try {
 
-			if (getLoggedUser().getRoles().get(0).getRole()
+			/*if (getLoggedUser().getRoles().get(0).getRole()
 					.equals("ROLE_ALUMNI")
 					&& selectedUniversityIsLast(selectedEducationInfo)) {
 				changeRoleToStudent();
 				getEducationInfoService().deleteEducationInfo(
 						getSelectedEducationInfo());
 				SecurityContextHolder.clearContext();
-			} else {
+			} else {*/
 
 				getEducationInfoService().deleteEducationInfo(
 						getSelectedEducationInfo());
-			}
+			//}
 
 			FacesContext
 					.getCurrentInstance()
@@ -201,6 +200,19 @@ public class EducationInfoView implements Serializable {
 
 	public void setGradingSystems(List<GradingSystem> gradingSystems) {
 		this.gradingSystems = gradingSystems;
+	}
+
+	public List<Integer> getClassInfos() {
+		if (this.classInfos.size() == 0) {
+			for (int i = 1; i < 7; i++) {
+				this.classInfos.add(i);
+			}
+		}
+		return classInfos;
+	}
+
+	public void setClassInfos(List<Integer> classInfos) {
+		this.classInfos = classInfos;
 	}
 
 	public List<EducationInfo> getEducations() {
@@ -305,13 +317,12 @@ public class EducationInfoView implements Serializable {
 		try {
 
 			if (getIsStudent()) {
-				getEducationInfo().setEndDate(null);
+				getEducationInfo().setEndYear(null);
 
-				Date registeredDate = new Date();
+				DateTime registeredDate = new DateTime();
 
-				int differenceStartRegister = Days.daysBetween(
-						new DateTime(getEducationInfo().getStartDate()),
-						new DateTime(registeredDate)).getDays();
+				int differenceStartRegister = registeredDate.getYear()
+						- getEducationInfo().getStartYear();
 				if (differenceStartRegister > 0) {
 
 					getEducationInfo().setUser(getLoggedUser());
@@ -334,30 +345,30 @@ public class EducationInfoView implements Serializable {
 
 				}
 			} else {
-				int differenceStartEnd = Days.daysBetween(
-						new DateTime(getEducationInfo().getStartDate()),
-						new DateTime(getEducationInfo().getEndDate()))
-						.getDays();
+				int differenceStartEnd = getEducationInfo().getEndYear()
+						- getEducationInfo().getStartYear();
 
-				Date registeredDate = new Date();
+				DateTime registeredDate = new DateTime();
 
-				int differenceStartRegister = Days.daysBetween(
-						new DateTime(getEducationInfo().getStartDate()),
-						new DateTime(registeredDate)).getDays();
+				int differenceStartRegister = registeredDate.getYear()
+						- getEducationInfo().getStartYear();
 
-				if (differenceStartEnd > 0 && differenceStartRegister > 0) {
+				int differenceEndRegister = registeredDate.getYear()
+						- getEducationInfo().getEndYear();
+
+				if (differenceStartEnd > 0 && differenceStartRegister > 0
+						&& differenceEndRegister >= 0) {
 
 					getEducationInfo().setUser(getLoggedUser());
 					getEducationInfoService().addEducationInfo(
 							getEducationInfo());
 
-					if (getLoggedUser().getRoles().get(0).getRole()
+					/*if (getLoggedUser().getRoles().get(0).getRole()
 							.equals("ROLE_STUDENT")) {
-						
+
 						changeRoleToAlumni();
 						SecurityContextHolder.clearContext();
-					}
-					
+					}*/
 
 					FacesContext
 							.getCurrentInstance()
@@ -369,7 +380,7 @@ public class EducationInfoView implements Serializable {
 				} else {
 					FacesMessage fm = new FacesMessage(
 							FacesMessage.SEVERITY_ERROR,
-							"Başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
+							"Başlangıç ve bitiş tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
 							"Lütfen yeniden deneyiniz.");
 					FacesContext.getCurrentInstance().addMessage(null, fm);
 
@@ -387,24 +398,20 @@ public class EducationInfoView implements Serializable {
 		try {
 
 			if (getSelectedEduInfoIsStudent()) {
-				getSelectedEducationInfo().setEndDate(null);
-				Date registeredDate = new Date();
+				getSelectedEducationInfo().setEndYear(null);
 
-				int differenceStartRegister = Days
-						.daysBetween(
-								new DateTime(getSelectedEducationInfo()
-										.getStartDate()),
-								new DateTime(registeredDate)).getDays();
+				DateTime registeredDate = new DateTime();
 
+				int differenceStartRegister = registeredDate.getYear()
+						- getSelectedEducationInfo().getStartYear();
 				if (differenceStartRegister > 0) {
 
-					
-					if (getLoggedUser().getRoles().get(0).getRole()
+					/*if (getLoggedUser().getRoles().get(0).getRole()
 							.equals("ROLE_ALUMNI")
 							&& selectedUniversityIsLast(getSelectedEducationInfo())) {
 						changeRoleToStudent();
 						SecurityContextHolder.clearContext();
-					}
+					}*/
 					getEducationInfoService().updateEducationInfo(
 							getSelectedEducationInfo());
 
@@ -422,30 +429,28 @@ public class EducationInfoView implements Serializable {
 					FacesContext.getCurrentInstance().addMessage(null, fm);
 				}
 			} else {
-				int differenceStartEnd = Days
-						.daysBetween(
-								new DateTime(getSelectedEducationInfo()
-										.getStartDate()),
-								new DateTime(getSelectedEducationInfo()
-										.getEndDate())).getDays();
+				int differenceStartEnd = getSelectedEducationInfo()
+						.getEndYear()
+						- getSelectedEducationInfo().getStartYear();
 
-				Date registeredDate = new Date();
+				DateTime registeredDate = new DateTime();
 
-				int differenceStartRegister = Days
-						.daysBetween(
-								new DateTime(getSelectedEducationInfo()
-										.getStartDate()),
-								new DateTime(registeredDate)).getDays();
+				int differenceStartRegister = registeredDate.getYear()
+						- getSelectedEducationInfo().getStartYear();
 
-				if (differenceStartEnd > 0 && differenceStartRegister > 0) {
+				int differenceEndRegister = registeredDate.getYear()
+						- getSelectedEducationInfo().getEndYear();
 
-					if (getLoggedUser().getRoles().get(0).getRole()
+				if (differenceStartEnd > 0 && differenceStartRegister > 0
+						&& differenceEndRegister >= 0) {
+
+					/*if (getLoggedUser().getRoles().get(0).getRole()
 							.equals("ROLE_STUDENT")) {
-						
+
 						changeRoleToAlumni();
 						SecurityContextHolder.clearContext();
-					}
-					
+					}*/
+
 					getEducationInfoService().updateEducationInfo(
 							getSelectedEducationInfo());
 
@@ -459,7 +464,7 @@ public class EducationInfoView implements Serializable {
 				} else {
 					FacesMessage fm = new FacesMessage(
 							FacesMessage.SEVERITY_ERROR,
-							"Başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
+							"Başlangıç ve bitiş tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
 							"Lütfen yeniden deneyiniz.");
 					FacesContext.getCurrentInstance().addMessage(null, fm);
 

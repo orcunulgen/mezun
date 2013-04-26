@@ -9,6 +9,8 @@ public class SearchCriteria implements Serializable {
 	private String searchByName;
 	private String searchBySurname;
 	private String searchByEmail;
+	private Integer searchByEduStartYear;
+	private Integer searchByEduEndYear;
 	
 	public String getSearchByName() {
 		return searchByName;
@@ -27,6 +29,18 @@ public class SearchCriteria implements Serializable {
 	}
 	public void setSearchByEmail(String searchByEmail) {
 		this.searchByEmail = searchByEmail;
+	}
+	public Integer getSearchByEduStartYear() {
+		return searchByEduStartYear;
+	}
+	public void setSearchByEduStartYear(Integer searchByEduStartYear) {
+		this.searchByEduStartYear = searchByEduStartYear;
+	}
+	public Integer getSearchByEduEndYear() {
+		return searchByEduEndYear;
+	}
+	public void setSearchByEduEndYear(Integer searchByEduEndYear) {
+		this.searchByEduEndYear = searchByEduEndYear;
 	}
 	
 

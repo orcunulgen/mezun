@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.orcun.mezun.model.User;
 import com.orcun.mezun.service.admin.InitAdminBasicInfoService;
-import com.orcun.mezun.service.user.InitAlumniInfoService;
-import com.orcun.mezun.service.user.InitStudentInfoService;
+import com.orcun.mezun.service.user.init.InitAlumniInfoService;
+import com.orcun.mezun.service.user.init.InitStudentInfoService;
 
 public class MezunAuthenticationSuccessHandler extends
 		SavedRequestAwareAuthenticationSuccessHandler {
@@ -58,7 +58,7 @@ public class MezunAuthenticationSuccessHandler extends
 				ExternalContext exCtx = FacesContext.getCurrentInstance()
 						.getExternalContext();
 				response.sendRedirect(exCtx.getRequestContextPath()
-						+ "/user_profile/init_student_info.xhtml");
+						+ "/user_profile/init/init_student_info.xhtml");
 			}
 
 		} else if (hasRole("ROLE_ALUMNI", loggedUser)) {
@@ -70,7 +70,7 @@ public class MezunAuthenticationSuccessHandler extends
 				ExternalContext exCtx = FacesContext.getCurrentInstance()
 						.getExternalContext();
 				response.sendRedirect(exCtx.getRequestContextPath()
-						+ "/user_profile/init_alumni_info.xhtml");
+						+ "/user_profile/init/init_alumni_info.xhtml");
 			}
 
 		}

@@ -1,9 +1,8 @@
-package com.orcun.mezun.view.user;
+package com.orcun.mezun.view.user.init;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -14,12 +13,9 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.primefaces.event.FlowEvent;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
-import com.orcun.mezun.model.Contact;
 import com.orcun.mezun.model.Department;
 import com.orcun.mezun.model.EducationInfo;
 import com.orcun.mezun.model.EducationLevel;
@@ -27,27 +23,18 @@ import com.orcun.mezun.model.Faculty;
 import com.orcun.mezun.model.GradingSystem;
 import com.orcun.mezun.model.University;
 import com.orcun.mezun.model.User;
-import com.orcun.mezun.service.user.ContactInfoService;
 import com.orcun.mezun.service.user.EducationInfoService;
-import com.orcun.mezun.service.user.InitAlumniInfoService;
+import com.orcun.mezun.service.user.init.InitAlumniInfoService;
 
 @ManagedBean
 @ViewScoped
-public class InitAlumniInfoView implements Serializable {
+public class AlumniUniversityView implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private User loggedUser;
 
-	// -------------------contact_info-----------------------
-	private Contact contact;
-
-	// ------------------------------------------------------
-
-	// ---------------university_info--------------------------
 	private EducationInfo educationInfo;
-
-	private Boolean isStudent = false;
 
 	private List<University> universities = new ArrayList<University>();
 
@@ -59,22 +46,14 @@ public class InitAlumniInfoView implements Serializable {
 
 	private List<GradingSystem> gradingSystems = new ArrayList<GradingSystem>();
 
-	// --------------------------------------------------------
-
 	@ManagedProperty(value = "#{educationInfoService}")
 	private EducationInfoService educationInfoService;
-
-	@ManagedProperty(value = "#{contactInfoService}")
-	private ContactInfoService contactInfoService;
 
 	@ManagedProperty(value = "#{initAlumniInfoService}")
 	private InitAlumniInfoService initAlumniInfoService;
 
 	@PostConstruct
 	public void init() {
-		if (contact == null) {
-			this.contact = new Contact();
-		}
 
 		gradingSystems = educationInfoService.allGradingSystems();
 
@@ -118,36 +97,12 @@ public class InitAlumniInfoView implements Serializable {
 
 	}
 
-	public Contact getContact() {
-		return contact;
-	}
-
-	public void setContact(Contact contact) {
-		this.contact = contact;
-	}
-
-	public List<GradingSystem> getGradingSystems() {
-		return gradingSystems;
-	}
-
-	public void setGradingSystems(List<GradingSystem> gradingSystems) {
-		this.gradingSystems = gradingSystems;
-	}
-
 	public EducationInfo getEducationInfo() {
 		return educationInfo;
 	}
 
 	public void setEducationInfo(EducationInfo educationInfo) {
 		this.educationInfo = educationInfo;
-	}
-
-	public Boolean getIsStudent() {
-		return isStudent;
-	}
-
-	public void setIsStudent(Boolean isStudent) {
-		this.isStudent = isStudent;
 	}
 
 	public List<University> getUniversities() {
@@ -182,6 +137,14 @@ public class InitAlumniInfoView implements Serializable {
 		this.educationLevels = educationLevels;
 	}
 
+	public List<GradingSystem> getGradingSystems() {
+		return gradingSystems;
+	}
+
+	public void setGradingSystems(List<GradingSystem> gradingSystems) {
+		this.gradingSystems = gradingSystems;
+	}
+
 	public EducationInfoService getEducationInfoService() {
 		return educationInfoService;
 	}
@@ -189,14 +152,6 @@ public class InitAlumniInfoView implements Serializable {
 	public void setEducationInfoService(
 			EducationInfoService educationInfoService) {
 		this.educationInfoService = educationInfoService;
-	}
-
-	public ContactInfoService getContactInfoService() {
-		return contactInfoService;
-	}
-
-	public void setContactInfoService(ContactInfoService contactInfoService) {
-		this.contactInfoService = contactInfoService;
 	}
 
 	public InitAlumniInfoService getInitAlumniInfoService() {
@@ -208,53 +163,43 @@ public class InitAlumniInfoView implements Serializable {
 		this.initAlumniInfoService = initAlumniInfoService;
 	}
 
-	public String onFlowProcess(FlowEvent event) {
-
-		return event.getNewStep();
-
-	}
-
-	public void saveInitAlumniInfo() throws IOException {
-
+	public void saveAlumniUniversity() throws IOException {
 		try {
 
-			getContact().setUser(getLoggedUser());
-			getEducationInfo().setUser(getLoggedUser());
+			DateTime registeredDate = new DateTime();
 
-			Date registeredDate = new Date();
+			int differenceStartEnd = getEducationInfo().getEndYear()
+					- getEducationInfo().getStartYear();
 
-			int differenceStartEnd = Days.daysBetween(
-					new DateTime(getEducationInfo().getStartDate()),
-					new DateTime(getEducationInfo().getEndDate())).getDays();
+			int differenceStartRegister = registeredDate.getYear()
+					- getEducationInfo().getStartYear();
+			
+			int differenceEndRegister = registeredDate.getYear()
+					- getEducationInfo().getEndYear();
 
-			int differenceStartRegister = Days.daysBetween(
-					new DateTime(getEducationInfo().getStartDate()),
-					new DateTime(registeredDate)).getDays();
+			if (differenceStartEnd > 0 && differenceStartRegister > 0
+					&& differenceEndRegister >= 0) {
 
-			if (differenceStartEnd > 0 && differenceStartRegister > 0) {
+				getEducationInfo().setUser(getLoggedUser());
+				getEducationInfoService().addEducationInfo(getEducationInfo());
 
-				if (getInitAlumniInfoService().saveInitAlumniInfo(getContact(),
-						getEducationInfo())) {
+				if (!getInitAlumniInfoService().IsValidInitAlumniInfo(
+						getLoggedUser())) {
 					FacesContext
 							.getCurrentInstance()
 							.getExternalContext()
 							.redirect(
-									"index.xhtml?user="
+									"init_alumni_info.xhtml?user="
 											+ getLoggedUser().getTcno());
-
 				} else {
-					FacesMessage fm = new FacesMessage(
-							FacesMessage.SEVERITY_ERROR,
-							"Yeni mezun kaydı tamamlanamadı.",
-							"Lütfen daha sonra yeniden deneyiniz.");
-					FacesContext.getCurrentInstance().addMessage(null, fm);
-
+					FacesContext.getCurrentInstance().getExternalContext()
+							.redirect("../index.xhtml");
 				}
 
 			} else {
 				FacesMessage fm = new FacesMessage(
 						FacesMessage.SEVERITY_ERROR,
-						"Üniversite başlangıç tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
+						"Üniversite başlangıç ve bitiş tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
 						"Lütfen yeniden deneyiniz.");
 				FacesContext.getCurrentInstance().addMessage(null, fm);
 
@@ -263,7 +208,6 @@ public class InitAlumniInfoView implements Serializable {
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 }

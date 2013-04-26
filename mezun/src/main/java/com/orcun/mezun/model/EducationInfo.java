@@ -1,7 +1,6 @@
 package com.orcun.mezun.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -33,11 +32,11 @@ public class EducationInfo implements Serializable{
 	@JoinColumn(name="education_level_id")
 	private EducationLevel educationLevel;
 	
-	@Column(name="start_date",nullable=false)
-	private Date startDate=new Date();
+	@Column(name="start_year",nullable=false)
+	private Integer startYear;
 	
-	@Column(name="end_date",nullable=true)
-	private Date endDate=new Date();
+	@Column(name="end_year",nullable=true)
+	private Integer endYear;
 	
 	@OneToOne(fetch=FetchType.EAGER)
 	private University university;
@@ -55,7 +54,7 @@ public class EducationInfo implements Serializable{
 	@Column(name="graduation_degree")
 	private String graduationDegree;
 	
-	@Column(name="class_info",nullable=false)
+	@Column(name="class_info",nullable=true)
 	private Integer classInfo;
 	
 	@ManyToOne(cascade=CascadeType.ALL)
@@ -78,20 +77,21 @@ public class EducationInfo implements Serializable{
 		this.educationLevel = educationLevel;
 	}
 
-	public Date getStartDate() {
-		return startDate;
+
+	public Integer getStartYear() {
+		return startYear;
 	}
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
+	public void setStartYear(Integer startYear) {
+		this.startYear = startYear;
 	}
 
-	public Date getEndDate() {
-		return endDate;
+	public Integer getEndYear() {
+		return endYear;
 	}
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+	public void setEndYear(Integer endYear) {
+		this.endYear = endYear;
 	}
 
 	public University getUniversity() {

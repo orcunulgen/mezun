@@ -2,6 +2,7 @@ package com.orcun.mezun.view.user.helper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -13,6 +14,7 @@ import javax.faces.context.FacesContext;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
+import com.orcun.mezun.model.EducationInfo;
 import com.orcun.mezun.model.SearchCriteria;
 import com.orcun.mezun.model.User;
 import com.orcun.mezun.service.user.helper.SearchChatPersonHelperService;
@@ -26,15 +28,15 @@ public class SearchChatPersonHelper implements Serializable {
 	private User loggedUser;
 
 	private SearchCriteria searchCriteria;
-	
+
 	private List<User> searchedPersons = new ArrayList<User>();
 
 	@ManagedProperty(value = "#{searchChatPersonHelperService}")
 	private SearchChatPersonHelperService searchChatPersonHelperService;
-	
+
 	@PostConstruct
-	public void init(){
-		this.searchCriteria=new SearchCriteria();
+	public void init() {
+		this.searchCriteria = new SearchCriteria();
 	}
 
 	public User getLoggedUser() {
@@ -77,9 +79,17 @@ public class SearchChatPersonHelper implements Serializable {
 	public void searchChatPerson() {
 		try {
 
-			searchedPersons = getSearchChatPersonHelperService()
-					.searchChatPersonByName(getSearchCriteria());
+			List<EducationInfo> eduInfos = new ArrayList<EducationInfo>();
 
+			eduInfos = getSearchChatPersonHelperService().searchChatPerson(
+					getSearchCriteria());
+			searchedPersons = new ArrayList<User>();
+
+			for (Iterator iterator = eduInfos.iterator(); iterator.hasNext();) {
+				EducationInfo edInfo = (EducationInfo) iterator.next();
+				searchedPersons.add(edInfo.getUser());
+			}
+			
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}

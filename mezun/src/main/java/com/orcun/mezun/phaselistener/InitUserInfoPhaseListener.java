@@ -11,8 +11,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.User;
-import com.orcun.mezun.service.user.InitAlumniInfoService;
-import com.orcun.mezun.service.user.InitStudentInfoService;
+import com.orcun.mezun.service.user.init.InitAlumniInfoService;
+import com.orcun.mezun.service.user.init.InitStudentInfoService;
 
 public class InitUserInfoPhaseListener implements PhaseListener {
 

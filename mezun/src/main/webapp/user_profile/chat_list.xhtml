@@ -90,7 +90,7 @@
 				resizable="false" id="searchChatPersonDlg" showEffect="fade"
 				modal="true">
 				<h:form id="dialog_search_chat_person_form">
-					<p:growl id="search_chat_person_messages" showDetail="true"/>
+					<p:growl id="search_chat_person_messages" showDetail="true" />
 					<p:panelGrid styleClass="no_border" id="searchChatPersonPanelGrid"
 						columns="2">
 
@@ -105,6 +105,14 @@
 						<h:outputLabel value="E-Mail Adresi :" />
 						<p:inputText
 							value="#{searchChatPersonHelper.searchCriteria.searchByEmail}" />
+							
+						<h:outputLabel value="YTÜ Bilgisayar Giriş Yılı :" />
+						<p:inputMask mask="9999"
+							value="#{searchChatPersonHelper.searchCriteria.searchByEduStartYear}" />
+							
+						<h:outputLabel value="YTÜ Bilgisayar Mezuniyet Yılı :" />
+						<p:inputMask mask="9999"
+							value="#{searchChatPersonHelper.searchCriteria.searchByEduEndYear}" />
 
 					</p:panelGrid>
 					<p:commandButton
@@ -123,7 +131,8 @@
 							</f:facet>
 							<p:commandButton id="followChatPersonButton"
 								actionListener="#{chatListView.followSearchedPerson(searchedPersonList)}"
-								icon="ui-icon-disk" value="Ekle" update=":dialog_search_chat_person_form">
+								icon="ui-icon-disk" value="Ekle"
+								update=":dialog_search_chat_person_form">
 							</p:commandButton>
 						</p:column>
 						<p:column>

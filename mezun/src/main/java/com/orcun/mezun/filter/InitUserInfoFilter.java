@@ -15,8 +15,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.User;
-import com.orcun.mezun.service.user.InitAlumniInfoService;
-import com.orcun.mezun.service.user.InitStudentInfoService;
+import com.orcun.mezun.service.user.init.InitAlumniInfoService;
+import com.orcun.mezun.service.user.init.InitStudentInfoService;
 
 public class InitUserInfoFilter implements Filter {
 
@@ -64,7 +64,7 @@ public class InitUserInfoFilter implements Filter {
 						.getExternalContext();
 				
 				request.getRequestDispatcher(exCtx.getRequestContextPath()
-						+ "/user_profile/init_student_info.xhtml").forward(request, response);
+						+ "/user_profile/init/init_student_info.xhtml").forward(request, response);
 			}
 
 		} else if (securityContext.getAuthentication().getAuthorities()
@@ -76,7 +76,7 @@ public class InitUserInfoFilter implements Filter {
 						.getExternalContext();
 				
 				request.getRequestDispatcher(exCtx.getRequestContextPath()
-						+ "/user_profile/init_alumni_info.xhtml").forward(request, response);
+						+ "/user_profile/init/init_alumni_info.xhtml").forward(request, response);
 			}
 
 		}else{

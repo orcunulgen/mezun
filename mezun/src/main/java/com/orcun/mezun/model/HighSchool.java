@@ -1,7 +1,6 @@
 package com.orcun.mezun.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -32,8 +31,8 @@ public class HighSchool implements Serializable{
 	@Column(name="high_school_department",nullable=false,length=200)
 	private String highSchoolDepartment;
 	
-	@Column(name="end_date",nullable=true)
-	private Date endDate=new Date();
+	@Column(name="end_year",nullable=false)
+	private Integer endYear;
 	
 	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="high_school_type_id")
@@ -74,12 +73,12 @@ public class HighSchool implements Serializable{
 		this.highSchoolDepartment = highSchoolDepartment;
 	}
 
-	public Date getEndDate() {
-		return endDate;
+	public Integer getEndYear() {
+		return endYear;
 	}
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+	public void setEndYear(Integer endYear) {
+		this.endYear = endYear;
 	}
 
 	public HighSchoolType getHighSchoolType() {

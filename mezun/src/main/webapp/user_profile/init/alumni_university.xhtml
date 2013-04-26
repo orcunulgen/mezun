@@ -1,0 +1,121 @@
+<ui:composition template="/templates/user/user_profile_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<ui:define name="main_container">
+
+		<h:outputStylesheet library="css"
+			name="user_profile/init/alumni_university.css" />
+
+
+		<div class="alumni_university">
+			<h:form id="form_alumni_university_panel" prependId="false">
+				<p:growl id="form_alumni_university_messages" />
+				<p:fieldset legend="Üniversite Bilgileri">
+					<p:panelGrid styleClass="no_border" id="university_add_display"
+						columns="2" cellpadding="4" style="margin:0 auto;">
+
+						<h:outputLabel value="Üniversite :" />
+						<p:selectOneMenu disabled="true" validator="universityValidator"
+							converter="universityConverter"
+							value="#{alumniUniversityView.educationInfo.university}">
+							<f:selectItem itemValue="0"
+								itemLabel="Lütfen bir üniversite seçiniz" />
+							<f:selectItems value="#{alumniUniversityView.universities}"
+								var="university" itemValue="#{university}"
+								itemLabel="#{university.universityName}" />
+							<p:ajax
+								listener="#{alumniUniversityView.addUniversityChangeFaculty}"
+								event="change"
+								update="form_add_university_faculty form_add_faculty_department" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value="Fakülte :" />
+						<p:selectOneMenu disabled="true" validator="facultyValidator"
+							converter="facultyConverter" id="form_add_university_faculty"
+							value="#{alumniUniversityView.educationInfo.faculty}">
+							<f:selectItem itemValue="0"
+								itemLabel="Lütfen bir fakülte seçiniz" />
+							<f:selectItems
+								value="#{alumniUniversityView.universityAddFaculties}"
+								var="faculty" itemValue="#{faculty}"
+								itemLabel="#{faculty.facultyName}" />
+							<p:ajax
+								listener="#{alumniUniversityView.addFacultyChangeDepartment}"
+								event="change" update="form_add_faculty_department" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value="Bölüm :" />
+						<p:selectOneMenu disabled="true" validator="departmentValidator"
+							converter="departmentConverter" id="form_add_faculty_department"
+							value="#{alumniUniversityView.educationInfo.department}">
+							<f:selectItem itemValue="0" itemLabel="Lütfen bir bölüm seçiniz" />
+							<f:selectItems
+								value="#{alumniUniversityView.facultyAddDepartments}"
+								var="department" itemValue="#{department}"
+								itemLabel="#{department.departmentName}" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value="Başlangıç Yılı :" />
+						<p:inputMask mask="9999" id="form_start_year"
+							value="#{alumniUniversityView.educationInfo.startYear}"
+							required="true"
+							requiredMessage="Lütfen okula giriş yılınızı belirtiniz." />
+
+						<h:outputLabel value="Mezuniyet Yılı :"
+							id="form_add_university_end_date_label" />
+						<p:inputMask mask="9999" id="form_end_year"
+							value="#{alumniUniversityView.educationInfo.endYear}"
+							required="true"
+							requiredMessage="Lütfen mezuniyet yılınızı belirtiniz." />
+
+						<h:outputLabel value="Eğitim Programı :" />
+						<p:selectOneMenu validator="educationLevelValidator"
+							converter="educationLevelConverter"
+							value="#{alumniUniversityView.educationInfo.educationLevel}">
+							<f:selectItem itemValue="0"
+								itemLabel="Lütfen eğitim programınızı seçiniz." />
+							<f:selectItems value="#{alumniUniversityView.educationLevels}"
+								var="educationLevel" itemValue="#{educationLevel}"
+								itemLabel="#{educationLevel.educationLevel}" />
+						</p:selectOneMenu>
+
+
+						<h:outputLabel value="Diploma Not Sistemi" />
+						<p:selectOneMenu id="add_form_grading_system"
+							validator="gradingSystemValidator"
+							converter="gradingSystemConverter"
+							value="#{alumniUniversityView.educationInfo.gradingSystem}">
+							<f:selectItem itemValue="0"
+								itemLabel="Lütfen not sistemini seçiniz" />
+							<f:selectItems value="#{alumniUniversityView.gradingSystems}"
+								var="gradingSystem" itemValue="#{gradingSystem}"
+								itemLabel="#{gradingSystem.grade}" />
+						</p:selectOneMenu>
+
+
+
+						<h:outputLabel value="Mezuniyet Derecesi"
+							id="form_graduation_degree_label" />
+						<p:inputText id="form_graduation_degree"
+							value="#{alumniUniversityView.educationInfo.graduationDegree}"
+							required="true"
+							requiredMessage="Lütfen mezuniyet derecenizi giriniz.">
+						</p:inputText>
+
+
+					</p:panelGrid>
+					<p:commandButton value="Kaydet"
+						action="#{alumniUniversityView.saveAlumniUniversity}"
+						icon="ui-icon-disk" ajax="false"
+						update="form_alumni_university_panel" />
+				</p:fieldset>
+			</h:form>
+		</div>
+
+	</ui:define>
+</ui:composition>

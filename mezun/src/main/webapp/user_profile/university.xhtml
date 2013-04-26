@@ -46,23 +46,19 @@
 						</p:column>
 						<p:column>
 							<f:facet name="header">
-								<h:outputLabel value="Başlangıç Tarihi" />
+								<h:outputLabel value="Başlangıç Yılı" />
 							</f:facet>
-							<h:outputLabel value="#{educationInfoList.startDate}">
-								<f:convertDateTime pattern="dd/MM/yyyy" />
-							</h:outputLabel>
+							<h:outputLabel value="#{educationInfoList.startYear}" />
 						</p:column>
 						<p:column>
 							<f:facet name="header">
-								<h:outputLabel value="Bitiş Tarihi" />
+								<h:outputLabel value="Bitiş Yılı" />
 							</f:facet>
-							<h:outputLabel value="#{educationInfoList.endDate}"
-								rendered="#{educationInfoList.endDate!=null}">
-								<f:convertDateTime pattern="dd/MM/yyyy" />
-							</h:outputLabel>
+							<h:outputLabel value="#{educationInfoList.endYear}"
+								rendered="#{educationInfoList.endYear!=null}" />
 
 							<h:outputLabel value="Devam Ediyor"
-								rendered="#{educationInfoList.endDate==null}">
+								rendered="#{educationInfoList.endYear==null}">
 							</h:outputLabel>
 
 						</p:column>
@@ -130,10 +126,11 @@
 								itemLabel="#{department.departmentName}" />
 						</p:selectOneMenu>
 
-						<h:outputLabel value="Başlangıç Tarihi :" />
-						<p:calendar
-							value="#{educationInfoView.selectedEducationInfo.startDate}"
-							showOn="button" />
+						<h:outputLabel value="Başlangıç Yılı :" />
+						<p:inputMask mask="9999" id="form_start_year"
+							value="#{educationInfoView.selectedEducationInfo.startYear}"
+							required="true"
+							requiredMessage="Lütfen okula giriş yılınızı belirtiniz." />
 
 						<h:outputLabel value="Devam Ediyorum :" />
 						<p:selectBooleanButton
@@ -143,11 +140,12 @@
 							<p:ajax update="university_dialog_form" />
 						</p:selectBooleanButton>
 
-						<h:outputLabel value="Bitiş Tarihi :"
+						<h:outputLabel value="Mezuniyet Yılı :"
 							rendered="#{!educationInfoView.selectedEduInfoIsStudent}" />
-						<p:calendar
-							value="#{educationInfoView.selectedEducationInfo.endDate}"
-							showOn="button"
+						<p:inputMask mask="9999" id="form_end_year"
+							value="#{educationInfoView.selectedEducationInfo.endYear}"
+							required="true"
+							requiredMessage="Lütfen mezuniyet yılınızı belirtiniz."
 							rendered="#{!educationInfoView.selectedEduInfoIsStudent}" />
 
 						<h:outputLabel value="Eğitim Programı :" />
@@ -183,13 +181,25 @@
 							rendered="#{!educationInfoView.selectedEduInfoIsStudent}">
 						</p:inputText>
 
+						<h:outputLabel
+							rendered="#{educationInfoView.selectedEduInfoIsStudent}"
+							value="Sınıf Bilgisi :" id="form_class_info_label" />
+						<p:selectOneMenu
+							rendered="#{educationInfoView.selectedEduInfoIsStudent}"
+							id="form_class_info" required="true"
+							requiredMessage="Lütfen sınıf bilgisi giriniz."
+							value="#{educationInfoView.selectedEducationInfo.classInfo}">
+							<f:selectItem itemLabel="Lütfen sınıfınızı belirtiniz" />
+							<f:selectItems value="#{educationInfoView.classInfos}"
+								var="classInfo" itemValue="#{classInfo}"
+								itemLabel="#{classInfo}.sınıf" />
+						</p:selectOneMenu>
+
 						<h:outputLabel value="Ağırlıklı Ortalama"
 							rendered="#{educationInfoView.selectedEduInfoIsStudent}" />
 
 						<p:inputText id="form_grade_mean"
 							value="#{educationInfoView.selectedEducationInfo.graduationDegree}"
-							required="true"
-							requiredMessage="Lütfen mezuniyet derecenizi giriniz."
 							rendered="#{educationInfoView.selectedEduInfoIsStudent}">
 						</p:inputText>
 
@@ -254,9 +264,12 @@
 								itemLabel="#{department.departmentName}" />
 						</p:selectOneMenu>
 
-						<h:outputLabel value="Başlangıç Tarihi :" />
-						<p:calendar value="#{educationInfoView.educationInfo.startDate}"
-							showOn="button" />
+						<h:outputLabel value="Başlangıç Yılı :" />
+						<p:inputMask mask="9999" id="form_start_year"
+							value="#{educationInfoView.educationInfo.startYear}"
+							required="true"
+							requiredMessage="Lütfen okula giriş yılınızı belirtiniz." />
+
 
 						<h:outputLabel value="Devam Ediyorum :" />
 						<p:selectBooleanButton value="#{educationInfoView.isStudent}"
@@ -265,10 +278,13 @@
 							<p:ajax update="dialog_university_add_form" />
 						</p:selectBooleanButton>
 
-						<h:outputLabel value="Bitiş Tarihi :"
+						<h:outputLabel value="Mezuniyet Yılı :"
 							rendered="#{!educationInfoView.isStudent}" />
-						<p:calendar value="#{educationInfoView.educationInfo.endDate}"
-							rendered="#{!educationInfoView.isStudent}" showOn="button" />
+						<p:inputMask mask="9999" id="form_end_year"
+							value="#{educationInfoView.educationInfo.endYear}"
+							required="true"
+							requiredMessage="Lütfen mezuniyet yılınızı belirtiniz."
+							rendered="#{!educationInfoView.isStudent}" />
 
 						<h:outputLabel value="Eğitim Programı :" />
 						<p:selectOneMenu validator="educationLevelValidator"
@@ -306,14 +322,25 @@
 						</p:inputText>
 
 
+						<h:outputLabel rendered="#{educationInfoView.isStudent}"
+							value="Sınıf Bilgisi* :" id="form_class_info_label" />
+						<p:selectOneMenu rendered="#{educationInfoView.isStudent}"
+							id="form_class_info" required="true"
+							requiredMessage="Lütfen sınıf bilgisi giriniz."
+							value="#{educationInfoView.educationInfo.classInfo}">
+							<f:selectItem itemLabel="Lütfen sınıfınızı belirtiniz" />
+							<f:selectItems value="#{educationInfoView.classInfos}"
+								var="classInfo" itemValue="#{classInfo}"
+								itemLabel="#{classInfo}.sınıf" />
+						</p:selectOneMenu>
+
 						<h:outputLabel value="Ağırlıklı Ortalama"
 							rendered="#{educationInfoView.isStudent}" />
 						<p:inputText id="form_grade_mean"
 							value="#{educationInfoView.educationInfo.graduationDegree}"
-							required="true"
-							requiredMessage="Lütfen ağırlıklı ortalamanızı giriniz."
 							rendered="#{educationInfoView.isStudent}">
 						</p:inputText>
+
 
 
 					</p:panelGrid>
