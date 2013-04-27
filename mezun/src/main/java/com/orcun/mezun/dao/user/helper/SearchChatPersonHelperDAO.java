@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.orcun.mezun.model.EducationInfo;
 import com.orcun.mezun.model.SearchCriteria;
-import com.orcun.mezun.model.User;
 
 @Repository
 @Transactional
@@ -38,22 +37,23 @@ public class SearchChatPersonHelperDAO {
 
 		SQLQuery query = getSession()
 				.createSQLQuery(
-						"SELECT * FROM education_info,user WHERE education_info.user_tcno=user.tcno AND "
-								+ "user.name=:name OR "
-								+ "user.surname=:surname OR "
-								+ "user.email=:email OR "
-								+ "education_info.start_year=:start_year OR "
-								+ "education_info.end_year=:end_year "
-								+ "GROUP BY user.tcno");
+						"SELECT {e.*} FROM education_info e JOIN user u ON e.user_tcno=u.tcno WHERE "
+								+ "u.name=:name OR "
+								+ "u.surname=:surname OR "
+								+ "u.email=:email OR "
+								+ "e.start_year=:start_year OR "
+								+ "e.end_year=:end_year "
+								+ "GROUP BY e.user_tcno");
 		query.setParameter("name", searchCriteria.getSearchByName());
 		query.setParameter("surname", searchCriteria.getSearchBySurname());
 		query.setParameter("email", searchCriteria.getSearchByEmail());
 		query.setParameter("start_year",
 				searchCriteria.getSearchByEduStartYear());
 		query.setParameter("end_year", searchCriteria.getSearchByEduEndYear());
-		query.addEntity("education_info",EducationInfo.class);
-		query.addEntity("education_info.user",User.class);
-		query.addJoin("user","education_info.user");
+		query.addEntity("e",EducationInfo.class);
+		//query.addEntity("e.user",User.class);
+		//query.addJoin("u","e.user");
+		//query.setResultTransformer(Transformers.aliasToBean(SearchChatPersonDTO.class));
 
 		return query.list();
 
