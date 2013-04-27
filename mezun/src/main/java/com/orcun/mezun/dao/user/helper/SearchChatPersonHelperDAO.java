@@ -35,25 +35,23 @@ public class SearchChatPersonHelperDAO {
 	@SuppressWarnings("unchecked")
 	public List<EducationInfo> searchChatPerson(SearchCriteria searchCriteria) {
 
-		SQLQuery query = getSession()
-				.createSQLQuery(
-						"SELECT {e.*} FROM education_info e JOIN user u ON e.user_tcno=u.tcno WHERE "
-								+ "u.name=:name OR "
-								+ "u.surname=:surname OR "
-								+ "u.email=:email OR "
-								+ "e.start_year=:start_year OR "
-								+ "e.end_year=:end_year "
-								+ "GROUP BY e.user_tcno");
+		SQLQuery query = getSession().createSQLQuery(
+				"SELECT {e.*} FROM education_info e JOIN user u ON e.user_tcno=u.tcno WHERE "
+						+ "(u.name=:name OR " + "u.surname=:surname OR "
+						+ "u.email=:email OR " + "e.start_year=:start_year OR "
+						+ "e.end_year=:end_year) AND "
+						+ "e.university_id=1 AND " + "e.faculty_id=2 AND "
+						+ "e.department_id=4 " + "GROUP BY e.user_tcno");
 		query.setParameter("name", searchCriteria.getSearchByName());
 		query.setParameter("surname", searchCriteria.getSearchBySurname());
 		query.setParameter("email", searchCriteria.getSearchByEmail());
 		query.setParameter("start_year",
 				searchCriteria.getSearchByEduStartYear());
 		query.setParameter("end_year", searchCriteria.getSearchByEduEndYear());
-		query.addEntity("e",EducationInfo.class);
-		//query.addEntity("e.user",User.class);
-		//query.addJoin("u","e.user");
-		//query.setResultTransformer(Transformers.aliasToBean(SearchChatPersonDTO.class));
+		query.addEntity("e", EducationInfo.class);
+		// query.addEntity("e.user",User.class);
+		// query.addJoin("u","e.user");
+		// query.setResultTransformer(Transformers.aliasToBean(SearchChatPersonDTO.class));
 
 		return query.list();
 
