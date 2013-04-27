@@ -27,12 +27,21 @@
 			width: 100%;
 			margin: auto;
 		}
+		
+		.bread_crumb{
+			height:35px;
+			width:auto;
+			margin:auto;
+		}
+			.ui-breadcrumb ul li a{
+				text-decoration: none;
+			}
 
 	.main_panel{
 		height: auto;
 		min-height: 600px;
 		width: 100%;
-		margin: 25px auto;
+		margin: 60px auto;
 	}
 		.main_panel_left{
 			height: auto;

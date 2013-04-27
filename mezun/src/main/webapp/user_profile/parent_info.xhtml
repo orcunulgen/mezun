@@ -6,13 +6,26 @@
 	xmlns:p="http://primefaces.org/ui">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
+	<ui:define name="bread_crumb_container">
+
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+			<p:menuitem value="Hesap Ayarları"
+				url="profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+			<p:menuitem value="Aile Bilgileri"
+				url="parent_info.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+		</p:breadCrumb>
+
+	</ui:define>
+
 	<ui:define name="main_container">
 		<h:outputStylesheet library="css" name="user_profile/parent_info.css" />
 		<div class="parent_info">
 			<h:form id="form_parent_info_panel" enctype="multipart/form-data"
 				prependId="false">
 
-				<p:growl id="form_parent_info_messages"/>
+				<p:growl id="form_parent_info_messages" />
 				<p:fieldset legend="Aile Bilgileri">
 					<p:panelGrid styleClass="no_border">
 
@@ -22,8 +35,8 @@
 							</p:column>
 							<p:column>
 								<p:inputText id="form_father_name"
-									value="#{parentInfoView.parentInfo.fatherName}"
-									required="true" requiredMessage="Lütfen baba adı giriniz.">
+									value="#{parentInfoView.parentInfo.fatherName}" required="true"
+									requiredMessage="Lütfen baba adı giriniz.">
 								</p:inputText>
 							</p:column>
 
@@ -32,8 +45,8 @@
 							</p:column>
 							<p:column>
 								<p:inputText id="form_mother_name"
-									value="#{parentInfoView.parentInfo.motherName}"
-									required="true" requiredMessage="Lütfen anne adı giriniz.">
+									value="#{parentInfoView.parentInfo.motherName}" required="true"
+									requiredMessage="Lütfen anne adı giriniz.">
 								</p:inputText>
 							</p:column>
 
@@ -46,8 +59,7 @@
 							</p:column>
 							<p:column>
 								<p:inputText id="form_father_job"
-									value="#{parentInfoView.parentInfo.fatherJob}"
-									required="true"
+									value="#{parentInfoView.parentInfo.fatherJob}" required="true"
 									requiredMessage="Lütfen baba mesleğini giriniz.">
 								</p:inputText>
 							</p:column>
@@ -57,8 +69,7 @@
 							</p:column>
 							<p:column>
 								<p:inputText id="form_mother_job"
-									value="#{parentInfoView.parentInfo.motherJob}"
-									required="true"
+									value="#{parentInfoView.parentInfo.motherJob}" required="true"
 									requiredMessage="Lütfen anne mesleğini giriniz.">
 								</p:inputText>
 							</p:column>
@@ -68,8 +79,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel
-									value="Baba Doğum yılı *" />
+								<h:outputLabel value="Baba Doğum yılı *" />
 							</p:column>
 							<p:column>
 								<p:selectOneMenu id="form_father_birthday_year" required="true"
@@ -82,8 +92,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel
-									value="Anne Doğum yılı *" />
+								<h:outputLabel value="Anne Doğum yılı *" />
 							</p:column>
 							<p:column>
 								<p:selectOneMenu id="form_mother_birthday_year" required="true"
@@ -104,7 +113,7 @@
 								<p:inputText id="form_parent_monthly_income"
 									value="#{parentInfoView.parentInfo.parentMonthlyIncome}"
 									required="true"
-									requiredMessage="Lütfen aile gelir düzeyini giriniz."/>
+									requiredMessage="Lütfen aile gelir düzeyini giriniz." />
 							</p:column>
 
 							<p:column>
@@ -113,13 +122,12 @@
 							<p:column>
 								<p:inputMask mask="9999-999-99-99" id="form_parent_phone_number"
 									value="#{parentInfoView.parentInfo.parentPhoneNumber}"
-									required="true"
-									requiredMessage="Lütfen aile telefonu giriniz."/>
+									required="true" requiredMessage="Lütfen aile telefonu giriniz." />
 							</p:column>
 
 
 						</p:row>
-						
+
 						<p:row>
 							<p:column>
 								<h:outputLabel value="Aile Adresi *" />
@@ -133,10 +141,10 @@
 						</p:row>
 					</p:panelGrid>
 					<p:commandButton value="Kaydet"
-									action="#{parentInfoView.saveParentInfo}" ajax="false"
-									update="form_parent_info_messages" icon="ui-icon-disk" />
+						action="#{parentInfoView.saveParentInfo}" ajax="false"
+						update="form_parent_info_messages" icon="ui-icon-disk" />
 				</p:fieldset>
-				
+
 			</h:form>
 		</div>
 

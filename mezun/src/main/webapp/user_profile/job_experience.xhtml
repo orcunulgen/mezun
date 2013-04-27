@@ -6,6 +6,18 @@
 	xmlns:p="http://primefaces.org/ui">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
+	<ui:define name="bread_crumb_container">
+
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+			<p:menuitem value="Hesap Ayarları"
+				url="profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+			<p:menuitem value="İş Tecrübeleri"
+				url="job_experience.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+		</p:breadCrumb>
+
+	</ui:define>
 	<ui:define name="main_container">
 		<h:outputStylesheet library="css"
 			name="user_profile/job_experience.css" />

@@ -19,7 +19,7 @@
 				<div class="menu">
 					<p:menubar>
 						<p:menuitem value="Anasayfa" url="/user_profile/index.xhtml"
-							icon="ui-icon-extlink" />
+							icon="ui-icon-home" />
 						<p:menuitem value="Profilim"
 							url="/user_profile/showcase/index.xhtml?user=#{showCaseView.loggedUser.tcno}"
 							icon="ui-icon-person" />
@@ -44,6 +44,9 @@
 						value="Hoşgeldiniz değerli öğrencimiz, #{profileSettingsView.loggedUser.name} #{profileSettingsView.loggedUser.surname} ">
 						<!-- <h:outputLink value="#{facesContext.externalContext.requestContextPath}/logout">Çıkış</h:outputLink> -->
 					</h:outputLabel>
+				</div>
+				<div class="bread_crumb">
+					<ui:insert name="bread_crumb_container"/>
 				</div>
 
 			</div>

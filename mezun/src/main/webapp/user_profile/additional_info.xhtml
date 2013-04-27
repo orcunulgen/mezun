@@ -8,7 +8,18 @@
 	<!-- <f:metadata>
 		<f:event type="preRenderView" listener="#{personalInfoView.checkURL}" />
 	</f:metadata> -->
+	<ui:define name="bread_crumb_container">
 
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+			<p:menuitem value="Hesap Ayarları"
+				url="profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+			<p:menuitem value="Ek Bilgiler"
+				url="additional_info.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+		</p:breadCrumb>
+
+	</ui:define>
 	<ui:define name="main_container">
 		<h:outputStylesheet library="css"
 			name="user_profile/additional_info.css" />
@@ -18,15 +29,16 @@
 			<h:form id="form_additional_info_panel" prependId="false">
 				<p:growl id="form_additional_info_messages" />
 				<p:fieldset legend="Ek Bilgiler">
-					<p:panelGrid styleClass="no_border" id="addInfoPanelGrid" columns="1">
-						<h:outputLabel
-							value="Bize biraz kendinizden bahsedin..." />
+					<p:panelGrid styleClass="no_border" id="addInfoPanelGrid"
+						columns="1">
+						<h:outputLabel value="Bize biraz kendinizden bahsedin..." />
 						<p:inputTextarea id="additional_info"
 							value="#{additionalInfoView.additionalInfo.text}" rows="5"
 							cols="50" maxlength="100" autoResize="false" />
 
 						<p:commandButton value="Kaydet"
-							action="#{additionalInfoView.saveAdditionalInfo}" icon="ui-icon-disk" ajax="false"
+							action="#{additionalInfoView.saveAdditionalInfo}"
+							icon="ui-icon-disk" ajax="false"
 							update="form_additional_info_messages" />
 					</p:panelGrid>
 				</p:fieldset>

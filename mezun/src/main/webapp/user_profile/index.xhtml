@@ -1,9 +1,18 @@
-<ui:composition template="/templates/user/user_profile_template.xhtml" 
+<ui:composition template="/templates/user/user_profile_template.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-	
+
+	<ui:define name="bread_crumb_container">
+
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+		</p:breadCrumb>
+
+	</ui:define>
+
 
 </ui:composition>
