@@ -49,8 +49,6 @@
     	<welcome-file>index.xhtml</welcome-file>
   	</welcome-file-list>
   
-  
-  
   <!-- Spring Security -->
   <filter>
 		<filter-name>springSecurityFilterChain</filter-name>
@@ -74,5 +72,5 @@
     	<filter-name>PrimeFaces FileUpload Filter</filter-name>
     	<servlet-name>Faces Servlet</servlet-name>
   	</filter-mapping>
-  
+  	
 </web-app>

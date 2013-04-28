@@ -5,12 +5,166 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<!-- <f:metadata>
-		<f:event type="preRenderView" listener="#{personalInfoView.checkURL}" />
-	</f:metadata> -->
-	
-	<ui:define name="main_container">
 
+	<ui:define name="bread_crumb_container">
+
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+			<p:menuitem value="Hesap Ayarları"
+				url="profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+			<p:menuitem value="Kişi Listesi"
+				url="chat_list.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+		</p:breadCrumb>
+
+	</ui:define>
+	<ui:define name="main_container">
+		<h:outputStylesheet library="css" name="user_profile/chat_list.css" />
+		<div class="chat_list">
+
+			<p:fieldset legend="Kişi Listesi">
+				<p:commandButton value="Yeni Grup Ekle" type="button"
+					icon="ui-icon-plus" onclick="chatGroupAddDialog.show()" />
+				<h:form id="list_chat_group_form">
+					<p:accordionPanel value="#{chatListView.chatList.chatGroups}"
+						var="chatGroupList" id="chat_group_list_acc_panel">
+						<p:tab title="#{chatGroupList.groupName}">
+							<p:commandButton id="selectChatGroupButton"
+								actionListener="#{chatListView.initSelectedChatGroup(chatGroupList)}"
+								update=":dialog_search_chat_person_form"
+								oncomplete="searchChatPersonDialog.show()" icon="ui-icon-plus"
+								value="Kişi Ekle">
+							</p:commandButton>
+
+							<p:commandButton id="deleteChatGroupButton"
+								actionListener="#{chatListView.deleteSelectedChatGroup(chatGroupList)}"
+								icon="ui-icon-close" value="Grubu Sil">
+							</p:commandButton>
+
+
+							<p:dataTable var="chatPersonList"
+								value="#{chatGroupList.chatPersons}">
+
+								<p:column>
+									<f:facet name="header">
+										<h:outputLabel value="İşlemler" />
+									</f:facet>
+									<p:commandButton id="deleteChatPersonButton"
+										actionListener="#{chatListView.deleteSelectedChatPerson(chatPersonList)}"
+										icon="ui-icon-close" value="Sil">
+									</p:commandButton>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputLabel value="İsim" />
+									</f:facet>
+									<h:outputLabel value="#{chatPersonList.user.name}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputLabel value="Soyisim" />
+									</f:facet>
+									<h:outputLabel value="#{chatPersonList.user.surname}" />
+								</p:column>
+
+							</p:dataTable>
+
+
+
+						</p:tab>
+					</p:accordionPanel>
+				</h:form>
+			</p:fieldset>
+
+
+			<p:dialog header="Grup Ekle" widgetVar="chatGroupAddDialog"
+				resizable="false" id="chatGroupAddDlg" showEffect="fade"
+				modal="true">
+				<h:form id="dialog_chat_group_add_form">
+					<p:growl id="chat_group_add_messages" />
+					<p:panelGrid styleClass="no_border" id="chat_group_add_display"
+						columns="2" cellpadding="4" style="margin:0 auto;">
+
+						<h:outputLabel value="Grup İsmi :" />
+						<p:inputText value="#{chatListView.chatGroup.groupName}"
+							required="true"
+							requiredMessage="Lütfen kişi listenize eklemek için grup ismi giriniz." />
+
+
+					</p:panelGrid>
+					<p:commandButton action="#{chatListView.addChatGroup}" value="Ekle"
+						ajax="true" icon="ui-icon-disk"
+						update=":dialog_chat_group_add_form" />
+				</h:form>
+			</p:dialog>
+
+			<p:dialog header="Kişi Ara" widgetVar="searchChatPersonDialog"
+				resizable="false" id="searchChatPersonDlg" showEffect="fade"
+				modal="true">
+				<h:form id="dialog_search_chat_person_form">
+					<p:growl id="search_chat_person_messages" showDetail="true" />
+					<p:panelGrid styleClass="no_border" id="searchChatPersonPanelGrid"
+						columns="2">
+
+						<h:outputLabel value="İsim :" />
+						<p:inputText
+							value="#{searchChatPersonHelper.searchCriteria.searchByName}" />
+
+						<h:outputLabel value="Soyisim :" />
+						<p:inputText
+							value="#{searchChatPersonHelper.searchCriteria.searchBySurname}" />
+
+						<h:outputLabel value="E-Mail Adresi :" />
+						<p:inputText
+							value="#{searchChatPersonHelper.searchCriteria.searchByEmail}" />
+							
+						<h:outputLabel value="YTÜ Bilgisayar Giriş Yılı :" />
+						<p:inputMask mask="9999"
+							value="#{searchChatPersonHelper.searchCriteria.searchByEduStartYear}" />
+							
+						<h:outputLabel value="YTÜ Bilgisayar Mezuniyet Yılı :" />
+						<p:inputMask mask="9999"
+							value="#{searchChatPersonHelper.searchCriteria.searchByEduEndYear}" />
+
+					</p:panelGrid>
+					<p:commandButton
+						action="#{searchChatPersonHelper.searchChatPerson}" value="Ara"
+						ajax="true" icon="ui-icon-search"
+						update=":dialog_chat_person_list_form" />
+				</h:form>
+
+				<h:form id="dialog_chat_person_list_form">
+					<p:dataTable var="searchedPersonList"
+						value="#{searchChatPersonHelper.searchedPersons}" paginator="true"
+						rows="10">
+						<p:column style="width:15%">
+							<f:facet name="header">
+								<h:outputLabel value="İşlemler" />
+							</f:facet>
+							<p:commandButton id="followChatPersonButton"
+								actionListener="#{chatListView.followSearchedPerson(searchedPersonList)}"
+								icon="ui-icon-disk" value="Ekle"
+								update=":list_chat_group_form">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="İsim" />
+							</f:facet>
+							<h:outputLabel value="#{searchedPersonList.name}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Soyisim" />
+							</f:facet>
+							<h:outputLabel value="#{searchedPersonList.surname}" />
+						</p:column>
+
+					</p:dataTable>
+				</h:form>
+			</p:dialog>
+
+		</div>
 
 	</ui:define>
 </ui:composition>

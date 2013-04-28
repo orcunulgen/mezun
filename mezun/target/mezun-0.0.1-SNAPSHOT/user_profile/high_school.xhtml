@@ -1,0 +1,173 @@
+<ui:composition template="/templates/user/user_profile_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<ui:define name="bread_crumb_container">
+
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+			<p:menuitem value="Hesap Ayarları"
+				url="profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+			<p:menuitem value="Lise Bilgileri"
+				url="high_school.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+		</p:breadCrumb>
+
+	</ui:define>
+	<ui:define name="main_container">
+
+		<h:outputStylesheet library="css" name="user_profile/high_school.css" />
+		<div class="high_school">
+			<h:form id="form_high_school_panel" enctype="multipart/form-data"
+				prependId="false">
+
+				<p:growl id="form_high_school_messages" />
+				<p:fieldset legend="Lise Bilgileri">
+					<p:panelGrid styleClass="no_border">
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Lise İsimi *" />
+							</p:column>
+							<p:column>
+								<p:inputText id="form_high_school_name"
+									value="#{highSchoolView.highSchool.highSchoolName}"
+									required="true" requiredMessage="Lütfen lise ismini giriniz.">
+								</p:inputText>
+							</p:column>
+
+							<p:column>
+								<h:outputLabel value="Lisedeki Bölümü *" />
+							</p:column>
+							<p:column>
+								<p:inputText id="form_high_school_department"
+									value="#{highSchoolView.highSchool.highSchoolDepartment}"
+									required="true"
+									requiredMessage="Lütfen lisedeki bölümünüzü giriniz.">
+								</p:inputText>
+							</p:column>
+
+
+						</p:row>
+
+						<p:row>
+
+							<p:column>
+								<h:outputLabel value="Mezuniyet Yılı *" />
+							</p:column>
+							<p:column>
+								<p:inputMask mask="9999" id="form_high_school_end_year"
+									value="#{highSchoolView.highSchool.endYear}"
+									required="true"
+									requiredMessage="Lütfen lise mezuniyet yılınızı belirtiniz."/>
+							</p:column>
+
+							<p:column>
+								<h:outputLabel value="Lise Tipi *" />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu validator="highSchoolTypeValidator"
+									converter="highSchoolTypeConverter"
+									value="#{highSchoolView.highSchool.highSchoolType}">
+									<f:selectItem itemValue="0"
+										itemLabel="Lütfen lise tipi seçiniz" />
+									<f:selectItems value="#{highSchoolView.highSchoolTypes}"
+										var="highSchoolType" itemValue="#{highSchoolType}"
+										itemLabel="#{highSchoolType.highSchoolType}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+
+						<p:row>
+
+							<p:column>
+								<h:outputLabel value="Diploma Not Sistemi *" />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu validator="gradingSystemValidator"
+									converter="gradingSystemConverter"
+									value="#{highSchoolView.highSchool.gradingSystem}">
+									<f:selectItem itemValue="0"
+										itemLabel="Lütfen not sistemini seçiniz" />
+									<f:selectItems value="#{highSchoolView.gradingSystems}"
+										var="gradingSystem" itemValue="#{gradingSystem}"
+										itemLabel="#{gradingSystem.grade}" />
+								</p:selectOneMenu>
+							</p:column>
+
+							<p:column>
+								<h:outputLabel value="Lise Mezuniyet Derecesi *" />
+							</p:column>
+							<p:column>
+								<p:inputText id="form_graduation_degree"
+									value="#{highSchoolView.highSchool.graduationDegree}"
+									required="true"
+									requiredMessage="Lütfen mezuniyet derecenizi giriniz.">
+								</p:inputText>
+							</p:column>
+
+
+						</p:row>
+
+						<p:row>
+							
+							<p:column colspan="2">
+								<h:outputLabel value="YTÜ Bilgisayar Tercih Sırası *" />
+							</p:column>
+							<p:column colspan="2">
+								<p:inputText id="form_ytu_ce_order_of_preference"
+									value="#{highSchoolView.highSchool.ytuCeOrderOfPreference}"
+									required="true"
+									requiredMessage="Lütfen YTÜ Bilgisayar Mühendisliği tercih sıranızı belirtiniz." />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column colspan="2">
+								<h:outputLabel value="1.Tercihi ( Üniversite/Bölüm ) *" />
+							</p:column>
+							<p:column colspan="2">
+								<p:inputText id="form_oss_first_choise"
+									value="#{highSchoolView.highSchool.ossFirstChoise}"
+									required="true" requiredMessage="1.Tercihinizi belirtiniz." />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column colspan="2">
+								<h:outputLabel value="2.Tercihi ( Üniversite/Bölüm ) " />
+							</p:column>
+							<p:column colspan="2">
+								<p:inputText id="form_oss_second_choise"
+									value="#{highSchoolView.highSchool.ossSecondChoise}"/>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column colspan="2">
+								<h:outputLabel value="3.Tercihi ( Üniversite/Bölüm ) " />
+							</p:column>
+							<p:column colspan="2">
+								<p:inputText id="form_oss_third_choise"
+									value="#{highSchoolView.highSchool.ossThirdChoise}"/>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column colspan="4">
+								<p:commandButton icon="ui-icon-disk" value="Kaydet"
+									action="#{highSchoolView.saveHighSchool}" ajax="false"
+									update="form_high_school_messages" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:fieldset>
+
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

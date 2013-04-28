@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.AreaOfInterest;
@@ -27,41 +28,40 @@ public class AreaOfInterestView implements Serializable {
 	private User loggedUser;
 
 	private AreaOfInterest areaOfInterest;
-	
-	private List<AreaOfInterest> areaOfInterests=new ArrayList<AreaOfInterest>();
-	
+
+	private List<AreaOfInterest> areaOfInterests = new ArrayList<AreaOfInterest>();
+
 	private AreaOfInterest selectedAreaOfInterest;
-	
+
 	@ManagedProperty(value = "#{areaOfInterestService}")
 	private AreaOfInterestService areaOfInterestService;
-	
+
 	@PostConstruct
 	public void init() {
-		areaOfInterest=new AreaOfInterest();
-		areaOfInterests = areaOfInterestService.allAreaOfInterest(getLoggedUser());
+		areaOfInterest = new AreaOfInterest();
+		areaOfInterests = areaOfInterestService
+				.allAreaOfInterest(getLoggedUser());
 	}
 
 	public void initSelectedAreaOfInterest(AreaOfInterest selectedAreaOfInterest) {
 		this.selectedAreaOfInterest = selectedAreaOfInterest;
 	}
 
-	public void deleteSelectedAreaOfInterest(AreaOfInterest selectedAreaOfInterest) throws IOException {
+	public void deleteSelectedAreaOfInterest(
+			AreaOfInterest selectedAreaOfInterest) throws IOException {
 		initSelectedAreaOfInterest(selectedAreaOfInterest);
-		try {
-			getAreaOfInterestService().deleteAreaOfInterest(
-					getSelectedAreaOfInterest());
-			
-			FacesContext.getCurrentInstance()
-			.getExternalContext()
-			.redirect(
-					"area_of_interest.xhtml?user="
-							+ getLoggedUser().getTcno());
+		getAreaOfInterestService().deleteAreaOfInterest(
+				getSelectedAreaOfInterest());
 
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-		}
+		FacesContext
+				.getCurrentInstance()
+				.getExternalContext()
+				.redirect(
+						"area_of_interest.xhtml?user="
+								+ getLoggedUser().getTcno());
+
 	}
-	
+
 	public AreaOfInterest getAreaOfInterest() {
 		return areaOfInterest;
 	}
@@ -90,7 +90,8 @@ public class AreaOfInterestView implements Serializable {
 		return areaOfInterestService;
 	}
 
-	public void setAreaOfInterestService(AreaOfInterestService areaOfInterestService) {
+	public void setAreaOfInterestService(
+			AreaOfInterestService areaOfInterestService) {
 		this.areaOfInterestService = areaOfInterestService;
 	}
 
@@ -105,45 +106,41 @@ public class AreaOfInterestView implements Serializable {
 		return loggedUser;
 
 	}
-	
-	public void addAreaOfInterest() throws IOException {
-		try {
 
-			
+	public String addAreaOfInterest() {
 
-				getAreaOfInterest().setUser(getLoggedUser());
-				getAreaOfInterestService().addAreaOfInterest(getAreaOfInterest());
+		getAreaOfInterest().setUser(getLoggedUser());
+		getAreaOfInterestService().addAreaOfInterest(getAreaOfInterest());
 
-				FacesContext
-						.getCurrentInstance()
-						.getExternalContext()
-						.redirect(
-								"area_of_interest.xhtml?user="
-										+ getLoggedUser().getTcno());
+		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Kaydınız başarıyla tamamlandı.", "");
 
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-		}
+		FacesContext.getCurrentInstance().addMessage(null, fm);
 
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
+
+		return "area_of_interest.xhtml?faces-redirect=true&user="
+				+ getLoggedUser().getTcno();
 	}
 
-	public void updateAreaOfInterest() throws IOException {
-		try {
+	public String updateAreaOfInterest() {
 
+		getAreaOfInterestService().updateAreaOfInterest(
+				getSelectedAreaOfInterest());
 
-				getAreaOfInterestService().updateAreaOfInterest(
-						getSelectedAreaOfInterest());
+		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Kaydınız başarıyla güncellendi.", "");
 
-				FacesContext
-						.getCurrentInstance()
-						.getExternalContext()
-						.redirect(
-								"area_of_interest.xhtml?user="
-										+ getLoggedUser().getTcno());
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-		}
+		FacesContext.getCurrentInstance().addMessage(null, fm);
 
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
+
+		return "area_of_interest.xhtml?faces-redirect=true&user="
+				+ getLoggedUser().getTcno();
 	}
 
 }

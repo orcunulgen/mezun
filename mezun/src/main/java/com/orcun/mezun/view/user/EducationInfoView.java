@@ -11,9 +11,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
 import org.joda.time.DateTime;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.Department;
@@ -89,31 +89,23 @@ public class EducationInfoView implements Serializable {
 	public void deleteSelectedEducationInfo(EducationInfo selectedEducationInfo)
 			throws IOException {
 		initSelectedEducationInfo(selectedEducationInfo);
-		try {
 
-			/*if (getLoggedUser().getRoles().get(0).getRole()
-					.equals("ROLE_ALUMNI")
-					&& selectedUniversityIsLast(selectedEducationInfo)) {
-				changeRoleToStudent();
-				getEducationInfoService().deleteEducationInfo(
-						getSelectedEducationInfo());
-				SecurityContextHolder.clearContext();
-			} else {*/
+		/*
+		 * if (getLoggedUser().getRoles().get(0).getRole()
+		 * .equals("ROLE_ALUMNI") &&
+		 * selectedUniversityIsLast(selectedEducationInfo)) {
+		 * changeRoleToStudent(); getEducationInfoService().deleteEducationInfo(
+		 * getSelectedEducationInfo()); SecurityContextHolder.clearContext(); }
+		 * else {
+		 */
 
-				getEducationInfoService().deleteEducationInfo(
-						getSelectedEducationInfo());
-			//}
+		getEducationInfoService().deleteEducationInfo(
+				getSelectedEducationInfo());
+		// }
 
-			FacesContext
-					.getCurrentInstance()
-					.getExternalContext()
-					.redirect(
-							"university.xhtml?user="
-									+ getLoggedUser().getTcno());
+		FacesContext.getCurrentInstance().getExternalContext()
+				.redirect("university.xhtml?user=" + getLoggedUser().getTcno());
 
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public User getLoggedUser() {
@@ -313,167 +305,158 @@ public class EducationInfoView implements Serializable {
 		}
 	}
 
-	public void addEducationInfo() throws IOException {
-		try {
+	public String addEducationInfo() {
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
 
-			if (getIsStudent()) {
-				getEducationInfo().setEndYear(null);
+		if (getIsStudent()) {
+			getEducationInfo().setEndYear(null);
 
-				DateTime registeredDate = new DateTime();
+			DateTime registeredDate = new DateTime();
 
-				int differenceStartRegister = registeredDate.getYear()
-						- getEducationInfo().getStartYear();
-				if (differenceStartRegister > 0) {
+			int differenceStartRegister = registeredDate.getYear()
+					- getEducationInfo().getStartYear();
+			if (differenceStartRegister > 0) {
 
-					getEducationInfo().setUser(getLoggedUser());
-					getEducationInfoService().addEducationInfo(
-							getEducationInfo());
+				getEducationInfo().setUser(getLoggedUser());
+				getEducationInfoService().addEducationInfo(getEducationInfo());
 
-					FacesContext
-							.getCurrentInstance()
-							.getExternalContext()
-							.redirect(
-									"university.xhtml?user="
-											+ getLoggedUser().getTcno());
+				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Kaydınız başarıyla tamamlandı.", "");
 
-				} else {
-					FacesMessage fm = new FacesMessage(
-							FacesMessage.SEVERITY_ERROR,
-							"Başlangıç tarihi geçmiş zamana ait olmalıdır.",
-							"Lütfen yeniden deneyiniz.");
-					FacesContext.getCurrentInstance().addMessage(null, fm);
+				FacesContext.getCurrentInstance().addMessage(null, fm);
 
-				}
 			} else {
-				int differenceStartEnd = getEducationInfo().getEndYear()
-						- getEducationInfo().getStartYear();
+				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Başlangıç tarihi geçmiş zamana ait olmalıdır.",
+						"Lütfen yeniden deneyiniz.");
+				FacesContext.getCurrentInstance().addMessage(null, fm);
 
-				DateTime registeredDate = new DateTime();
+			}
+		} else {
+			int differenceStartEnd = getEducationInfo().getEndYear()
+					- getEducationInfo().getStartYear();
 
-				int differenceStartRegister = registeredDate.getYear()
-						- getEducationInfo().getStartYear();
+			DateTime registeredDate = new DateTime();
 
-				int differenceEndRegister = registeredDate.getYear()
-						- getEducationInfo().getEndYear();
+			int differenceStartRegister = registeredDate.getYear()
+					- getEducationInfo().getStartYear();
 
-				if (differenceStartEnd > 0 && differenceStartRegister > 0
-						&& differenceEndRegister >= 0) {
+			int differenceEndRegister = registeredDate.getYear()
+					- getEducationInfo().getEndYear();
 
-					getEducationInfo().setUser(getLoggedUser());
-					getEducationInfoService().addEducationInfo(
-							getEducationInfo());
+			if (differenceStartEnd > 0 && differenceStartRegister > 0
+					&& differenceEndRegister >= 0) {
 
-					/*if (getLoggedUser().getRoles().get(0).getRole()
-							.equals("ROLE_STUDENT")) {
+				getEducationInfo().setUser(getLoggedUser());
+				getEducationInfoService().addEducationInfo(getEducationInfo());
 
-						changeRoleToAlumni();
-						SecurityContextHolder.clearContext();
-					}*/
+				/*
+				 * if (getLoggedUser().getRoles().get(0).getRole()
+				 * .equals("ROLE_STUDENT")) {
+				 * 
+				 * changeRoleToAlumni(); SecurityContextHolder.clearContext(); }
+				 */
 
-					FacesContext
-							.getCurrentInstance()
-							.getExternalContext()
-							.redirect(
-									"university.xhtml?user="
-											+ getLoggedUser().getTcno());
+				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Kaydınız başarıyla tamamlandı.", "");
 
-				} else {
-					FacesMessage fm = new FacesMessage(
-							FacesMessage.SEVERITY_ERROR,
-							"Başlangıç ve bitiş tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
-							"Lütfen yeniden deneyiniz.");
-					FacesContext.getCurrentInstance().addMessage(null, fm);
+				FacesContext.getCurrentInstance().addMessage(null, fm);
 
-				}
+			} else {
+				FacesMessage fm = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR,
+						"Başlangıç ve bitiş tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
+						"Lütfen yeniden deneyiniz.");
+				FacesContext.getCurrentInstance().addMessage(null, fm);
 
 			}
 
-		} catch (DataAccessException e) {
-			e.printStackTrace();
 		}
 
+		return "university.xhtml?faces-redirect=true&user="
+				+ getLoggedUser().getTcno();
 	}
 
-	public void updateEducationInfo() throws IOException {
-		try {
+	public String updateEducationInfo() {
 
-			if (getSelectedEduInfoIsStudent()) {
-				getSelectedEducationInfo().setEndYear(null);
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
 
-				DateTime registeredDate = new DateTime();
+		if (getSelectedEduInfoIsStudent()) {
+			getSelectedEducationInfo().setEndYear(null);
 
-				int differenceStartRegister = registeredDate.getYear()
-						- getSelectedEducationInfo().getStartYear();
-				if (differenceStartRegister > 0) {
+			DateTime registeredDate = new DateTime();
 
-					/*if (getLoggedUser().getRoles().get(0).getRole()
-							.equals("ROLE_ALUMNI")
-							&& selectedUniversityIsLast(getSelectedEducationInfo())) {
-						changeRoleToStudent();
-						SecurityContextHolder.clearContext();
-					}*/
-					getEducationInfoService().updateEducationInfo(
-							getSelectedEducationInfo());
+			int differenceStartRegister = registeredDate.getYear()
+					- getSelectedEducationInfo().getStartYear();
+			if (differenceStartRegister > 0) {
 
-					FacesContext
-							.getCurrentInstance()
-							.getExternalContext()
-							.redirect(
-									"university.xhtml?user="
-											+ getLoggedUser().getTcno());
-				} else {
-					FacesMessage fm = new FacesMessage(
-							FacesMessage.SEVERITY_ERROR,
-							"Başlangıç tarihi geçmiş zamana ait olmalıdır.",
-							"Lütfen yeniden deneyiniz.");
-					FacesContext.getCurrentInstance().addMessage(null, fm);
-				}
+				/*
+				 * if (getLoggedUser().getRoles().get(0).getRole()
+				 * .equals("ROLE_ALUMNI") &&
+				 * selectedUniversityIsLast(getSelectedEducationInfo())) {
+				 * changeRoleToStudent(); SecurityContextHolder.clearContext();
+				 * }
+				 */
+				getEducationInfoService().updateEducationInfo(
+						getSelectedEducationInfo());
+
+				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Kaydınız başarıyla güncellendi.", "");
+
+				FacesContext.getCurrentInstance().addMessage(null, fm);
+
 			} else {
-				int differenceStartEnd = getSelectedEducationInfo()
-						.getEndYear()
-						- getSelectedEducationInfo().getStartYear();
-
-				DateTime registeredDate = new DateTime();
-
-				int differenceStartRegister = registeredDate.getYear()
-						- getSelectedEducationInfo().getStartYear();
-
-				int differenceEndRegister = registeredDate.getYear()
-						- getSelectedEducationInfo().getEndYear();
-
-				if (differenceStartEnd > 0 && differenceStartRegister > 0
-						&& differenceEndRegister >= 0) {
-
-					/*if (getLoggedUser().getRoles().get(0).getRole()
-							.equals("ROLE_STUDENT")) {
-
-						changeRoleToAlumni();
-						SecurityContextHolder.clearContext();
-					}*/
-
-					getEducationInfoService().updateEducationInfo(
-							getSelectedEducationInfo());
-
-					FacesContext
-							.getCurrentInstance()
-							.getExternalContext()
-							.redirect(
-									"university.xhtml?user="
-											+ getLoggedUser().getTcno());
-
-				} else {
-					FacesMessage fm = new FacesMessage(
-							FacesMessage.SEVERITY_ERROR,
-							"Başlangıç ve bitiş tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
-							"Lütfen yeniden deneyiniz.");
-					FacesContext.getCurrentInstance().addMessage(null, fm);
-
-				}
+				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Başlangıç tarihi geçmiş zamana ait olmalıdır.",
+						"Lütfen yeniden deneyiniz.");
+				FacesContext.getCurrentInstance().addMessage(null, fm);
 			}
+		} else {
+			int differenceStartEnd = getSelectedEducationInfo().getEndYear()
+					- getSelectedEducationInfo().getStartYear();
 
-		} catch (DataAccessException e) {
-			e.printStackTrace();
+			DateTime registeredDate = new DateTime();
+
+			int differenceStartRegister = registeredDate.getYear()
+					- getSelectedEducationInfo().getStartYear();
+
+			int differenceEndRegister = registeredDate.getYear()
+					- getSelectedEducationInfo().getEndYear();
+
+			if (differenceStartEnd > 0 && differenceStartRegister > 0
+					&& differenceEndRegister >= 0) {
+
+				/*
+				 * if (getLoggedUser().getRoles().get(0).getRole()
+				 * .equals("ROLE_STUDENT")) {
+				 * 
+				 * changeRoleToAlumni(); SecurityContextHolder.clearContext(); }
+				 */
+
+				getEducationInfoService().updateEducationInfo(
+						getSelectedEducationInfo());
+
+				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Kaydınız başarıyla güncellendi.", "");
+
+				FacesContext.getCurrentInstance().addMessage(null, fm);
+
+			} else {
+				FacesMessage fm = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR,
+						"Başlangıç ve bitiş tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
+						"Lütfen yeniden deneyiniz.");
+				FacesContext.getCurrentInstance().addMessage(null, fm);
+
+			}
 		}
+
+		return "university.xhtml?faces-redirect=true&user="
+				+ getLoggedUser().getTcno();
 
 	}
 

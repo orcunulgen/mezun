@@ -7,12 +7,13 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.ForeignLanguage;
@@ -58,20 +59,16 @@ public class ForeignLanguageView implements Serializable {
 	public void deleteSelectedForeignLanguage(
 			ForeignLanguage selectedForeignLanguage) throws IOException {
 		initSelectedForeignLanguage(selectedForeignLanguage);
-		try {
-			getForeignLanguageService().deleteForeignLanguage(
-					getSelectedForeignLanguage());
+		getForeignLanguageService().deleteForeignLanguage(
+				getSelectedForeignLanguage());
 
-			FacesContext
-					.getCurrentInstance()
-					.getExternalContext()
-					.redirect(
-							"foreign_language.xhtml?user="
-									+ getLoggedUser().getTcno());
+		FacesContext
+				.getCurrentInstance()
+				.getExternalContext()
+				.redirect(
+						"foreign_language.xhtml?user="
+								+ getLoggedUser().getTcno());
 
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public ForeignLanguage getForeignLanguage() {
@@ -128,67 +125,42 @@ public class ForeignLanguageView implements Serializable {
 
 	}
 
-	public void addForeignLanguage() throws IOException {
-		try {
+	public String addForeignLanguage() {
 
-			Date registeredDate = new Date();
+		Date registeredDate = new Date();
 
-			getForeignLanguage().setUser(getLoggedUser());
-			getForeignLanguage().setRegisteredDate(registeredDate);
-			getForeignLanguageService()
-					.addForeignLanguage(getForeignLanguage());
+		getForeignLanguage().setUser(getLoggedUser());
+		getForeignLanguage().setRegisteredDate(registeredDate);
+		getForeignLanguageService().addForeignLanguage(getForeignLanguage());
 
-			/*
-			 * FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-			 * "Kaydınız tamamlandı.", "");
-			 * 
-			 * FacesContext.getCurrentInstance().addMessage(null, fm);
-			 */
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
 
-			/*
-			 * FacesContext.getCurrentInstance().getExternalContext()
-			 * .getFlash().setKeepMessages(true);
-			 */
-			FacesContext
-					.getCurrentInstance()
-					.getExternalContext()
-					.redirect(
-							"foreign_language.xhtml?user="
-									+ getLoggedUser().getTcno());
+		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Kaydınız başarıyla tamamlandı.", "");
 
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-		}
+		FacesContext.getCurrentInstance().addMessage(null, fm);
 
+		return "foreign_language.xhtml?faces-redirect=true&user="
+				+ getLoggedUser().getTcno();
 	}
 
-	public void updateForeignLanguage() throws IOException {
-		try {
+	public String updateForeignLanguage() {
 
-			getForeignLanguageService().updateForeignLanguage(
-					getSelectedForeignLanguage());
+		getForeignLanguageService().updateForeignLanguage(
+				getSelectedForeignLanguage());
 
-			/*
-			 * FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-			 * "Kaydınız tamamlandı.", "");
-			 * 
-			 * FacesContext.getCurrentInstance().addMessage(null, fm);
-			 */
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
 
-			/*
-			 * FacesContext.getCurrentInstance().getExternalContext()
-			 * .getFlash().setKeepMessages(true);
-			 */
-			FacesContext
-					.getCurrentInstance()
-					.getExternalContext()
-					.redirect(
-							"foreign_language.xhtml?user="
-									+ getLoggedUser().getTcno());
+		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Kaydınız başarıyla güncellendi.", "");
 
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-		}
+		FacesContext.getCurrentInstance().addMessage(null, fm);
 
+		return "foreign_language.xhtml?faces-redirect=true&user="
+				+ getLoggedUser().getTcno();
 	}
 }

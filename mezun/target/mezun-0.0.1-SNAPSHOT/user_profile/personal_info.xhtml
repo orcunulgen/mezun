@@ -5,12 +5,125 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<!-- <f:metadata>
-		<f:event type="preRenderView" listener="#{personalInfoView.checkURL}" />
-	</f:metadata> -->
-	
-	<ui:define name="main_container">
 
+	<ui:define name="bread_crumb_container">
+
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+			<p:menuitem value="Hesap Ayarları"
+				url="profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+			<p:menuitem value="Kişisel Bilgiler"
+				url="personal_info.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+		</p:breadCrumb>
+
+	</ui:define>
+	<ui:define name="main_container">
+		<h:outputStylesheet library="css"
+			name="user_profile/personal_info.css" />
+		<div class="personal_info">
+			<h:form id="form_personal_info_panel" enctype="multipart/form-data"
+				prependId="false">
+
+				<p:growl id="form_personal_info_messages" />
+				<p:fieldset legend="Üyelik Bilgileri">
+					<p:panelGrid styleClass="no_border">
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="İsim" />
+							</p:column>
+							<p:column>
+								<h:outputLabel id="form_name"
+									value="#{personalInfoView.loggedUser.name}" />
+							</p:column>
+
+							<p:column>
+								<h:outputLabel  value="Soyisim" />
+							</p:column>
+							<p:column>
+								<h:outputLabel id="form_surname"
+									value="#{personalInfoView.loggedUser.surname}" />
+							</p:column>
+
+
+						</p:row>
+
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Şifre*" />
+							</p:column>
+							<p:column>
+								<p:password id="form_password"
+									value="#{personalInfoView.loggedUser.password}" required="true"
+									requiredMessage="Lütfen şifre giriniz."
+									validatorMessage="Şifreniz eşleşmiyor.Lütfen yeniden deneyiniz."
+									match="form_confirm_password" />
+							</p:column>
+
+							<p:column>
+								<h:outputLabel  value="Şifre Tekrarı*" />
+							</p:column>
+							<p:column>
+								<p:password id="form_confirm_password"
+									value="#{personalInfoView.confirmPassword}" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="E-Mail*" />
+							</p:column>
+							<p:column>
+								<p:inputText id="form_email"
+									value="#{personalInfoView.loggedUser.email}" required="true"
+									requiredMessage="Lütfen e-mail adresi giriniz.">
+
+									<f:validator validatorId="emailFormatValidator" />
+									<f:validator validatorId="emailMatchValidator" />
+									<f:validator validatorId="emailUniquenessValidator" />
+
+									<p:ajax event="blur" update="form_personal_info_messages" />
+									<f:attribute name="formName" value="form_personal_info_panel" />
+								</p:inputText>
+							</p:column>
+
+							<p:column>
+								<h:outputLabel  value="E-Mail Tekrarı*" />
+							</p:column>
+							<p:column>
+								<p:inputText id="form_confirm_email"
+									value="#{personalInfoView.confirmEmail}" />
+							</p:column>
+						</p:row>
+
+
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Doğum yılı" />
+							</p:column>
+							<p:column>
+								<h:outputLabel id="form_birthday_year"
+									value="#{personalInfoView.loggedUser.birthdayYear}" />
+							</p:column>
+
+							<p:column>
+								<h:outputLabel value="TC kimlik numarası" />
+							</p:column>
+							<p:column>
+								<h:outputLabel id="form_tcno"
+									value="#{personalInfoView.loggedUser.tcno}" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<p:commandButton value="Kaydet"
+						action="#{personalInfoView.updatePersonalInfo}" ajax="false"
+						update="form_personal_info_messages" icon="ui-icon-disk" />
+				</p:fieldset>
+			</h:form>
+		</div>
 
 	</ui:define>
 </ui:composition>

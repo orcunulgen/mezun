@@ -12,10 +12,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.Event;
@@ -29,49 +29,39 @@ public class EventView implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private User loggedUser;
-	
+
 	private Event event;
-	
+
 	private List<Event> events = new ArrayList<Event>();
 	private Event selectedEvent;
 
 	@ManagedProperty(value = "#{eventService}")
 	private EventService eventService;
-	
-	
+
 	@PostConstruct
 	public void init() {
-		
 
-		events=eventService.allEvent(getLoggedUser());
-		
+		events = eventService.allEvent(getLoggedUser());
+
 		if (event == null) {
 			event = new Event();
 
 		}
 	}
-	
-	public void initSelectedEvent(Event selectedEvent){
-		this.selectedEvent=selectedEvent;
+
+	public void initSelectedEvent(Event selectedEvent) {
+		this.selectedEvent = selectedEvent;
 	}
-	
+
 	public void deleteSelectedEvent(Event selectedEvent) throws IOException {
 		initSelectedEvent(selectedEvent);
-		try {
-			getEventService().deleteEvent(
-					getSelectedEvent());
-			
-			FacesContext.getCurrentInstance()
-			.getExternalContext()
-			.redirect(
-					"event.xhtml?user="
-							+ getLoggedUser().getTcno());
+		getEventService().deleteEvent(getSelectedEvent());
 
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-		}
+		FacesContext.getCurrentInstance().getExternalContext()
+				.redirect("event.xhtml?user=" + getLoggedUser().getTcno());
+
 	}
-	
+
 	public User getLoggedUser() {
 		SecurityContext securityContext = (SecurityContext) FacesContext
 				.getCurrentInstance().getExternalContext().getSessionMap()
@@ -83,7 +73,7 @@ public class EventView implements Serializable {
 		return loggedUser;
 
 	}
-	
+
 	public Event getEvent() {
 		return event;
 	}
@@ -116,106 +106,80 @@ public class EventView implements Serializable {
 		this.eventService = eventService;
 	}
 
-	public void addEvent() throws IOException {
-		try {
+	public String addEvent() {
 
-			int differenceStartEnd = Days.daysBetween(
-					new DateTime(getEvent().getStartDate()),
-					new DateTime(getEvent().getEndDate())).getDays();
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
 
-			Date registeredDate = new Date();
+		int differenceStartEnd = Days.daysBetween(
+				new DateTime(getEvent().getStartDate()),
+				new DateTime(getEvent().getEndDate())).getDays();
 
-			int differenceStartRegister = Days.daysBetween(
-					new DateTime(getEvent().getStartDate()),
-					new DateTime(registeredDate)).getDays();
+		Date registeredDate = new Date();
 
-			if (differenceStartEnd > 0 && differenceStartRegister <= 0) {
+		int differenceStartRegister = Days.daysBetween(
+				new DateTime(getEvent().getStartDate()),
+				new DateTime(registeredDate)).getDays();
 
-				getEvent().setUser(getLoggedUser());
-				getEvent().setRegisteredDate(registeredDate);
-				getEventService().addEvent(getEvent());
+		if (differenceStartEnd > 0 && differenceStartRegister <= 0) {
 
-				/*
-				 * FacesMessage fm = new
-				 * FacesMessage(FacesMessage.SEVERITY_ERROR,
-				 * "Kaydınız tamamlandı.", "");
-				 * 
-				 * FacesContext.getCurrentInstance().addMessage(null, fm);
-				 */
+			getEvent().setUser(getLoggedUser());
+			getEvent().setRegisteredDate(registeredDate);
+			getEventService().addEvent(getEvent());
 
-				/*
-				 * FacesContext.getCurrentInstance().getExternalContext()
-				 * .getFlash().setKeepMessages(true);
-				 */
-				FacesContext
-						.getCurrentInstance()
-						.getExternalContext()
-						.redirect(
-								"event.xhtml?user="
-										+ getLoggedUser().getTcno());
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Kaydınız başarıyla tamamlandı.", "");
 
-			} else {
-				FacesMessage fm = new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"Başlangıç tarihi gelecek zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
-						"Lütfen yeniden deneyiniz.");
-				FacesContext.getCurrentInstance().addMessage(null, fm);
+			FacesContext.getCurrentInstance().addMessage(null, fm);
 
-			}
-		} catch (DataAccessException e) {
-			e.printStackTrace();
+		} else {
+			FacesMessage fm = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR,
+					"Başlangıç tarihi gelecek zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
+					"Lütfen yeniden deneyiniz.");
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+
 		}
-
+		return "event.xhtml?faces-redirect=true&user="
+				+ getLoggedUser().getTcno();
 	}
-	
-	public void updateEvent() throws IOException {
-		try {
 
-			int differenceStartEnd = Days.daysBetween(
-					new DateTime(getSelectedEvent().getStartDate()),
-					new DateTime(getSelectedEvent().getEndDate())).getDays();
+	public String updateEvent() {
 
-			Date registeredDate = new Date();
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
 
-			int differenceStartRegister = Days.daysBetween(
-					new DateTime(getSelectedEvent().getStartDate()),
-					new DateTime(registeredDate)).getDays();
+		int differenceStartEnd = Days.daysBetween(
+				new DateTime(getSelectedEvent().getStartDate()),
+				new DateTime(getSelectedEvent().getEndDate())).getDays();
 
-			if (differenceStartEnd > 0 && differenceStartRegister <= 0) {
+		Date registeredDate = new Date();
 
-				getEventService().updateEvent(getSelectedEvent());
+		int differenceStartRegister = Days.daysBetween(
+				new DateTime(getSelectedEvent().getStartDate()),
+				new DateTime(registeredDate)).getDays();
 
-				/*
-				 * FacesMessage fm = new
-				 * FacesMessage(FacesMessage.SEVERITY_ERROR,
-				 * "Kaydınız tamamlandı.", "");
-				 * 
-				 * FacesContext.getCurrentInstance().addMessage(null, fm);
-				 */
+		if (differenceStartEnd > 0 && differenceStartRegister <= 0) {
 
-				/*
-				 * FacesContext.getCurrentInstance().getExternalContext()
-				 * .getFlash().setKeepMessages(true);
-				 */
-				FacesContext
-						.getCurrentInstance()
-						.getExternalContext()
-						.redirect(
-								"event.xhtml?user="
-										+ getLoggedUser().getTcno());
+			getEventService().updateEvent(getSelectedEvent());
 
-			} else {
-				FacesMessage fm = new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"Başlangıç tarihi gelecek zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
-						"Lütfen yeniden deneyiniz.");
-				FacesContext.getCurrentInstance().addMessage(null, fm);
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Kaydınız başarıyla güncellendi.", "");
 
-			}
-		} catch (DataAccessException e) {
-			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+
+		} else {
+			FacesMessage fm = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR,
+					"Başlangıç tarihi gelecek zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
+					"Lütfen yeniden deneyiniz.");
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+
 		}
-
+		return "event.xhtml?faces-redirect=true&user="
+				+ getLoggedUser().getTcno();
 	}
 
 }

@@ -7,13 +7,14 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.Announcement;
@@ -57,20 +58,14 @@ public class AnnouncementView implements Serializable {
 	public void deleteSelectedAnnouncement(Announcement selectedAnnouncement)
 			throws IOException {
 		initSelectedAnnouncement(selectedAnnouncement);
-		try {
-			getAnnouncementService().deleteAnnouncement(
-					getSelectedAnnouncement());
+		getAnnouncementService().deleteAnnouncement(getSelectedAnnouncement());
 
-			FacesContext
-					.getCurrentInstance()
-					.getExternalContext()
-					.redirect(
-							"announcement.xhtml?user="
-									+ getLoggedUser().getTcno());
+		FacesContext
+				.getCurrentInstance()
+				.getExternalContext()
+				.redirect(
+						"announcement.xhtml?user=" + getLoggedUser().getTcno());
 
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public User getLoggedUser() {
@@ -151,67 +146,42 @@ public class AnnouncementView implements Serializable {
 		}
 	}
 
-	public void addAnnouncement() throws IOException {
-		try {
+	public String addAnnouncement() {
 
-			Date registeredDate = new Date();
+		Date registeredDate = new Date();
 
-			getAnnouncement().setUser(getLoggedUser());
-			getAnnouncement().setRegisteredDate(registeredDate);
-			getAnnouncementService().addAnnouncement(getAnnouncement());
+		getAnnouncement().setUser(getLoggedUser());
+		getAnnouncement().setRegisteredDate(registeredDate);
+		getAnnouncementService().addAnnouncement(getAnnouncement());
 
-			/*
-			 * FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-			 * "Kaydınız tamamlandı.", "");
-			 * 
-			 * FacesContext.getCurrentInstance().addMessage(null, fm);
-			 */
+		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Kaydınız başarıyla tamamlandı.", "");
 
-			/*
-			 * FacesContext.getCurrentInstance().getExternalContext()
-			 * .getFlash().setKeepMessages(true);
-			 */
-			FacesContext
-					.getCurrentInstance()
-					.getExternalContext()
-					.redirect(
-							"announcement.xhtml?user="
-									+ getLoggedUser().getTcno());
+		FacesContext.getCurrentInstance().addMessage(null, fm);
 
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-		}
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
 
+		return "announcement.xhtml?faces-redirect=true&user="
+				+ getLoggedUser().getTcno();
 	}
 
-	public void updateAnnouncement() throws IOException {
-		try {
+	public String updateAnnouncement() {
 
+		getAnnouncementService().updateAnnouncement(getSelectedAnnouncement());
 
-			getAnnouncementService().updateAnnouncement(
-					getSelectedAnnouncement());
+		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Kaydınız başarıyla güncellendi.", "");
 
-			/*
-			 * FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-			 * "Kaydınız tamamlandı.", "");
-			 * 
-			 * FacesContext.getCurrentInstance().addMessage(null, fm);
-			 */
+		FacesContext.getCurrentInstance().addMessage(null, fm);
 
-			/*
-			 * FacesContext.getCurrentInstance().getExternalContext()
-			 * .getFlash().setKeepMessages(true);
-			 */
-			FacesContext
-					.getCurrentInstance()
-					.getExternalContext()
-					.redirect(
-							"announcement.xhtml?user="
-									+ getLoggedUser().getTcno());
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-		}
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
 
+		return "announcement.xhtml?faces-redirect=true&user="
+				+ getLoggedUser().getTcno();
 	}
 
 }

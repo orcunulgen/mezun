@@ -11,8 +11,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.ChatGroup;
@@ -161,7 +161,11 @@ public class ChatListView implements Serializable {
 		
 	}
 
-	public void followSearchedPerson(User searchedPerson) throws IOException {
+	public String followSearchedPerson(User searchedPerson) {
+		
+		Flash flash = FacesContext.getCurrentInstance()
+				.getExternalContext().getFlash();
+		flash.setKeepMessages(true);
 		
 		if(!findPersonInChatGroup(searchedPerson)){
 			this.searchedPerson = searchedPerson;
@@ -175,8 +179,14 @@ public class ChatListView implements Serializable {
 			
 			getChatListService().updateChatList(getChatList());
 			
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect("chat_list.xhtml?user=" + getLoggedUser().getTcno());
+			
+			
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Kişi ekleme işlemi başarıyla tamamlandı.", "");
+
+			FacesContext.getCurrentInstance().addMessage(
+					null, fm);
+			
 
 		}else{
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -184,11 +194,11 @@ public class ChatListView implements Serializable {
 			FacesContext.getCurrentInstance().addMessage("form_tcno", fm);
 		}
 		
+		return "chat_list.xhtml?faces-redirect=true&user="+getLoggedUser().getTcno();
+		
 	}
 
 	public void addChatGroup() throws IOException {
-		try {
-
 			
 			getChatGroup().setChatList(getChatList());
 			getChatList().getChatGroups().add(getChatGroup());
@@ -200,9 +210,6 @@ public class ChatListView implements Serializable {
 					.getExternalContext()
 					.redirect(
 							"chat_list.xhtml?user=" + getLoggedUser().getTcno());
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-		}
 
 	}
 

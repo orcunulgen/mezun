@@ -12,10 +12,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.Certification;
@@ -49,21 +49,18 @@ public class CertificationView implements Serializable {
 		this.selectedCertification = selectedCertification;
 	}
 
-	public void deleteSelectedCertification(Certification selectedCertification) throws IOException {
+	public void deleteSelectedCertification(Certification selectedCertification)
+			throws IOException {
 		initSelectedCertification(selectedCertification);
-		try {
-			getCertificationService().deleteCertification(
-					getSelectedCertification());
-			
-			FacesContext.getCurrentInstance()
-			.getExternalContext()
-			.redirect(
-					"certification.xhtml?user="
-							+ getLoggedUser().getTcno());
+		getCertificationService().deleteCertification(
+				getSelectedCertification());
 
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-		}
+		FacesContext
+				.getCurrentInstance()
+				.getExternalContext()
+				.redirect(
+						"certification.xhtml?user=" + getLoggedUser().getTcno());
+
 	}
 
 	public Certification getCertification() {
@@ -111,74 +108,71 @@ public class CertificationView implements Serializable {
 
 	}
 
-	public void addCertification() throws IOException {
-		try {
+	public String addCertification() {
 
-			Date registeredDate = new Date();
+		Date registeredDate = new Date();
 
-			int differenceStartRegister = Days.daysBetween(
-					new DateTime(getCertification().getCertificateDate()),
-					new DateTime(registeredDate)).getDays();
+		int differenceStartRegister = Days.daysBetween(
+				new DateTime(getCertification().getCertificateDate()),
+				new DateTime(registeredDate)).getDays();
 
-			if (differenceStartRegister > 0) {
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
 
-				getCertification().setUser(getLoggedUser());
-				getCertificationService().addCertification(getCertification());
+		if (differenceStartRegister > 0) {
 
-				FacesContext
-						.getCurrentInstance()
-						.getExternalContext()
-						.redirect(
-								"certification.xhtml?user="
-										+ getLoggedUser().getTcno());
+			getCertification().setUser(getLoggedUser());
+			getCertificationService().addCertification(getCertification());
 
-			} else {
-				FacesMessage fm = new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"Sertifikanın alındığı tarih geçmiş zamana ait olmalıdır.",
-						"Lütfen yeniden deneyiniz.");
-				FacesContext.getCurrentInstance().addMessage(null, fm);
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Kaydınız başarıyla tamamlandı.", "");
 
-			}
-		} catch (DataAccessException e) {
-			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+		} else {
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Sertifikanın alındığı tarih geçmiş zamana ait olmalıdır.",
+					"Lütfen yeniden deneyiniz.");
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+
 		}
 
+		return "certification.xhtml?faces-redirect=true&user="
+				+ getLoggedUser().getTcno();
 	}
 
-	public void updateCertification() throws IOException {
-		try {
+	public String updateCertification() {
 
-			Date registeredDate = new Date();
+		Date registeredDate = new Date();
 
-			int differenceStartRegister = Days.daysBetween(
-					new DateTime(getSelectedCertification()
-							.getCertificateDate()),
-					new DateTime(registeredDate)).getDays();
+		int differenceStartRegister = Days.daysBetween(
+				new DateTime(getSelectedCertification().getCertificateDate()),
+				new DateTime(registeredDate)).getDays();
 
-			if (differenceStartRegister > 0) {
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
 
-				getCertificationService().updateCertification(
-						getSelectedCertification());
+		if (differenceStartRegister > 0) {
 
-				FacesContext
-						.getCurrentInstance()
-						.getExternalContext()
-						.redirect(
-								"certification.xhtml?user="
-										+ getLoggedUser().getTcno());
+			getCertificationService().updateCertification(
+					getSelectedCertification());
 
-			} else {
-				FacesMessage fm = new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"Sertifikanın alındığı tarih geçmiş zamana ait olmalıdır.",
-						"Lütfen yeniden deneyiniz.");
-				FacesContext.getCurrentInstance().addMessage(null, fm);
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Kaydınız başarıyla güncellendi.", "");
 
-			}
-		} catch (DataAccessException e) {
-			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+
+		} else {
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Sertifikanın alındığı tarih geçmiş zamana ait olmalıdır.",
+					"Lütfen yeniden deneyiniz.");
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+
 		}
+
+		return "certification.xhtml?faces-redirect=true&user="
+				+ getLoggedUser().getTcno();
 
 	}
 

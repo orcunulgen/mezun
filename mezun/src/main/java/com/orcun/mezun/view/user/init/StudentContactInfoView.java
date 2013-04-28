@@ -1,14 +1,14 @@
 package com.orcun.mezun.view.user.init;
 
-import java.io.IOException;
 import java.io.Serializable;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.Contact;
@@ -28,10 +28,10 @@ public class StudentContactInfoView implements Serializable {
 
 	@ManagedProperty(value = "#{contactInfoService}")
 	private ContactInfoService contactInfoService;
-	
+
 	@ManagedProperty(value = "#{initStudentInfoService}")
 	private InitStudentInfoService initStudentInfoService;
-	
+
 	public User getLoggedUser() {
 		SecurityContext securityContext = (SecurityContext) FacesContext
 				.getCurrentInstance().getExternalContext().getSessionMap()
@@ -45,18 +45,18 @@ public class StudentContactInfoView implements Serializable {
 	}
 
 	public Contact getContact() {
-		
-		if(contact == null){
+
+		if (contact == null) {
 			contact = new Contact();
 		}
-		
-		if(contact.getUser()==null){
+
+		if (contact.getUser() == null) {
 			if (getContactInfoService().findContactByUser(getLoggedUser()) != null) {
-				setContact(getContactInfoService().findContactByUser(getLoggedUser()));
-			}	
+				setContact(getContactInfoService().findContactByUser(
+						getLoggedUser()));
+			}
 		}
-		
-		
+
 		return contact;
 	}
 
@@ -81,34 +81,48 @@ public class StudentContactInfoView implements Serializable {
 		this.initStudentInfoService = initStudentInfoService;
 	}
 
-	public void saveContact() throws IOException {
-		try {
-			if (getContactInfoService().findContactByUser(getLoggedUser()) != null) {
-				getContactInfoService().updateContact(getContact());
-			} else {
-				getContact().setUser(getLoggedUser());
-				getContactInfoService().addContact(getContact());
-			}
-			
-			if(!getInitStudentInfoService().IsValidInitStudentInfo(getLoggedUser())){
-				FacesContext
-				.getCurrentInstance()
-				.getExternalContext()
-				.redirect(
-						"init_student_info.xhtml?user="
-								+ getLoggedUser().getTcno());
-			}else{
-				FacesContext
-				.getCurrentInstance()
-				.getExternalContext()
-				.redirect(
-						"../index.xhtml");
-			}
-			
-
-		} catch (DataAccessException e) {
-			e.printStackTrace();
+	public String saveContact() {
+		if (getContactInfoService().findContactByUser(getLoggedUser()) != null) {
+			getContactInfoService().updateContact(getContact());
+		} else {
+			getContact().setUser(getLoggedUser());
+			getContactInfoService().addContact(getContact());
 		}
+
+		if (!getInitStudentInfoService()
+				.IsValidInitStudentInfo(getLoggedUser())) {
+			FacesMessage fm = new FacesMessage(
+					FacesMessage.SEVERITY_INFO,
+					"Kaydınız başarıyla güncellendi.Lütfen diğer temel bilgilerinizi de tamamlayınız.",
+					"");
+
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+
+			Flash flash = FacesContext.getCurrentInstance()
+					.getExternalContext().getFlash();
+			flash.setKeepMessages(true);
+
+			return "init_student_info.xhtml?faces-redirect=true&user="
+					+ getLoggedUser().getTcno();
+		} else {
+			FacesMessage fm = new FacesMessage(
+					FacesMessage.SEVERITY_INFO,
+					"Tüm temel bilgileriniz başarıyla kayıt altına alınmıştır.",
+					"");
+
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+
+			Flash flash = FacesContext.getCurrentInstance()
+					.getExternalContext().getFlash();
+			flash.setKeepMessages(true);
+
+			/*
+			 * FacesContext.getCurrentInstance().getExternalContext()
+			 * .redirect("../index.xhtml");
+			 */
+			return "/user_profile/index.xhtml?faces-redirect=true";
+		}
+
 	}
 
 }

@@ -3,12 +3,13 @@ package com.orcun.mezun.view.user;
 import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.User;
@@ -21,14 +22,13 @@ public class PersonalInfoView implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private User loggedUser;
-	
+
 	private String confirmEmail;
 	private String confirmPassword;
-	
-	
+
 	@ManagedProperty(value = "#{personalInfoService}")
 	private PersonalInfoService personalInfoService;
-	
+
 	@PostConstruct
 	public void init() {
 		SecurityContext securityContext = (SecurityContext) FacesContext
@@ -37,7 +37,7 @@ public class PersonalInfoView implements Serializable {
 
 		this.loggedUser = (User) securityContext.getAuthentication()
 				.getPrincipal();
-		
+
 	}
 
 	public PersonalInfoService getPersonalInfoService() {
@@ -49,11 +49,11 @@ public class PersonalInfoView implements Serializable {
 	}
 
 	public User getLoggedUser() {
-		
+
 		return loggedUser;
 
 	}
-	
+
 	public void setLoggedUser(User loggedUser) {
 		this.loggedUser = loggedUser;
 	}
@@ -75,14 +75,21 @@ public class PersonalInfoView implements Serializable {
 	}
 
 	public String updatePersonalInfo() {
-		try {
-			if (getLoggedUser() != null) {
-				getPersonalInfoService().updatePersonalInfo(getLoggedUser());
-			}
-		} catch (DataAccessException e) {
-			e.printStackTrace();
+		if (getLoggedUser() != null) {
+			getPersonalInfoService().updatePersonalInfo(getLoggedUser());
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Kaydınız başarıyla güncellendi.", "");
+
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+
 		}
-		return ("personal_info.xhtml?faces-redirect=true&user="+getLoggedUser().getTcno());
+
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
+
+		return ("personal_info.xhtml?faces-redirect=true&user=" + getLoggedUser()
+				.getTcno());
 	}
 
 }

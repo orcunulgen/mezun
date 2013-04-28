@@ -5,12 +5,140 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<!-- <f:metadata>
-		<f:event type="preRenderView" listener="#{personalInfoView.checkURL}" />
-	</f:metadata> -->
-	
-	<ui:define name="main_container">
 
+	<ui:define name="bread_crumb_container">
+
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+			<p:menuitem value="Hesap Ayarları"
+				url="profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+			<p:menuitem value="İlgi Alanları"
+				url="area_of_interest.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+		</p:breadCrumb>
+
+	</ui:define>
+	<ui:define name="main_container">
+		<h:outputStylesheet library="css"
+			name="user_profile/area_of_interest.css" />
+		<div class="area_of_interest">
+
+			<h:form id="list_area_of_interest_form">
+				<p:growl id="list_area_of_interest_messages" />
+				<p:fieldset legend="İlgi Alanları">
+					<p:dataTable var="areaOfInterestList"
+						value="#{areaOfInterestView.areaOfInterests}" paginator="true"
+						rows="10">
+						<p:column style="width:15%">
+							<f:facet name="header">
+								<h:outputLabel value="İşlemler" />
+							</f:facet>
+							<p:commandButton id="selectButton"
+								actionListener="#{areaOfInterestView.initSelectedAreaOfInterest(areaOfInterestList)}"
+								update=":area_of_interest_dialog_form"
+								oncomplete="areaOfInterestUpdateDialog.show()"
+								icon="ui-icon-search" title="View">
+							</p:commandButton>
+							<p:commandButton id="deleteButton"
+								actionListener="#{areaOfInterestView.deleteSelectedAreaOfInterest(areaOfInterestList)}"
+								icon="ui-icon-close" title="Delete">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Başlık" />
+							</f:facet>
+							<h:outputLabel value="#{areaOfInterestList.areaOfInterestTitle}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Deneyim Seviyesi" />
+							</f:facet>
+							<p:rating value="#{areaOfInterestList.experienceLevel}"
+								stars="10" />
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
+			</h:form>
+
+			<p:dialog position="top" header="İlgi Alanı Ayrıntıları"
+				widgetVar="areaOfInterestUpdateDialog" resizable="false"
+				id="areaOfInterestUpdateDlg" showEffect="fade" modal="true">
+				<h:form id="area_of_interest_dialog_form">
+					<p:growl id="selected_area_of_interest_dialog_messages" />
+					<p:panelGrid styleClass="no_border"
+						id="area_of_interest_detail_display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputLabel value="Başlık :" />
+						<p:inputText
+							value="#{areaOfInterestView.selectedAreaOfInterest.areaOfInterestTitle}"
+							required="true"
+							requiredMessage="Lütfen ilgi alanınız için bir başlık giriniz." />
+
+						<h:outputLabel value="Açıklama :" />
+						<p:inputTextarea
+							value="#{areaOfInterestView.selectedAreaOfInterest.areaOfInterestName}"
+							rows="5" cols="50" maxlength="100" autoResize="false"
+							required="true"
+							requiredMessage="Lütfen ilgi alanınıza ait detayları anlatınız." />
+
+						<h:outputLabel value="Deneyim Seviyesi :" />
+						<p:rating
+							value="#{areaOfInterestView.selectedAreaOfInterest.experienceLevel}"
+							stars="10" required="true"
+							requiredMessage="Lütfen bir seviye belirleyiniz." />
+
+					</p:panelGrid>
+					<p:commandButton
+						action="#{areaOfInterestView.updateAreaOfInterest}" value="Kaydet"
+						ajax="true" icon="ui-icon-disk"
+						update=":area_of_interest_dialog_form" />
+				</h:form>
+			</p:dialog>
+
+
+
+
+			<p:commandButton value="Yeni İlgi Alanı Ekle" type="button"
+				onclick="areaOfInterestAddDialog.show()" icon="ui-icon-plus" />
+			<p:dialog header="Yeni İlgi Alanı Ekle"
+				widgetVar="areaOfInterestAddDialog" resizable="false"
+				id="areaOfInterestAddDlg" showEffect="fade" modal="true">
+				<h:form id="dialog_area_of_interest_add_form">
+					<p:growl id="area_of_interest_add_messages" />
+					<p:panelGrid styleClass="no_border"
+						id="area_of_interest_add_display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputLabel value="Başlık :" />
+						<p:inputText
+							value="#{areaOfInterestView.areaOfInterest.areaOfInterestTitle}"
+							required="true"
+							requiredMessage="Lütfen ilgi alanınız için bir başlık giriniz." />
+
+						<h:outputLabel value="Açıklama :" />
+						<p:inputTextarea
+							value="#{areaOfInterestView.areaOfInterest.areaOfInterestName}"
+							rows="5" cols="50" maxlength="100" autoResize="false"
+							required="true"
+							requiredMessage="Lütfen ilgi alanınıza ait detayları anlatınız." />
+
+						<h:outputLabel value="Deneyim Seviyesi :" />
+						<p:rating
+							value="#{areaOfInterestView.areaOfInterest.experienceLevel}"
+							stars="10" required="true"
+							requiredMessage="Lütfen bir seviye belirleyiniz." />
+
+
+
+					</p:panelGrid>
+					<p:commandButton action="#{areaOfInterestView.addAreaOfInterest}"
+						value="Ekle" ajax="true" icon="ui-icon-disk"
+						update=":list_area_of_interest_form" />
+				</h:form>
+			</p:dialog>
+		</div>
 
 	</ui:define>
 </ui:composition>

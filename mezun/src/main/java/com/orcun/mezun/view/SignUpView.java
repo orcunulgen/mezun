@@ -14,6 +14,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
 import org.primefaces.event.FlowEvent;
 import org.springframework.dao.DataAccessException;
@@ -133,15 +134,35 @@ public class SignUpView implements Serializable {
 				user.setRoles(userRoles);
 
 				getSignUpService().addUser(user);
-				return ("login.xhtml?faces-redirect=true");
-			} else {
-				return ("fail.xhtml?faces-redirect=true");
-			}
+				
+				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Kaydınız başarıyla tamamlandı.", "");
 
+				FacesContext.getCurrentInstance().addMessage(
+						null, fm);
+
+				Flash flash = FacesContext.getCurrentInstance()
+						.getExternalContext().getFlash();
+				flash.setKeepMessages(true);
+				
+				
+				return ("login.xhtml?faces-redirect=true");
+			}
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}
-		return ("fail.xhtml?faces-redirect=true");
+
+		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Kaydınız tamamlanamadı.Lütfen daha sonra tekrar deneyin.", "");
+
+		FacesContext.getCurrentInstance().addMessage(
+				null, fm);
+
+		Flash flash = FacesContext.getCurrentInstance()
+				.getExternalContext().getFlash();
+		flash.setKeepMessages(true);
+
+		return ("sign_up.xhtml?faces-redirect=true");
 	}
 
 	public boolean checkUserTcno(User user) {

@@ -1,6 +1,5 @@
 package com.orcun.mezun.view.user;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +10,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
 import org.joda.time.DateTime;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.GradingSystem;
@@ -101,38 +100,39 @@ public class HighSchoolView implements Serializable {
 
 	}
 
-	public void saveHighSchool() throws IOException {
-		try {
+	public String saveHighSchool() {
 
-			DateTime registeredDate = new DateTime();
+		DateTime registeredDate = new DateTime();
 
-			int differenceEndRegister = registeredDate.getYear()
-					- getHighSchool().getEndYear();
+		int differenceEndRegister = registeredDate.getYear()
+				- getHighSchool().getEndYear();
 
-			if (differenceEndRegister > 0) {
-				if (getHighSchoolService()
-						.findHighSchoolByUser(getLoggedUser()) != null) {
-					getHighSchoolService().updateHighSchool(getHighSchool());
-				} else {
-					getHighSchool().setUser(getLoggedUser());
-					getHighSchoolService().addHighSchool(getHighSchool());
-				}
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
 
-				FacesContext
-						.getCurrentInstance()
-						.getExternalContext()
-						.redirect(
-								"high_school.xhtml?user="
-										+ getLoggedUser().getTcno());
+		if (differenceEndRegister > 0) {
+			if (getHighSchoolService().findHighSchoolByUser(getLoggedUser()) != null) {
+				getHighSchoolService().updateHighSchool(getHighSchool());
 			} else {
-				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-						"Bitiş tarihi geçmiş zamana ait olmalıdır.",
-						"Lütfen yeniden deneyiniz.");
-				FacesContext.getCurrentInstance().addMessage(null, fm);
+				getHighSchool().setUser(getLoggedUser());
+				getHighSchoolService().addHighSchool(getHighSchool());
 			}
-		} catch (DataAccessException e) {
-			e.printStackTrace();
+
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Kaydınız başarıyla güncellendi.", "");
+
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+
+		} else {
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Bitiş tarihi geçmiş zamana ait olmalıdır.",
+					"Lütfen yeniden deneyiniz.");
+			FacesContext.getCurrentInstance().addMessage(null, fm);
 		}
+
+		return "high_school.xhtml?faces-redirect=true&user="
+				+ getLoggedUser().getTcno();
 	}
 
 }

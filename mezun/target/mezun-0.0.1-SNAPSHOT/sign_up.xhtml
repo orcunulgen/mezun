@@ -12,13 +12,13 @@
 			<h:form id="form_sign_up_panel" enctype="multipart/form-data"
 				prependId="false">
 
-				<p:growl id="form_sign_up_messages" showDetail="true" />
+				<p:growl id="form_sign_up_messages" />
 				<p:fieldset legend="Yeni Üye Kayıt Formu">
-					<p:panelGrid>
+					<p:panelGrid styleClass="no_border">
 
 						<p:row>
 							<p:column>
-								<h:outputLabel for="form_name" value="İsim" />
+								<h:outputLabel value="İsim *" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_name" value="#{signUpView.user.name}"
@@ -27,7 +27,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel for="form_surname" value="Soyisim" />
+								<h:outputLabel value="Soyisim *" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_surname"
@@ -42,7 +42,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel for="form_password" value="Şifre" />
+								<h:outputLabel value="Şifre *" />
 							</p:column>
 							<p:column>
 								<p:password id="form_password"
@@ -53,7 +53,7 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel for="form_confirm_password" value="Şifre Tekrarı" />
+								<h:outputLabel value="Şifre Tekrarı *" />
 							</p:column>
 							<p:column>
 								<p:password id="form_confirm_password"
@@ -64,18 +64,22 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel for="form_email" value="E-Mail" />
+								<h:outputLabel value="E-Mail *" />
 							</p:column>
 							<p:column>
-								<p:inputText id="form_email" validator="emailValidator"
-									value="#{signUpView.user.email}" required="true"
-									requiredMessage="Lütfen e-mail adresi giriniz.">
+								<p:inputText id="form_email" value="#{signUpView.user.email}"
+									required="true" requiredMessage="Lütfen e-mail adresi giriniz.">
+									<f:validator validatorId="emailFormatValidator" />
+									<f:validator validatorId="emailMatchValidator" />
+									<f:validator validatorId="emailUniquenessValidator" />
+
 									<p:ajax event="blur" update="form_sign_up_messages" />
+									<f:attribute name="formName" value="form_sign_up_panel" />
 								</p:inputText>
 							</p:column>
 
 							<p:column>
-								<h:outputLabel for="form_confirm_email" value="E-Mail Tekrarı" />
+								<h:outputLabel value="E-Mail Tekrarı *" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_confirm_email"
@@ -86,7 +90,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel for="form_birthday_year" value="Doğum yılı" />
+								<h:outputLabel value="Doğum yılı *" />
 							</p:column>
 							<p:column>
 								<p:selectOneMenu id="form_birthday_year" required="true"
@@ -99,24 +103,79 @@
 							</p:column>
 
 							<p:column>
-								<h:outputLabel for="form_tcno" value="TC kimlik numarası" />
+								<h:outputLabel value="TC kimlik numarası *" />
 							</p:column>
 							<p:column>
 								<p:inputMask id="form_tcno" value="#{signUpView.user.tcno}"
 									mask="99999999999" required="true"
 									requiredMessage="Lütfen TC kimlik numaranızı giriniz.">
+									<f:validator validatorId="tcnoUniquenessValidator" />
+
 									<p:ajax event="blur" update="form_sign_up_messages" />
+									<f:attribute name="formName" value="form_sign_up_panel" />
 								</p:inputMask>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Doğduğu Ülke *" />
+							</p:column>
+							<p:column colspan="3">
+								<p:selectOneMenu validator="countryValidator"
+									converter="countryConverter" value="#{signUpView.user.country}">
+									<f:selectItem itemValue="0" itemLabel="Lütfen bir ülke seçiniz" />
+									<f:selectItems value="#{signUpView.countries}" var="country"
+										itemValue="#{country}" itemLabel="#{country.countryName}" />
+									<p:ajax listener="#{signUpView.updateUserChangeCountry}"
+										event="change" update="form_update_user_city" />
+
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Doğduğu Şehir *" />
+							</p:column>
+							<p:column colspan="3">
+								<p:selectOneMenu validator="cityValidator"
+									converter="cityConverter" id="form_update_user_city"
+									value="#{signUpView.user.city}">
+									<f:selectItem itemValue="0"
+										itemLabel="Lütfen bir şehir seçiniz" />
+									<f:selectItems value="#{signUpView.userCities}" var="city"
+										itemValue="#{city}" itemLabel="#{city.cityName}" />
+								</p:selectOneMenu>
 							</p:column>
 						</p:row>
 
 						<p:row>
-							<p:column colspan="4">
-								<p:commandButton value="Kaydet" action="#{signUpView.saveUser}"
-									ajax="false" update="form_sign_up_messages" />
+							<p:column colspan="3">
+								<h:outputLabel
+									value="YTÜ Bilgisayar Mühendisliği mezunu musunuz? " />
+							</p:column>
+							<p:column>
+								<p:selectBooleanButton value="#{signUpView.isAlumni}"
+									onLabel="Evet" offLabel="Hayır" onIcon="ui-icon-check"
+									offIcon="ui-icon-close">
+								</p:selectBooleanButton>
 							</p:column>
 						</p:row>
+						<p:row>
+							<p:column colspan="3">
+								<h:outputLabel
+									value="Duyuru ve Etkinliklerden haberdar olmak ister misiniz? " />
+							</p:column>
+							<p:column>
+								<p:selectBooleanButton value="#{signUpView.user.sendMail}"
+									onLabel="Evet" offLabel="Hayır" onIcon="ui-icon-check"
+									offIcon="ui-icon-close">
+								</p:selectBooleanButton>
+							</p:column>
+						</p:row>
+
 					</p:panelGrid>
+					<p:commandButton value="Kaydet" action="#{signUpView.saveUser}"
+						ajax="false" update="form_sign_up_messages" />
 				</p:fieldset>
 
 			</h:form>

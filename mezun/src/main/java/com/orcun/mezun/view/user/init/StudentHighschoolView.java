@@ -1,6 +1,5 @@
 package com.orcun.mezun.view.user.init;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +10,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
 import org.joda.time.DateTime;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.GradingSystem;
@@ -114,8 +113,7 @@ public class StudentHighschoolView implements Serializable {
 
 	}
 
-	public void saveHighSchool() throws IOException {
-		try {
+	public String saveHighSchool()  {
 
 			DateTime registeredDate = new DateTime();
 
@@ -132,15 +130,36 @@ public class StudentHighschoolView implements Serializable {
 
 				if (!getInitStudentInfoService().IsValidInitStudentInfo(
 						getLoggedUser())) {
-					FacesContext
-							.getCurrentInstance()
-							.getExternalContext()
-							.redirect(
-									"init_student_info.xhtml?user="
-											+ getLoggedUser().getTcno());
+					FacesMessage fm = new FacesMessage(
+							FacesMessage.SEVERITY_INFO,
+							"Kaydınız başarıyla güncellendi.Lütfen diğer temel bilgilerinizi de tamamlayınız.",
+							"");
+
+					FacesContext.getCurrentInstance().addMessage(null, fm);
+
+					Flash flash = FacesContext.getCurrentInstance()
+							.getExternalContext().getFlash();
+					flash.setKeepMessages(true);
+
+					return "init_student_info.xhtml?faces-redirect=true&user="
+							+ getLoggedUser().getTcno();
 				} else {
-					FacesContext.getCurrentInstance().getExternalContext()
-							.redirect("../index.xhtml");
+					FacesMessage fm = new FacesMessage(
+							FacesMessage.SEVERITY_INFO,
+							"Tüm temel bilgileriniz başarıyla kayıt altına alınmıştır.",
+							"");
+
+					FacesContext.getCurrentInstance().addMessage(null, fm);
+
+					Flash flash = FacesContext.getCurrentInstance()
+							.getExternalContext().getFlash();
+					flash.setKeepMessages(true);
+
+					/*
+					 * FacesContext.getCurrentInstance().getExternalContext()
+					 * .redirect("../index.xhtml");
+					 */
+					return "/user_profile/index.xhtml?faces-redirect=true";
 				}
 
 			} else {
@@ -148,10 +167,9 @@ public class StudentHighschoolView implements Serializable {
 						"Bitiş tarihi geçmiş zamana ait olmalıdır.",
 						"Lütfen yeniden deneyiniz.");
 				FacesContext.getCurrentInstance().addMessage(null, fm);
+				
+				return "init_student_info.xhtml?faces-redirect=true&user="+getLoggedUser().getTcno();
 			}
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-		}
 	}
 
 }

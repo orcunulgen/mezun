@@ -1,6 +1,5 @@
 package com.orcun.mezun.view.admin;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +10,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
 import org.primefaces.event.FlowEvent;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.AdminBasicInfo;
@@ -133,29 +132,37 @@ public class InitAdminBasicInfoView implements Serializable {
 
 	}
 
-	public void saveInitAdminBasicInfo() throws IOException {
+	public String saveInitAdminBasicInfo(){
 
-		try {
 
 			getAdminBasicInfo().setUser(getLoggedUser());
 			if (getInitAdminBasicInfoService().saveInitAdminBasicInfo(getAdminBasicInfo())) {
-				FacesContext
-						.getCurrentInstance()
-						.getExternalContext()
-						.redirect(
-								"index.xhtml");
+				FacesMessage fm = new FacesMessage(
+						FacesMessage.SEVERITY_INFO,
+						"Admin konfigürasyon bilgileri başarıyla kayıt altına alındı.",
+						"");
 
+				FacesContext.getCurrentInstance().addMessage(null, fm);
+
+				Flash flash = FacesContext.getCurrentInstance()
+						.getExternalContext().getFlash();
+				flash.setKeepMessages(true);
+
+				return "/admin_profile/index.xhtml?faces-redirect=true";
 			} else {
 				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
 						"Admin konfigürasyon bilgileri kaydedilemedi.",
 						"Lütfen daha sonra yeniden deneyiniz.");
 				FacesContext.getCurrentInstance().addMessage(null, fm);
+				
+				Flash flash = FacesContext.getCurrentInstance()
+						.getExternalContext().getFlash();
+				flash.setKeepMessages(true);
 
+				return "/admin_profile/init_admin_basic_info.xhtml?faces-redirect=true";
 			}
 
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-		}
+
 
 	}
 

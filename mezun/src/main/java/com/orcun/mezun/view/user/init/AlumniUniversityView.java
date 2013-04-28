@@ -1,6 +1,5 @@
 package com.orcun.mezun.view.user.init;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +10,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
 import org.joda.time.DateTime;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.Department;
@@ -163,51 +162,68 @@ public class AlumniUniversityView implements Serializable {
 		this.initAlumniInfoService = initAlumniInfoService;
 	}
 
-	public void saveAlumniUniversity() throws IOException {
-		try {
+	public String saveAlumniUniversity() {
 
-			DateTime registeredDate = new DateTime();
+		DateTime registeredDate = new DateTime();
 
-			int differenceStartEnd = getEducationInfo().getEndYear()
-					- getEducationInfo().getStartYear();
+		int differenceStartEnd = getEducationInfo().getEndYear()
+				- getEducationInfo().getStartYear();
 
-			int differenceStartRegister = registeredDate.getYear()
-					- getEducationInfo().getStartYear();
-			
-			int differenceEndRegister = registeredDate.getYear()
-					- getEducationInfo().getEndYear();
+		int differenceStartRegister = registeredDate.getYear()
+				- getEducationInfo().getStartYear();
 
-			if (differenceStartEnd > 0 && differenceStartRegister > 0
-					&& differenceEndRegister >= 0) {
+		int differenceEndRegister = registeredDate.getYear()
+				- getEducationInfo().getEndYear();
 
-				getEducationInfo().setUser(getLoggedUser());
-				getEducationInfoService().addEducationInfo(getEducationInfo());
+		if (differenceStartEnd > 0 && differenceStartRegister > 0
+				&& differenceEndRegister >= 0) {
 
-				if (!getInitAlumniInfoService().IsValidInitAlumniInfo(
-						getLoggedUser())) {
-					FacesContext
-							.getCurrentInstance()
-							.getExternalContext()
-							.redirect(
-									"init_alumni_info.xhtml?user="
-											+ getLoggedUser().getTcno());
-				} else {
-					FacesContext.getCurrentInstance().getExternalContext()
-							.redirect("../index.xhtml");
-				}
+			getEducationInfo().setUser(getLoggedUser());
+			getEducationInfoService().addEducationInfo(getEducationInfo());
 
-			} else {
+			if (!getInitAlumniInfoService().IsValidInitAlumniInfo(
+					getLoggedUser())) {
 				FacesMessage fm = new FacesMessage(
-						FacesMessage.SEVERITY_ERROR,
-						"Üniversite başlangıç ve bitiş tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
-						"Lütfen yeniden deneyiniz.");
+						FacesMessage.SEVERITY_INFO,
+						"Kaydınız başarıyla güncellendi.Lütfen diğer temel bilgilerinizi de tamamlayınız.",
+						"");
+
 				FacesContext.getCurrentInstance().addMessage(null, fm);
 
-			}
+				Flash flash = FacesContext.getCurrentInstance()
+						.getExternalContext().getFlash();
+				flash.setKeepMessages(true);
 
-		} catch (DataAccessException e) {
-			e.printStackTrace();
+				return "init_alumni_info.xhtml?faces-redirect=true&user="
+						+ getLoggedUser().getTcno();
+			} else {
+				FacesMessage fm = new FacesMessage(
+						FacesMessage.SEVERITY_INFO,
+						"Tüm temel bilgileriniz başarıyla kayıt altına alınmıştır.",
+						"");
+
+				FacesContext.getCurrentInstance().addMessage(null, fm);
+
+				Flash flash = FacesContext.getCurrentInstance()
+						.getExternalContext().getFlash();
+				flash.setKeepMessages(true);
+
+				/*
+				 * FacesContext.getCurrentInstance().getExternalContext()
+				 * .redirect("../index.xhtml");
+				 */
+				return "/user_profile/index.xhtml?faces-redirect=true";
+			}
+		} else {
+			FacesMessage fm = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR,
+					"Üniversite başlangıç ve bitiş tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
+					"Lütfen yeniden deneyiniz.");
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+			return "init_alumni_info.xhtml?faces-redirect=true&user="
+					+ getLoggedUser().getTcno();
 		}
+
 	}
 
 }

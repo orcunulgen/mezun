@@ -4,15 +4,18 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<ui:define name="bread_crumb_container">
 
 
-		<p:breadCrumb>
-			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
-		</p:breadCrumb>
-
 	</ui:define>
 
+	<ui:define name="main_container">
+
+		<h:form>
+			<p:growl id="form_user_profile_messages" />
+		</h:form>
+		Tüm postlar burada olacak...
+	</ui:define>
 
 </ui:composition>

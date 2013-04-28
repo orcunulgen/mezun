@@ -11,4 +11,10 @@
 	</application>
 
 
+
+	<!-- <lifecycle>
+		<phase-listener>com.orcun.mezun.phaselistener.InitUserInfoPhaseListener</phase-listener>
+	</lifecycle> -->
+
+
 </faces-config>

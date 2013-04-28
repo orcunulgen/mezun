@@ -1,0 +1,53 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:view encoding="UTF-8" contentType="text/html">
+	<h:head>
+		<title>Mezun Bilgi Sistemi</title>
+		<h:outputStylesheet library="css" name="style.css" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	</h:head>
+
+	<h:body>
+		<div class="body_panel">
+
+			<div class="header_panel">
+				<div class="logo"></div>
+				<div class="menu">
+					<p:menubar>
+						<p:menuitem value="Anasayfa" url="/admin_profile/index.xhtml"
+							icon="ui-icon-home" />
+						<p:menuitem value="Profilim" url="/user_profile/index.xhtml"
+							icon="ui-icon-person" />
+						<p:menuitem value="Çıkış" url="/logout" icon="ui-icon-close" />
+
+					</p:menubar>
+				</div>
+				<div class="welcome">
+					<h:outputLabel style="float:right;"
+						value="Hoşgeldiniz , #{adminPanelView.loggedUser.name} #{adminPanelView.loggedUser.surname} ">
+						<!-- <h:outputLink value="#{facesContext.externalContext.requestContextPath}/logout">Çıkış</h:outputLink> -->
+					</h:outputLabel>
+
+				</div>
+
+			</div>
+
+			<div class="main_panel">
+				<div class="main_panel_left"></div>
+				<div class="main_panel_middle">
+					<ui:insert name="main_container" />
+				</div>
+				<div class="main_panel_right"></div>
+
+			</div>
+
+			<div class="footer_panel"></div>
+
+		</div>
+	</h:body>
+</f:view>
+</html>

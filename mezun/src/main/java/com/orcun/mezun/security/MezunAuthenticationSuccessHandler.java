@@ -47,6 +47,17 @@ public class MezunAuthenticationSuccessHandler extends
 						.getExternalContext();
 				response.sendRedirect(exCtx.getRequestContextPath()
 						+ "/admin_profile/init_admin_basic_info.xhtml");
+			}else if (hasRole("ROLE_ALUMNI", loggedUser)) {
+
+				InitAlumniInfoService initAlumniInfoService = (InitAlumniInfoService) appContext
+						.getBean("initAlumniInfoService");
+
+				if (!initAlumniInfoService.IsValidInitAlumniInfo(loggedUser)) {
+					ExternalContext exCtx = FacesContext.getCurrentInstance()
+							.getExternalContext();
+					response.sendRedirect(exCtx.getRequestContextPath()
+							+ "/user_profile/init/init_alumni_info.xhtml");
+				}
 			}
 
 		} else if (hasRole("ROLE_STUDENT", loggedUser)) {

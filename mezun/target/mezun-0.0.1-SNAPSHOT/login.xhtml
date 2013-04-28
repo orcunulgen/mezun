@@ -11,13 +11,13 @@
 
 		<h:form id="form_login_panel" prependId="false">
     	<div class="login_panel">
-    	 	<p:growl id="login_panel_messages" showDetail="true"/>
+    	 	<p:growl id="login_panel_messages"/>
     	 	<p:outputPanel style="text-align:center;color: red; font-weight: bold;"
 				rendered="#{not empty param['error']}">
 				Geçersiz kullanıcı adı veya şifre.Lütfen yeniden deneyiniz.
 			</p:outputPanel>
     		<p:fieldset legend="Kullanıcı Girişi">
-    			<h:panelGrid columns="3">
+    			<p:panelGrid styleClass="no_border" columns="3">
     				<h:outputLabel for="j_username" value="Email Adresiniz :" />
 					<h:inputText id="j_username" required="true" 
 					requiredMessage="Lütfen email adresinizi giriniz."  />
@@ -27,10 +27,10 @@
 					requiredMessage="Lütfen şifre giriniz."  />
 					<p:message for="j_password" display="icon"/>
 					
-					<p:commandButton value="Giriş" action="#{loginView.login}" update="login_panel_messages" ajax="false"/>    
-					<p:commandLink  action="sign_up.xhtml?faces-redirect=true" value="Yeni Üye Kaydı" ajax="false" immediate="true"/>  
+					<p:commandButton icon="ui-icon-carat-1-ne" value="Giriş" action="#{loginView.login}" update="login_panel_messages" ajax="false"/>
+					<h:outputLink value="#{facesContext.externalContext.requestContextPath}/sign_up.xhtml">Yeni Üye Kaydı</h:outputLink>    
         			 
-    	  		</h:panelGrid>
+    	  		</p:panelGrid>
 			</p:fieldset>  
       	</div>
       	</h:form>

@@ -1,14 +1,14 @@
 package com.orcun.mezun.view.user;
 
-import java.io.IOException;
 import java.io.Serializable;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.Contact;
@@ -41,18 +41,18 @@ public class ContactInfoView implements Serializable {
 	}
 
 	public Contact getContact() {
-		
-		if(contact == null){
+
+		if (contact == null) {
 			contact = new Contact();
 		}
-		
-		if(contact.getUser()==null){
+
+		if (contact.getUser() == null) {
 			if (getContactInfoService().findContactByUser(getLoggedUser()) != null) {
-				setContact(getContactInfoService().findContactByUser(getLoggedUser()));
-			}	
+				setContact(getContactInfoService().findContactByUser(
+						getLoggedUser()));
+			}
 		}
-		
-		
+
 		return contact;
 	}
 
@@ -68,25 +68,25 @@ public class ContactInfoView implements Serializable {
 		this.contactInfoService = contactInfoService;
 	}
 
-	public void saveContact() throws IOException {
-		try {
-			if (getContactInfoService().findContactByUser(getLoggedUser()) != null) {
-				getContactInfoService().updateContact(getContact());
-			} else {
-				getContact().setUser(getLoggedUser());
-				getContactInfoService().addContact(getContact());
-			}
-			
-			FacesContext
-			.getCurrentInstance()
-			.getExternalContext()
-			.redirect(
-					"contact_info.xhtml?user="
-							+ getLoggedUser().getTcno());
-
-		} catch (DataAccessException e) {
-			e.printStackTrace();
+	public String saveContact() {
+		if (getContactInfoService().findContactByUser(getLoggedUser()) != null) {
+			getContactInfoService().updateContact(getContact());
+		} else {
+			getContact().setUser(getLoggedUser());
+			getContactInfoService().addContact(getContact());
 		}
+
+		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Kaydınız başarıyla güncellendi.", "");
+
+		FacesContext.getCurrentInstance().addMessage(null, fm);
+
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
+
+		return ("contact_info.xhtml?faces-redirect=true&user=" + getLoggedUser()
+				.getTcno());
 	}
 
 }

@@ -1,6 +1,5 @@
 package com.orcun.mezun.view.user;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -9,12 +8,13 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.ParentInfo;
@@ -28,14 +28,14 @@ public class ParentInfoView implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private User loggedUser;
-	
+
 	private ParentInfo parentInfo;
-	
+
 	private List<Integer> birthdayYears = new ArrayList<Integer>();
-	
+
 	@ManagedProperty(value = "#{parentInfoService}")
 	private ParentInfoService parentInfoService;
-	
+
 	@PostConstruct
 	public void init() {
 		SecurityContext securityContext = (SecurityContext) FacesContext
@@ -45,17 +45,16 @@ public class ParentInfoView implements Serializable {
 		this.loggedUser = (User) securityContext.getAuthentication()
 				.getPrincipal();
 
-		
-		
 		if (parentInfo == null) {
-			parentInfo=new ParentInfo();
+			parentInfo = new ParentInfo();
 
 		}
-		
-		if(parentInfo.getUser()==null){
+
+		if (parentInfo.getUser() == null) {
 			if (getParentInfoService().findParentInfoByUser(getLoggedUser()) != null) {
-				setParentInfo(getParentInfoService().findParentInfoByUser(getLoggedUser()));
-			}	
+				setParentInfo(getParentInfoService().findParentInfoByUser(
+						getLoggedUser()));
+			}
 		}
 	}
 
@@ -76,7 +75,6 @@ public class ParentInfoView implements Serializable {
 		this.birthdayYears = birthdayYears;
 	}
 
-	
 	public ParentInfoService getParentInfoService() {
 		return parentInfoService;
 	}
@@ -86,11 +84,11 @@ public class ParentInfoView implements Serializable {
 	}
 
 	public User getLoggedUser() {
-		
+
 		return loggedUser;
 
 	}
-	
+
 	public void setLoggedUser(User loggedUser) {
 		this.loggedUser = loggedUser;
 	}
@@ -103,19 +101,26 @@ public class ParentInfoView implements Serializable {
 		this.parentInfo = parentInfo;
 	}
 
-	public void saveParentInfo() throws IOException {
-		try {
-			if (getParentInfoService().findParentInfoByUser(getLoggedUser()) != null) {
-				getParentInfoService().updateParentInfo(getParentInfo());
-			} else {
-				getParentInfo().setUser(getLoggedUser());
-				getParentInfoService().addParentInfo(getParentInfo());
-			}
-			FacesContext.getCurrentInstance().getExternalContext()
-			.redirect("parent_info.xhtml?user="+getLoggedUser().getTcno());
-		} catch (DataAccessException e) {
-			e.printStackTrace();
+	public String saveParentInfo() {
+
+		if (getParentInfoService().findParentInfoByUser(getLoggedUser()) != null) {
+			getParentInfoService().updateParentInfo(getParentInfo());
+		} else {
+			getParentInfo().setUser(getLoggedUser());
+			getParentInfoService().addParentInfo(getParentInfo());
 		}
+
+		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Kaydınız başarıyla güncellendi.", "");
+
+		FacesContext.getCurrentInstance().addMessage(null, fm);
+
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
+
+		return ("parent_info.xhtml?faces-redirect=true&user=" + getLoggedUser()
+				.getTcno());
 	}
 
 }

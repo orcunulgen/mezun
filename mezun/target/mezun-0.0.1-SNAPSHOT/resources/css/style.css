@@ -1,12 +1,13 @@
 .body_panel{
 	height:auto;
-	width: 1024px;
+	width: 1000px;
 	margin: auto;
+	
 }
 
 	.header_panel{
 		max-height: 150px;
-		width:80%;	
+		width:100%;	
 		margin: auto;
 	}
 		.logo{
@@ -20,16 +21,67 @@
 			width:100%;
 			margin: auto;
 		}
+		
+		.welcome{
+			height: 20px;
+			width: 100%;
+			margin: auto;
+		}
+		
+		.bread_crumb{
+			height:35px;
+			width:auto;
+			margin:auto;
+		}
+			.ui-breadcrumb ul li a{
+				text-decoration: none;
+			}
 
 	.main_panel{
 		height: auto;
 		min-height: 600px;
-		width: 80%;
-		margin: auto;
+		width: 100%;
+		margin: 60px auto;
 	}
+		.main_panel_left{
+			height: auto;
+			min-height: 600px;
+			width: 20%;
+			float: left;
+		}
+		.main_panel_middle{
+			height: auto;
+			min-height: 600px;
+			width: 60%;
+			float: left;
+		}
+		
+		.main_panel_right{
+			height: auto;
+			min-height: 600px;
+			width: 20%;
+			float: left;
+		}
 
 	.footer_panel{
-		max-height: 100px;
-		width: 80%;
+		height: 100px;
+		width: 100%;
 		margin:auto;
 	}
+	
+.ui-widget{
+	font-size:0.9em;
+}
+
+.ui-widget .ui-widget{
+	font-size:0.9em;
+}
+
+label{
+	font-size:0.9em;
+}
+
+.no_border tr , .no_border td{
+	background: none !important;
+    border: none !important;
+}

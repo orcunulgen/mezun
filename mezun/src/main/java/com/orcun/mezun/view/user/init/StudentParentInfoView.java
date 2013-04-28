@@ -1,6 +1,5 @@
 package com.orcun.mezun.view.user.init;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -9,12 +8,13 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.model.ParentInfo;
@@ -114,30 +114,48 @@ public class StudentParentInfoView implements Serializable {
 		this.parentInfo = parentInfo;
 	}
 
-	public void saveParentInfo() throws IOException {
-		try {
-			if (getParentInfoService().findParentInfoByUser(getLoggedUser()) != null) {
-				getParentInfoService().updateParentInfo(getParentInfo());
-			} else {
-				getParentInfo().setUser(getLoggedUser());
-				getParentInfoService().addParentInfo(getParentInfo());
-			}
-
-			if (!getInitStudentInfoService().IsValidInitStudentInfo(
-					getLoggedUser())) {
-				FacesContext
-						.getCurrentInstance()
-						.getExternalContext()
-						.redirect(
-								"init_student_info.xhtml?user="
-										+ getLoggedUser().getTcno());
-			} else {
-				FacesContext.getCurrentInstance().getExternalContext()
-						.redirect("../index.xhtml");
-			}
-		} catch (DataAccessException e) {
-			e.printStackTrace();
+	public String saveParentInfo() {
+		if (getParentInfoService().findParentInfoByUser(getLoggedUser()) != null) {
+			getParentInfoService().updateParentInfo(getParentInfo());
+		} else {
+			getParentInfo().setUser(getLoggedUser());
+			getParentInfoService().addParentInfo(getParentInfo());
 		}
+
+		if (!getInitStudentInfoService()
+				.IsValidInitStudentInfo(getLoggedUser())) {
+			FacesMessage fm = new FacesMessage(
+					FacesMessage.SEVERITY_INFO,
+					"Kaydınız başarıyla güncellendi.Lütfen diğer temel bilgilerinizi de tamamlayınız.",
+					"");
+
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+
+			Flash flash = FacesContext.getCurrentInstance()
+					.getExternalContext().getFlash();
+			flash.setKeepMessages(true);
+
+			return "init_student_info.xhtml?faces-redirect=true&user="
+					+ getLoggedUser().getTcno();
+		} else {
+			FacesMessage fm = new FacesMessage(
+					FacesMessage.SEVERITY_INFO,
+					"Tüm temel bilgileriniz başarıyla kayıt altına alınmıştır.",
+					"");
+
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+
+			Flash flash = FacesContext.getCurrentInstance()
+					.getExternalContext().getFlash();
+			flash.setKeepMessages(true);
+
+			/*
+			 * FacesContext.getCurrentInstance().getExternalContext()
+			 * .redirect("../index.xhtml");
+			 */
+			return "/user_profile/index.xhtml?faces-redirect=true";
+		}
+
 	}
 
 }
