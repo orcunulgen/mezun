@@ -1,0 +1,15 @@
+java resources içine appContext klasörü ile ayný dizinde olacak þekilde koy
+
+
+hibernate in tüm gerçek sorgularýný görebilmek adýna kullanýlan bir logger
+
+
+spy.log dosyasýný c dizinin altýna açman gerekiyor
+
+
+ayrýca
+
+<property name="driverClass" value="com.p6spy.engine.spy.P6SpyDriver" />
+
+þeklinde driverclass deðiþtirilmeli
+

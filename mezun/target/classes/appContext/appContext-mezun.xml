@@ -10,12 +10,13 @@
 
 	<context:annotation-config />
 	<context:component-scan base-package="com.orcun" />
-		
+
 	<!-- Data Source Declaration -->
 	<bean id="DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
-		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/mezun" />
+		<property name="driverClass" value="com.mysql.jdbc.Driver" /> 
+		<!-- <property name="driverClass" value="com.p6spy.engine.spy.P6SpyDriver" />-->
+		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/mezun?characterEncoding=UTF-8" />
 		<property name="user" value="mezun" />
 		<property name="password" value="3323103" />
 		<property name="maxPoolSize" value="10" />
@@ -33,10 +34,15 @@
 				<!-- dialect i innoDb yapmalıyız mysql de -->
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</prop>
 				<prop key="hibernate.show_sql">true</prop>
+				<!--<prop key="hibernate.format_sql">true</prop>-->
+				<!-- <prop key="hibernate.use_sql_comment">true</prop> -->
 				<!-- <prop key="hibernate.hbm2ddl.auto">create-drop</prop> -->
 				<!--<prop key="hibernate.hbm2ddl.auto">create</prop> -->
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
 				<!--<prop key="hibernate.hbm2ddl.auto">validate</prop> -->
+				<prop key="hibernate.connection.useUnicode">true</prop>
+				<prop key="hibernate.connection.characterEncoding">UTF-8</prop>
+				<prop key="hibernate.connection.charSet">UTF-8</prop>
 			</props>
 		</property>
 		<property name="packagesToScan" value="com.orcun" />

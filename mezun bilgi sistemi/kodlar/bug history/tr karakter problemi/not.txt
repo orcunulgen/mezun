@@ -1,0 +1,25 @@
+tr karakter problemini çözmek adýna
+
+1- proje dosyasý utf8 olsun
+2- maven utf 8 ile build etsin
+
+<properties>
+		
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+</properties> 
+
+
+
+3- data source da
+
+<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/mezun?characterEncoding=UTF-8" />
+
+url bu þekilde olsun
+
+
+
+4- hibernate ayarlarýna bunlarý ekle
+
+<prop key="hibernate.connection.useUnicode">true</prop>
+<prop key="hibernate.connection.characterEncoding">UTF-8</prop>
+<prop key="hibernate.connection.charSet">UTF-8</prop>
