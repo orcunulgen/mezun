@@ -1,8 +1,11 @@
 package com.orcun.mezun.model;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.util.Date;
 
+import javax.faces.context.FacesContext;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,9 +14,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import com.orcun.mezun.model.enums.UploadedFileDirectory;
+import com.orcun.mezun.util.MyURLUtil;
 
 @Entity
 @Table(name="certification")
@@ -37,11 +44,12 @@ public class Certification implements Serializable {
 	@Column(name="description",nullable=false,length=200)
 	private String description;
 	
-	@Column(name="file_name",nullable=true,length=200)
-	private String fileName;
-	
 	@Column(name="file_path",nullable=true,length=200)
 	private String filePath;
+	
+	@SuppressWarnings("unused")
+	@Transient
+	private String fileURL;
 	
 	@ManyToOne(cascade=CascadeType.ALL)
 	@OnDelete(action=OnDeleteAction.CASCADE)
@@ -59,8 +67,8 @@ public class Certification implements Serializable {
 		return certificateName;
 	}
 
-	public void setCertificateName(String certificateName) {
-		this.certificateName = certificateName;
+	public void setCertificateName(String certificateName) throws UnsupportedEncodingException {
+		this.certificateName = new String(certificateName.getBytes("ISO-8859-1"), "UTF-8");
 	}
 
 	public Date getCertificateDate() {
@@ -75,24 +83,16 @@ public class Certification implements Serializable {
 		return institution;
 	}
 
-	public void setInstitution(String institution) {
-		this.institution = institution;
+	public void setInstitution(String institution) throws UnsupportedEncodingException {
+		this.institution =new String(institution.getBytes("ISO-8859-1"), "UTF-8");
 	}
 
 	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getFileName() {
-		return fileName;
-	}
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public void setDescription(String description) throws UnsupportedEncodingException {
+		this.description =new String(description.getBytes("ISO-8859-1"), "UTF-8");
 	}
 
 	public String getFilePath() {
@@ -104,6 +104,17 @@ public class Certification implements Serializable {
 	}
 
 	
+	public String getFileURL() throws MalformedURLException {
+		return MyURLUtil.getBaseURL(FacesContext.getCurrentInstance())
+				+ UploadedFileDirectory.CERTIFICATES_PATH.getPath()
+				+"/"
+				+ getFilePath();
+	}
+
+	public void setFileURL(String fileURL) {
+		this.fileURL = fileURL;
+	}
+
 	public User getUser() {
 		return user;
 	}

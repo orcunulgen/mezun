@@ -1,8 +1,11 @@
 package com.orcun.mezun.model;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.util.Date;
 
+import javax.faces.context.FacesContext;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,39 +17,46 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.orcun.mezun.model.enums.UploadedFileDirectory;
+import com.orcun.mezun.util.MyURLUtil;
 
 @Entity
-@Table(name="announcement")
+@Table(name = "announcement")
 public class Announcement implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(name="title",nullable=false,length=200)
+
+	@Column(name = "title", nullable = false, length = 200)
 	private String title;
-	
-	@Column(name="description",nullable=false,length=200)
+
+	@Column(name = "description", nullable = false, length = 200)
 	private String description;
-	
-	@Column(name="registered_date",nullable=false)
-	private Date registeredDate=new Date();
-	
-	@Column(name="poster_path",nullable=true,length=200)
+
+	@Column(name = "registered_date", nullable = false)
+	private Date registeredDate = new Date();
+
+	@Column(name = "poster_path", nullable = true, length = 200)
 	private String posterPath;
 	
-	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="announcement_type_id")
-	private AnnouncementType announcementType;
+	@SuppressWarnings("unused")
+	@Transient
+	private String posterURL;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
-	@OnDelete(action=OnDeleteAction.CASCADE)
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "announcement_type_id")
+	private AnnouncementType announcementType;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private User user;
 
 	public Long getId() {
@@ -86,16 +96,18 @@ public class Announcement implements Serializable {
 		return title;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setTitle(String title) throws UnsupportedEncodingException {
+		this.title = new String(title.getBytes("ISO-8859-1"), "UTF-8");
 	}
 
 	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDescription(String description)
+			throws UnsupportedEncodingException {
+		this.description = new String(description.getBytes("ISO-8859-1"),
+				"UTF-8");
 	}
 
 	public Date getRegisteredDate() {
@@ -106,12 +118,24 @@ public class Announcement implements Serializable {
 		this.registeredDate = registeredDate;
 	}
 
-	public String getPosterPath() {
+	public String getPosterPath(){
+
 		return posterPath;
 	}
 
 	public void setPosterPath(String posterPath) {
 		this.posterPath = posterPath;
+	}
+
+	public String getPosterURL() throws MalformedURLException {
+		return MyURLUtil.getBaseURL(FacesContext.getCurrentInstance())
+				+ UploadedFileDirectory.ANNOUNCEMENT_POSTER_PATH.getPath()
+				+"/"
+				+ getPosterPath();
+	}
+	
+	public void setPosterURL(String posterURL) {
+		this.posterURL = posterURL;
 	}
 
 	public AnnouncementType getAnnouncementType() {
@@ -129,7 +153,5 @@ public class Announcement implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	
 
 }

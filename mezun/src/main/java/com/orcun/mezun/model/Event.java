@@ -1,8 +1,11 @@
 package com.orcun.mezun.model;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.util.Date;
 
+import javax.faces.context.FacesContext;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,9 +14,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import com.orcun.mezun.model.enums.UploadedFileDirectory;
+import com.orcun.mezun.util.MyURLUtil;
 
 
 @Entity
@@ -34,6 +41,10 @@ public class Event implements Serializable {
 	
 	@Column(name="poster_path",nullable=true,length=200)
 	private String posterPath;
+	
+	@SuppressWarnings("unused")
+	@Transient
+	private String posterURL;
 	
 	@Column(name="registered_date",nullable=false)
 	private Date registeredDate=new Date();
@@ -60,16 +71,16 @@ public class Event implements Serializable {
 		return title;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setTitle(String title) throws UnsupportedEncodingException {
+		this.title = new String(title.getBytes("ISO-8859-1"), "UTF-8");
 	}
 
 	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDescription(String description) throws UnsupportedEncodingException {
+		this.description = new String(description.getBytes("ISO-8859-1"), "UTF-8");
 	}
 
 	public String getPosterPath() {
@@ -78,6 +89,17 @@ public class Event implements Serializable {
 
 	public void setPosterPath(String posterPath) {
 		this.posterPath = posterPath;
+	}
+
+	public String getPosterURL() throws MalformedURLException {
+		return MyURLUtil.getBaseURL(FacesContext.getCurrentInstance())
+				+ UploadedFileDirectory.EVENT_POSTER_PATH.getPath()
+				+"/"
+				+ getPosterPath();
+	}
+
+	public void setPosterURL(String posterURL) {
+		this.posterURL = posterURL;
 	}
 
 	public Date getRegisteredDate() {

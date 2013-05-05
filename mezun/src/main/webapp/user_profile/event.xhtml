@@ -38,7 +38,7 @@
 								title="View">
 							</p:commandButton>
 							<p:commandButton id="deleteButton"
-								actionListener="#{eventView.deleteSelectedEvent(eventList)}"
+								action="#{eventView.deleteSelectedEvent(eventList)}"
 								icon="ui-icon-close" title="Delete">
 							</p:commandButton>
 						</p:column>
@@ -85,6 +85,10 @@
 					<p:panelGrid styleClass="no_border" id="event_detail_display"
 						columns="2" cellpadding="4" style="margin:0 auto;">
 
+						<h:outputLabel value="Etkinlik Afişi :" />
+						<p:graphicImage value="#{eventView.selectedEvent.posterURL}"
+							width="250px" height="220px" />
+
 						<h:outputLabel value="Etkinlik İsmi :" />
 						<p:inputText value="#{eventView.selectedEvent.title}"
 							required="true" requiredMessage="Lütfen etkinlik ismi giriniz." />
@@ -116,7 +120,7 @@
 				onclick="eventAddDialog.show()" icon="ui-icon-plus" />
 			<p:dialog header="Etkinlik Ekle" widgetVar="eventAddDialog"
 				resizable="false" id="eventAddDlg" showEffect="fade" modal="true">
-				<h:form id="dialog_event_add_form">
+				<h:form id="dialog_event_add_form" enctype="multipart/form-data">
 					<p:growl id="event_add_messages" />
 					<p:panelGrid styleClass="no_border" id="event_add_display"
 						columns="2" cellpadding="4" style="margin:0 auto;">
@@ -137,9 +141,19 @@
 						<h:outputLabel value="Bitiş Tarihi :" />
 						<p:calendar value="#{eventView.event.endDate}" showOn="button" />
 
+						<h:outputLabel value="Lütfen duyuru afişinizi belirleyiniz." />
+						<p:fileUpload required="true"
+							requiredMessage="Lütfen dosya seçiniz"
+							value="#{eventView.uploadedPoster}" mode="simple"
+							update="event_add_messages" uploadLabel="Yükle" label="Seç"
+							cancelLabel="İptal Et"
+							invalidFileMessage="Geçersiz dosya uzantısı."
+							fileLimitMessage="Yüklenecek olan dosya 2 MB dan küçük olması gerekmektedir."
+							sizeLimit="2000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+
 					</p:panelGrid>
 					<p:commandButton action="#{eventView.addEvent}" value="Ekle"
-						ajax="true" icon="ui-icon-disk" update=":list_event_form" />
+						ajax="false" icon="ui-icon-disk" update=":list_event_form" />
 				</h:form>
 			</p:dialog>
 		</div>

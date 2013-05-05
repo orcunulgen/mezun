@@ -1,16 +1,22 @@
 package com.orcun.mezun.model;
 
 import java.io.Serializable;
+import java.net.MalformedURLException;
 
+import javax.faces.context.FacesContext;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import com.orcun.mezun.model.enums.UploadedFileDirectory;
+import com.orcun.mezun.util.MyURLUtil;
 
 @Entity
 @Table(name="classical_cv")
@@ -26,9 +32,10 @@ public class ClassicalCV implements Serializable {
 	@Column(name="cv_path",nullable=false,length=200)
 	private String cvPath;
 	
-	@Column(name="cv_file_name",nullable=false,length=200)
-	private String cvFileName;
-
+	@SuppressWarnings("unused")
+	@Transient
+	private String cvURL;
+	
 	public User getUser() {
 		return user;
 	}
@@ -45,12 +52,15 @@ public class ClassicalCV implements Serializable {
 		this.cvPath = cvPath;
 	}
 
-	public String getCvFileName() {
-		return cvFileName;
+	public String getCvURL() throws MalformedURLException {
+		return MyURLUtil.getBaseURL(FacesContext.getCurrentInstance())
+				+ UploadedFileDirectory.CLASSICAL_CV_PATH.getPath()
+				+"/"
+				+ getCvPath();
 	}
 
-	public void setCvFileName(String cvFileName) {
-		this.cvFileName = cvFileName;
+	public void setCvURL(String cvURL) {
+		this.cvURL = cvURL;
 	}
 
 	@Override

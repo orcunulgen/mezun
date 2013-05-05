@@ -1,5 +1,6 @@
 package com.orcun.mezun.view;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
@@ -16,15 +17,16 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 
-import org.primefaces.event.FlowEvent;
-import org.springframework.dao.DataAccessException;
+import org.primefaces.model.UploadedFile;
 
 import tr.gov.nvi.tckimlik.WS.KPSPublicSoapProxy;
 
+import com.orcun.mezun.commons.FileUploadService;
 import com.orcun.mezun.model.City;
 import com.orcun.mezun.model.Country;
 import com.orcun.mezun.model.Role;
 import com.orcun.mezun.model.User;
+import com.orcun.mezun.model.enums.UploadedFileDirectory;
 import com.orcun.mezun.service.SignUpService;
 
 @ManagedBean
@@ -43,8 +45,13 @@ public class SignUpView implements Serializable {
 
 	private Boolean isAlumni = false;
 
+	private UploadedFile uploadedProfilePic;
+
 	@ManagedProperty(value = "#{signUpService}")
 	private SignUpService signUpService;
+
+	@ManagedProperty(value = "#{fileUploadService}")
+	private FileUploadService fileUploadService;
 
 	@PostConstruct
 	public void init() {
@@ -103,6 +110,14 @@ public class SignUpView implements Serializable {
 		this.isAlumni = isAlumni;
 	}
 
+	public UploadedFile getUploadedProfilePic() {
+		return uploadedProfilePic;
+	}
+
+	public void setUploadedProfilePic(UploadedFile uploadedProfilePic) {
+		this.uploadedProfilePic = uploadedProfilePic;
+	}
+
 	public SignUpService getSignUpService() {
 		return signUpService;
 	}
@@ -111,55 +126,75 @@ public class SignUpView implements Serializable {
 		this.signUpService = signUpService;
 	}
 
+	public FileUploadService getFileUploadService() {
+		return fileUploadService;
+	}
+
+	public void setFileUploadService(FileUploadService fileUploadService) {
+		this.fileUploadService = fileUploadService;
+	}
+
+	/*
+	 * public String getImage() {
+	 * 
+	 * try { image = MyURLUtil.getBaseURL(FacesContext.getCurrentInstance()); }
+	 * catch (MalformedURLException e) { e.printStackTrace(); } image +=
+	 * "/app_images/profile_pictures/1367685202268.jpg"; return image; }
+	 */
+
 	public void updateUserChangeCountry() {
 		userCities = getSignUpService().allCities(getUser().getCountry());
 	}
 
 	public String saveUser() {
-		try {
 
-			if (!checkUserTcno(user)) { // geçici olarak devre dışı
+		if (!checkUserTcno(user)) { // geçici olarak devre dışı
 
-				List<Role> userRoles = new ArrayList<Role>();
+			List<Role> userRoles = new ArrayList<Role>();
 
-				Role defaultRole = new Role();
+			Role defaultRole = new Role();
 
-				if (getIsAlumni()) {
-					defaultRole = signUpService.getRoleInfo("ROLE_ALUMNI");
-				} else {
-					defaultRole = signUpService.getRoleInfo("ROLE_STUDENT");
-				}
+			if (getIsAlumni()) {
+				defaultRole = signUpService.getRoleInfo("ROLE_ALUMNI");
+			} else {
+				defaultRole = signUpService.getRoleInfo("ROLE_STUDENT");
+			}
 
-				userRoles.add(defaultRole);
-				user.setRoles(userRoles);
+			userRoles.add(defaultRole);
+			user.setRoles(userRoles);
+
+			try {
+				getFileUploadService().saveFile(
+						UploadedFileDirectory.PROFILE_PICTURE_PATH.getPath(),
+						getUploadedProfilePic());
+
+				user.setProfilePhotoPath(getFileUploadService().getFileName());
 
 				getSignUpService().addUser(user);
-				
-				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
-						"Kaydınız başarıyla tamamlandı.", "");
 
-				FacesContext.getCurrentInstance().addMessage(
-						null, fm);
-
-				Flash flash = FacesContext.getCurrentInstance()
-						.getExternalContext().getFlash();
-				flash.setKeepMessages(true);
-				
-				
-				return ("login.xhtml?faces-redirect=true");
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (DataAccessException e) {
-			e.printStackTrace();
+
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Kaydınız başarıyla tamamlandı.", "");
+
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+
+			Flash flash = FacesContext.getCurrentInstance()
+					.getExternalContext().getFlash();
+			flash.setKeepMessages(true);
+
+			return ("login.xhtml?faces-redirect=true");
 		}
 
 		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"Kaydınız tamamlanamadı.Lütfen daha sonra tekrar deneyin.", "");
 
-		FacesContext.getCurrentInstance().addMessage(
-				null, fm);
+		FacesContext.getCurrentInstance().addMessage(null, fm);
 
-		Flash flash = FacesContext.getCurrentInstance()
-				.getExternalContext().getFlash();
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
 		flash.setKeepMessages(true);
 
 		return ("sign_up.xhtml?faces-redirect=true");
@@ -210,9 +245,4 @@ public class SignUpView implements Serializable {
 
 	}
 
-	public String onFlowProcess(FlowEvent event) {
-
-			return event.getNewStep();
-	}
-	
 }

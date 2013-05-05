@@ -28,9 +28,6 @@ public class Transcript implements Serializable {
 	@Column(name="transcript_path",nullable=false,length=200)
 	private String transcriptPath;
 	
-	@Column(name="transcript_file_name",nullable=false,length=200)
-	private String transcriptFileName;
-	
 	@ManyToOne(cascade=CascadeType.ALL)
 	@OnDelete(action=OnDeleteAction.CASCADE)
 	@JoinColumn(name="education_info_id")
@@ -50,14 +47,6 @@ public class Transcript implements Serializable {
 
 	public void setTranscriptPath(String transcriptPath) {
 		this.transcriptPath = transcriptPath;
-	}
-
-	public String getTranscriptFileName() {
-		return transcriptFileName;
-	}
-
-	public void setTranscriptFileName(String transcriptFileName) {
-		this.transcriptFileName = transcriptFileName;
 	}
 
 	public EducationInfo getEducationInfo() {

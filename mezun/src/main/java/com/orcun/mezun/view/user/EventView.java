@@ -16,10 +16,13 @@ import javax.faces.context.Flash;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
+import org.primefaces.model.UploadedFile;
 import org.springframework.security.core.context.SecurityContext;
 
+import com.orcun.mezun.commons.FileUploadService;
 import com.orcun.mezun.model.Event;
 import com.orcun.mezun.model.User;
+import com.orcun.mezun.model.enums.UploadedFileDirectory;
 import com.orcun.mezun.service.user.EventService;
 
 @ManagedBean
@@ -34,9 +37,14 @@ public class EventView implements Serializable {
 
 	private List<Event> events = new ArrayList<Event>();
 	private Event selectedEvent;
+	
+	private UploadedFile uploadedPoster;
 
 	@ManagedProperty(value = "#{eventService}")
 	private EventService eventService;
+	
+	@ManagedProperty(value = "#{fileUploadService}")
+	private FileUploadService fileUploadService;
 
 	@PostConstruct
 	public void init() {
@@ -53,12 +61,34 @@ public class EventView implements Serializable {
 		this.selectedEvent = selectedEvent;
 	}
 
-	public void deleteSelectedEvent(Event selectedEvent) throws IOException {
+	public String deleteSelectedEvent(Event selectedEvent) throws IOException {
 		initSelectedEvent(selectedEvent);
-		getEventService().deleteEvent(getSelectedEvent());
 
-		FacesContext.getCurrentInstance().getExternalContext()
-				.redirect("event.xhtml?user=" + getLoggedUser().getTcno());
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
+		
+		if(getFileUploadService().deleteFile(
+				UploadedFileDirectory.EVENT_POSTER_PATH.getPath() + "/"
+						+ selectedEvent.getPosterPath())){
+			
+			getEventService().deleteEvent(getSelectedEvent());
+			
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Etkinlik başarıyla silindi.", "");
+
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+		}else{
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Etkinlik silinemedi.", "");
+
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+
+		}
+
+		return "event.xhtml?faces-redirect=true&user="
+		+ getLoggedUser().getTcno();
+
 
 	}
 
@@ -98,12 +128,28 @@ public class EventView implements Serializable {
 		this.selectedEvent = selectedEvent;
 	}
 
+	public UploadedFile getUploadedPoster() {
+		return uploadedPoster;
+	}
+
+	public void setUploadedPoster(UploadedFile uploadedPoster) {
+		this.uploadedPoster = uploadedPoster;
+	}
+
 	public EventService getEventService() {
 		return eventService;
 	}
 
 	public void setEventService(EventService eventService) {
 		this.eventService = eventService;
+	}
+
+	public FileUploadService getFileUploadService() {
+		return fileUploadService;
+	}
+
+	public void setFileUploadService(FileUploadService fileUploadService) {
+		this.fileUploadService = fileUploadService;
 	}
 
 	public String addEvent() {
@@ -126,7 +172,22 @@ public class EventView implements Serializable {
 
 			getEvent().setUser(getLoggedUser());
 			getEvent().setRegisteredDate(registeredDate);
-			getEventService().addEvent(getEvent());
+			
+			
+			try {
+				getFileUploadService().saveFile(
+						UploadedFileDirectory.EVENT_POSTER_PATH.getPath(),
+						getUploadedPoster());
+
+				getEvent().setPosterPath(
+						getFileUploadService().getFileName());
+				
+				getEventService().addEvent(getEvent());
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Kaydınız başarıyla tamamlandı.", "");

@@ -1,6 +1,7 @@
 package com.orcun.mezun.model;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -74,26 +75,29 @@ public class User implements Serializable,UserDetails{
 	public String getEmail() {
 		return email;
 	}
-	public void setEmail(String email) {
-		this.email = email;
+	public void setEmail(String email) throws UnsupportedEncodingException {
+	    this.email=email;    
 	}
 	public String getPassword() {
 		return password;
 	}
-	public void setPassword(String password) {
-		this.password = password;
+	public void setPassword(String password) throws UnsupportedEncodingException {
+		//this.password=password;
+		this.password = new String(password.getBytes("ISO-8859-1"), "UTF-8");
 	}
 	public String getName() {
 		return name;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String name) throws UnsupportedEncodingException {
+		//this.name=name;
+		this.name = new String(name.getBytes("ISO-8859-1"), "UTF-8");
 	}
 	public String getSurname() {
 		return surname;
 	}
-	public void setSurname(String surname) {
-		this.surname = surname;
+	public void setSurname(String surname) throws UnsupportedEncodingException {
+		//this.surname=surname;
+		this.surname = new String(surname.getBytes("ISO-8859-1"), "UTF-8");
 	}
 	public Integer getBirthdayYear() {
 		return birthdayYear;

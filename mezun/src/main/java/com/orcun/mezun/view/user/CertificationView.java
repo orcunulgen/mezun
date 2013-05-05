@@ -16,10 +16,13 @@ import javax.faces.context.Flash;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
+import org.primefaces.model.UploadedFile;
 import org.springframework.security.core.context.SecurityContext;
 
+import com.orcun.mezun.commons.FileUploadService;
 import com.orcun.mezun.model.Certification;
 import com.orcun.mezun.model.User;
+import com.orcun.mezun.model.enums.UploadedFileDirectory;
 import com.orcun.mezun.service.user.CertificationService;
 
 @ManagedBean
@@ -35,10 +38,15 @@ public class CertificationView implements Serializable {
 	private List<Certification> certifications = new ArrayList<Certification>();
 
 	private Certification selectedCertification;
+	
+	private UploadedFile uploadedFile;
 
 	@ManagedProperty(value = "#{certificationService}")
 	private CertificationService certificationService;
 
+	@ManagedProperty(value = "#{fileUploadService}")
+	private FileUploadService fileUploadService;
+	
 	@PostConstruct
 	public void init() {
 		certification = new Certification();
@@ -49,17 +57,36 @@ public class CertificationView implements Serializable {
 		this.selectedCertification = selectedCertification;
 	}
 
-	public void deleteSelectedCertification(Certification selectedCertification)
+	public String deleteSelectedCertification(Certification selectedCertification)
 			throws IOException {
-		initSelectedCertification(selectedCertification);
-		getCertificationService().deleteCertification(
-				getSelectedCertification());
 
-		FacesContext
-				.getCurrentInstance()
-				.getExternalContext()
-				.redirect(
-						"certification.xhtml?user=" + getLoggedUser().getTcno());
+		initSelectedCertification(selectedCertification);
+
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
+		
+		if(getFileUploadService().deleteFile(
+				UploadedFileDirectory.CERTIFICATES_PATH.getPath() + "/"
+						+ selectedCertification.getFilePath())){
+			
+			getCertificationService().deleteCertification(
+					getSelectedCertification());
+			
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Sertifika başarıyla silindi.", "");
+
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+		}else{
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Sertifika silinemedi.", "");
+
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+
+		}
+
+		return "announcement.xhtml?faces-redirect=true&user="
+		+ getLoggedUser().getTcno();
 
 	}
 
@@ -87,6 +114,14 @@ public class CertificationView implements Serializable {
 		this.selectedCertification = selectedCertification;
 	}
 
+	public UploadedFile getUploadedFile() {
+		return uploadedFile;
+	}
+
+	public void setUploadedFile(UploadedFile uploadedFile) {
+		this.uploadedFile = uploadedFile;
+	}
+
 	public CertificationService getCertificationService() {
 		return certificationService;
 	}
@@ -94,6 +129,14 @@ public class CertificationView implements Serializable {
 	public void setCertificationService(
 			CertificationService certificationService) {
 		this.certificationService = certificationService;
+	}
+
+	public FileUploadService getFileUploadService() {
+		return fileUploadService;
+	}
+
+	public void setFileUploadService(FileUploadService fileUploadService) {
+		this.fileUploadService = fileUploadService;
 	}
 
 	public User getLoggedUser() {
@@ -123,7 +166,24 @@ public class CertificationView implements Serializable {
 		if (differenceStartRegister > 0) {
 
 			getCertification().setUser(getLoggedUser());
-			getCertificationService().addCertification(getCertification());
+			
+			
+			try {
+				getFileUploadService().saveFile(
+						UploadedFileDirectory.CERTIFICATES_PATH.getPath(),
+						getUploadedFile());
+
+				getCertification().setFilePath(
+						getFileUploadService().getFileName());
+				
+				getCertificationService().addCertification(getCertification());
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			
 
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Kaydınız başarıyla tamamlandı.", "");

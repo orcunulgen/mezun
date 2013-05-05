@@ -15,11 +15,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.servlet.http.HttpServletRequest;
 
+import org.primefaces.model.UploadedFile;
 import org.springframework.security.core.context.SecurityContext;
 
+import com.orcun.mezun.commons.FileUploadService;
 import com.orcun.mezun.model.Announcement;
 import com.orcun.mezun.model.AnnouncementType;
 import com.orcun.mezun.model.User;
+import com.orcun.mezun.model.enums.UploadedFileDirectory;
 import com.orcun.mezun.service.user.AnnouncementService;
 
 @ManagedBean
@@ -37,8 +40,13 @@ public class AnnouncementView implements Serializable {
 	private List<Announcement> announcements = new ArrayList<Announcement>();
 	private Announcement selectedAnnouncement;
 
+	private UploadedFile uploadedPoster;
+
 	@ManagedProperty(value = "#{announcementService}")
 	private AnnouncementService announcementService;
+
+	@ManagedProperty(value = "#{fileUploadService}")
+	private FileUploadService fileUploadService;
 
 	@PostConstruct
 	public void init() {
@@ -55,17 +63,33 @@ public class AnnouncementView implements Serializable {
 		this.selectedAnnouncement = selectedAnnouncement;
 	}
 
-	public void deleteSelectedAnnouncement(Announcement selectedAnnouncement)
+	public String deleteSelectedAnnouncement(Announcement selectedAnnouncement)
 			throws IOException {
 		initSelectedAnnouncement(selectedAnnouncement);
-		getAnnouncementService().deleteAnnouncement(getSelectedAnnouncement());
 
-		FacesContext
-				.getCurrentInstance()
-				.getExternalContext()
-				.redirect(
-						"announcement.xhtml?user=" + getLoggedUser().getTcno());
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
+		
+		if(getFileUploadService().deleteFile(
+				UploadedFileDirectory.ANNOUNCEMENT_POSTER_PATH.getPath() + "/"
+						+ selectedAnnouncement.getPosterPath())){
+			getAnnouncementService().deleteAnnouncement(getSelectedAnnouncement());
+			
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Duyuru başarıyla silindi.", "");
 
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+		}else{
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Duyuru silinemedi.", "");
+
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+
+		}
+
+		return "announcement.xhtml?faces-redirect=true&user="
+		+ getLoggedUser().getTcno();
 	}
 
 	public User getLoggedUser() {
@@ -112,12 +136,28 @@ public class AnnouncementView implements Serializable {
 		this.selectedAnnouncement = selectedAnnouncement;
 	}
 
+	public UploadedFile getUploadedPoster() {
+		return uploadedPoster;
+	}
+
+	public void setUploadedPoster(UploadedFile uploadedPoster) {
+		this.uploadedPoster = uploadedPoster;
+	}
+
 	public AnnouncementService getAnnouncementService() {
 		return announcementService;
 	}
 
 	public void setAnnouncementService(AnnouncementService announcementService) {
 		this.announcementService = announcementService;
+	}
+
+	public FileUploadService getFileUploadService() {
+		return fileUploadService;
+	}
+
+	public void setFileUploadService(FileUploadService fileUploadService) {
+		this.fileUploadService = fileUploadService;
 	}
 
 	public void checkURL() throws IOException {
@@ -152,7 +192,20 @@ public class AnnouncementView implements Serializable {
 
 		getAnnouncement().setUser(getLoggedUser());
 		getAnnouncement().setRegisteredDate(registeredDate);
-		getAnnouncementService().addAnnouncement(getAnnouncement());
+
+		try {
+			getFileUploadService().saveFile(
+					UploadedFileDirectory.ANNOUNCEMENT_POSTER_PATH.getPath(),
+					getUploadedPoster());
+
+			getAnnouncement().setPosterPath(
+					getFileUploadService().getFileName());
+			getAnnouncementService().addAnnouncement(getAnnouncement());
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"Kaydınız başarıyla tamamlandı.", "");

@@ -39,7 +39,7 @@
 								icon="ui-icon-search" title="View">
 							</p:commandButton>
 							<p:commandButton id="deleteButton"
-								actionListener="#{announcementView.deleteSelectedAnnouncement(announcementList)}"
+								action="#{announcementView.deleteSelectedAnnouncement(announcementList)}"
 								icon="ui-icon-close" title="Delete">
 							</p:commandButton>
 						</p:column>
@@ -76,6 +76,11 @@
 					<p:panelGrid styleClass="no_border"
 						id="announcement_detail_display" columns="2" cellpadding="4"
 						style="margin:0 auto;">
+
+						<h:outputLabel value="Duyuru Afişi :" />
+						<p:graphicImage
+							value="#{announcementView.selectedAnnouncement.posterURL}"
+							width="250px" height="220px" />
 
 						<h:outputLabel value="Duyuru Başlığı :" />
 						<p:inputText
@@ -115,7 +120,8 @@
 			<p:dialog header="Duyuru Ekle" widgetVar="announcementAddDialog"
 				resizable="false" id="announcementAddDlg" showEffect="fade"
 				modal="true">
-				<h:form id="dialog_announcement_add_form">
+				<h:form id="dialog_announcement_add_form"
+					enctype="multipart/form-data">
 					<p:growl id="announcement_add_messages" />
 					<p:panelGrid styleClass="no_border" id="announcement_add_display"
 						columns="2" cellpadding="4" style="margin:0 auto;">
@@ -142,9 +148,19 @@
 								itemLabel="#{announcementType.announcementType}" />
 						</p:selectOneMenu>
 
+						<h:outputLabel value="Lütfen duyuru afişinizi belirleyiniz." />
+						<p:fileUpload required="true"
+							requiredMessage="Lütfen dosya seçiniz"
+							value="#{announcementView.uploadedPoster}" mode="simple"
+							update="announcement_add_messages" uploadLabel="Yükle"
+							label="Seç" cancelLabel="İptal Et"
+							invalidFileMessage="Geçersiz dosya uzantısı."
+							fileLimitMessage="Yüklenecek olan dosya 2 MB dan küçük olması gerekmektedir."
+							sizeLimit="2000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+
 					</p:panelGrid>
 					<p:commandButton action="#{announcementView.addAnnouncement}"
-						value="Ekle" ajax="true" icon="ui-icon-disk"
+						value="Ekle" ajax="false" icon="ui-icon-disk"
 						update=":list_announcement_form" />
 				</h:form>
 			</p:dialog>
