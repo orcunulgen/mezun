@@ -1,7 +1,9 @@
 package com.orcun.mezun.model;
 
 import java.io.Serializable;
+import java.net.MalformedURLException;
 
+import javax.faces.context.FacesContext;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,9 +15,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import com.orcun.mezun.model.enums.UploadedFileDirectory;
+import com.orcun.mezun.util.MyURLUtil;
 
 
 @Entity
@@ -57,9 +63,18 @@ public class EducationInfo implements Serializable{
 	@Column(name="class_info",nullable=true)
 	private Integer classInfo;
 	
+	@Column(name="transcript_path",nullable=true,length=200)
+	private String transcriptPath;
+	
+	@SuppressWarnings("unused")
+	@Transient
+	private String transcriptFileURL;
+	
 	@ManyToOne(cascade=CascadeType.ALL)
 	@OnDelete(action=OnDeleteAction.CASCADE)
 	private User user;
+	
+	
 
 	public Long getId() {
 		return id;
@@ -140,6 +155,25 @@ public class EducationInfo implements Serializable{
 
 	public void setClassInfo(Integer classInfo) {
 		this.classInfo = classInfo;
+	}
+
+	public String getTranscriptPath() {
+		return transcriptPath;
+	}
+
+	public void setTranscriptPath(String transcriptPath) {
+		this.transcriptPath = transcriptPath;
+	}
+
+	public String getTranscriptFileURL() throws MalformedURLException {
+		return MyURLUtil.getBaseURL(FacesContext.getCurrentInstance())
+				+ UploadedFileDirectory.TRANSCRIPT_PATH.getPath()
+				+"/"
+				+ getTranscriptPath();
+	}
+
+	public void setTranscriptFileURL(String transcriptFileURL) {
+		this.transcriptFileURL = transcriptFileURL;
 	}
 
 	public User getUser() {

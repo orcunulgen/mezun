@@ -91,131 +91,241 @@
 			<p:dialog header="Eğitim Ayrıntıları"
 				widgetVar="universityUpdateDialog" resizable="false"
 				id="universityUpdateDlg" showEffect="fade" modal="true">
-				<h:form id="university_dialog_form">
+				<h:form id="university_dialog_form" enctype="multipart/form-data">
 					<p:growl id="selected_university_dialog_messages" />
 					<p:panelGrid styleClass="no_border" id="university_detail_display"
-						columns="2" cellpadding="4" style="margin:0 auto;">
+						cellpadding="4" style="margin:0 auto;">
 
-						<h:outputLabel value="Üniversite :" />
-						<p:selectOneMenu validator="universityValidator"
-							converter="universityConverter"
-							value="#{educationInfoView.selectedEducationInfo.university}">
-							<f:selectItem itemValue="0"
-								itemLabel="Lütfen bir üniversite seçiniz" />
-							<f:selectItems value="#{educationInfoView.universities}"
-								var="university" itemValue="#{university}"
-								itemLabel="#{university.universityName}" />
-							<p:ajax
-								listener="#{educationInfoView.updateUniversityChangeFaculty}"
-								event="change"
-								update="form_update_university_faculty form_update_faculty_department" />
-						</p:selectOneMenu>
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Üniversite :" />
+							</p:column>
+							<p:column colspan="2">
+								<p:selectOneMenu validator="universityValidator"
+									converter="universityConverter"
+									value="#{educationInfoView.selectedEducationInfo.university}">
+									<f:selectItem itemValue="0"
+										itemLabel="Lütfen bir üniversite seçiniz" />
+									<f:selectItems value="#{educationInfoView.universities}"
+										var="university" itemValue="#{university}"
+										itemLabel="#{university.universityName}" />
+									<p:ajax
+										listener="#{educationInfoView.updateUniversityChangeFaculty}"
+										event="change"
+										update="form_update_university_faculty form_update_faculty_department" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
 
-						<h:outputLabel value="Fakülte :" />
-						<p:selectOneMenu validator="facultyValidator"
-							converter="facultyConverter" id="form_update_university_faculty"
-							value="#{educationInfoView.selectedEducationInfo.faculty}">
-							<f:selectItem itemValue="0"
-								itemLabel="Lütfen bir fakülte seçiniz" />
-							<f:selectItems
-								value="#{educationInfoView.universityUpdateFaculties}"
-								var="faculty" itemValue="#{faculty}"
-								itemLabel="#{faculty.facultyName}" />
-							<p:ajax
-								listener="#{educationInfoView.updateFacultyChangeDepartment}"
-								event="change" update="form_update_faculty_department" />
-						</p:selectOneMenu>
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Fakülte :" />
+							</p:column>
+							<p:column colspan="2">
+								<p:selectOneMenu validator="facultyValidator"
+									converter="facultyConverter"
+									id="form_update_university_faculty"
+									value="#{educationInfoView.selectedEducationInfo.faculty}">
+									<f:selectItem itemValue="0"
+										itemLabel="Lütfen bir fakülte seçiniz" />
+									<f:selectItems
+										value="#{educationInfoView.universityUpdateFaculties}"
+										var="faculty" itemValue="#{faculty}"
+										itemLabel="#{faculty.facultyName}" />
+									<p:ajax
+										listener="#{educationInfoView.updateFacultyChangeDepartment}"
+										event="change" update="form_update_faculty_department" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
 
-						<h:outputLabel value="Bölüm :" />
-						<p:selectOneMenu validator="departmentValidator"
-							converter="departmentConverter"
-							id="form_update_faculty_department"
-							value="#{educationInfoView.selectedEducationInfo.department}">
-							<f:selectItem itemValue="0" itemLabel="Lütfen bir bölüm seçiniz" />
-							<f:selectItems
-								value="#{educationInfoView.facultyUpdateDepartments}"
-								var="department" itemValue="#{department}"
-								itemLabel="#{department.departmentName}" />
-						</p:selectOneMenu>
-
-						<h:outputLabel value="Başlangıç Yılı :" />
-						<p:inputMask mask="9999" id="form_start_year"
-							value="#{educationInfoView.selectedEducationInfo.startYear}"
-							required="true"
-							requiredMessage="Lütfen okula giriş yılınızı belirtiniz." />
-
-						<h:outputLabel value="Devam Ediyorum :" />
-						<p:selectBooleanButton
-							value="#{educationInfoView.selectedEduInfoIsStudent}"
-							onLabel="Evet" offLabel="Hayır" onIcon="ui-icon-check"
-							offIcon="ui-icon-close">
-							<p:ajax update="university_dialog_form" />
-						</p:selectBooleanButton>
-
-						<h:outputLabel value="Mezuniyet Yılı :"
-							rendered="#{!educationInfoView.selectedEduInfoIsStudent}" />
-						<p:inputMask mask="9999" id="form_end_year"
-							value="#{educationInfoView.selectedEducationInfo.endYear}"
-							required="true"
-							requiredMessage="Lütfen mezuniyet yılınızı belirtiniz."
-							rendered="#{!educationInfoView.selectedEduInfoIsStudent}" />
-
-						<h:outputLabel value="Eğitim Programı :" />
-						<p:selectOneMenu validator="educationLevelValidator"
-							converter="educationLevelConverter"
-							value="#{educationInfoView.selectedEducationInfo.educationLevel}">
-							<f:selectItem itemValue="0"
-								itemLabel="Lütfen eğitim eğitim programınızı seçiniz." />
-							<f:selectItems value="#{educationInfoView.educationLevels}"
-								var="educationLevel" itemValue="#{educationLevel}"
-								itemLabel="#{educationLevel.educationLevel}" />
-						</p:selectOneMenu>
-
-						<h:outputLabel value="Diploma Not Sistemi" />
-						<p:selectOneMenu id="update_form_grading_system"
-							validator="gradingSystemValidator"
-							converter="gradingSystemConverter"
-							value="#{educationInfoView.selectedEducationInfo.gradingSystem}">
-							<f:selectItem itemValue="0"
-								itemLabel="Lütfen not sistemini seçiniz" />
-							<f:selectItems value="#{educationInfoView.gradingSystems}"
-								var="gradingSystem" itemValue="#{gradingSystem}"
-								itemLabel="#{gradingSystem.grade}" />
-						</p:selectOneMenu>
-
-						<h:outputLabel value="Mezuniyet Derecesi"
-							rendered="#{!educationInfoView.selectedEduInfoIsStudent}" />
-
-						<p:inputText id="form_graduation_degree"
-							value="#{educationInfoView.selectedEducationInfo.graduationDegree}"
-							required="true"
-							requiredMessage="Lütfen mezuniyet derecenizi giriniz."
-							rendered="#{!educationInfoView.selectedEduInfoIsStudent}">
-						</p:inputText>
-
-						<h:outputLabel
-							rendered="#{educationInfoView.selectedEduInfoIsStudent}"
-							value="Sınıf Bilgisi :" id="form_class_info_label" />
-						<p:selectOneMenu
-							rendered="#{educationInfoView.selectedEduInfoIsStudent}"
-							id="form_class_info" required="true"
-							requiredMessage="Lütfen sınıf bilgisi giriniz."
-							value="#{educationInfoView.selectedEducationInfo.classInfo}">
-							<f:selectItem itemLabel="Lütfen sınıfınızı belirtiniz" />
-							<f:selectItems value="#{educationInfoView.classInfos}"
-								var="classInfo" itemValue="#{classInfo}"
-								itemLabel="#{classInfo}.sınıf" />
-						</p:selectOneMenu>
-
-						<h:outputLabel value="Ağırlıklı Ortalama"
-							rendered="#{educationInfoView.selectedEduInfoIsStudent}" />
-
-						<p:inputText id="form_grade_mean"
-							value="#{educationInfoView.selectedEducationInfo.graduationDegree}"
-							rendered="#{educationInfoView.selectedEduInfoIsStudent}">
-						</p:inputText>
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Bölüm :" />
+							</p:column>
+							<p:column colspan="2">
+								<p:selectOneMenu validator="departmentValidator"
+									converter="departmentConverter"
+									id="form_update_faculty_department"
+									value="#{educationInfoView.selectedEducationInfo.department}">
+									<f:selectItem itemValue="0"
+										itemLabel="Lütfen bir bölüm seçiniz" />
+									<f:selectItems
+										value="#{educationInfoView.facultyUpdateDepartments}"
+										var="department" itemValue="#{department}"
+										itemLabel="#{department.departmentName}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
 
 
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Başlangıç Yılı :" />
+							</p:column>
+							<p:column colspan="2">
+								<p:inputMask mask="9999" id="form_start_year"
+									value="#{educationInfoView.selectedEducationInfo.startYear}"
+									required="true"
+									requiredMessage="Lütfen okula giriş yılınızı belirtiniz." />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Devam Ediyorum :" />
+							</p:column>
+							<p:column colspan="2">
+								<p:selectBooleanButton
+									value="#{educationInfoView.selectedEduInfoIsStudent}"
+									onLabel="Evet" offLabel="Hayır" onIcon="ui-icon-check"
+									offIcon="ui-icon-close">
+									<p:ajax update="university_dialog_form" />
+								</p:selectBooleanButton>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Mezuniyet Yılı :"
+									rendered="#{!educationInfoView.selectedEduInfoIsStudent}" />
+							</p:column>
+							<p:column colspan="2">
+								<p:inputMask mask="9999" id="form_end_year"
+									value="#{educationInfoView.selectedEducationInfo.endYear}"
+									required="true"
+									requiredMessage="Lütfen mezuniyet yılınızı belirtiniz."
+									rendered="#{!educationInfoView.selectedEduInfoIsStudent}" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Eğitim Programı :" />
+							</p:column>
+							<p:column colspan="2">
+								<p:selectOneMenu validator="educationLevelValidator"
+									converter="educationLevelConverter"
+									value="#{educationInfoView.selectedEducationInfo.educationLevel}">
+									<f:selectItem itemValue="0"
+										itemLabel="Lütfen eğitim eğitim programınızı seçiniz." />
+									<f:selectItems value="#{educationInfoView.educationLevels}"
+										var="educationLevel" itemValue="#{educationLevel}"
+										itemLabel="#{educationLevel.educationLevel}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Diploma Not Sistemi" />
+							</p:column>
+							<p:column colspan="2">
+								<p:selectOneMenu id="update_form_grading_system"
+									validator="gradingSystemValidator"
+									converter="gradingSystemConverter"
+									value="#{educationInfoView.selectedEducationInfo.gradingSystem}">
+									<f:selectItem itemValue="0"
+										itemLabel="Lütfen not sistemini seçiniz" />
+									<f:selectItems value="#{educationInfoView.gradingSystems}"
+										var="gradingSystem" itemValue="#{gradingSystem}"
+										itemLabel="#{gradingSystem.grade}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Mezuniyet Derecesi"
+									rendered="#{!educationInfoView.selectedEduInfoIsStudent}" />
+							</p:column>
+							<p:column colspan="2">
+								<p:inputText id="form_graduation_degree"
+									value="#{educationInfoView.selectedEducationInfo.graduationDegree}"
+									required="true"
+									requiredMessage="Lütfen mezuniyet derecenizi giriniz."
+									rendered="#{!educationInfoView.selectedEduInfoIsStudent}">
+								</p:inputText>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel
+									rendered="#{educationInfoView.selectedEduInfoIsStudent}"
+									value="Sınıf Bilgisi :" id="form_class_info_label" />
+							</p:column>
+							<p:column colspan="2">
+								<p:selectOneMenu
+									rendered="#{educationInfoView.selectedEduInfoIsStudent}"
+									id="form_class_info" required="true"
+									requiredMessage="Lütfen sınıf bilgisi giriniz."
+									value="#{educationInfoView.selectedEducationInfo.classInfo}">
+									<f:selectItem itemLabel="Lütfen sınıfınızı belirtiniz" />
+									<f:selectItems value="#{educationInfoView.classInfos}"
+										var="classInfo" itemValue="#{classInfo}"
+										itemLabel="#{classInfo}.sınıf" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Ağırlıklı Ortalama"
+									rendered="#{educationInfoView.selectedEduInfoIsStudent}" />
+							</p:column>
+							<p:column colspan="2">
+								<p:inputText id="form_grade_mean"
+									value="#{educationInfoView.selectedEducationInfo.graduationDegree}"
+									rendered="#{educationInfoView.selectedEduInfoIsStudent}">
+								</p:inputText>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Transcript Dosyası :"
+									rendered="#{educationInfoView.selectedEduInfoIsStudent}" />
+							</p:column>
+							<p:column>
+								<h:outputLink
+									rendered="#{educationInfoView.selectedEduInfoIsStudent}"
+									value="#{educationInfoView.selectedEducationInfo.transcriptFileURL}">İndir</h:outputLink>
+							</p:column>
+							<p:column>
+
+								<p:selectBooleanButton
+									value="#{educationInfoView.updateTranscriptFile}"
+									onLabel="Düzenle" offLabel="Vazgeç" onIcon="ui-icon-check"
+									offIcon="ui-icon-close"
+									rendered="#{educationInfoView.selectedEduInfoIsStudent}">
+									<p:ajax update="university_dialog_form" />
+								</p:selectBooleanButton>
+
+								<p:commandButton id="deleteFileButton"
+									rendered="#{educationInfoView.selectedEduInfoIsStudent}"
+									actionListener="#{educationInfoView.deleteSelectedEduInfoTranscriptFile(educationInfoList)}"
+									icon="ui-icon-close" value="Sil" />
+
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Lütfen transcriptinizi sisteme yükleyiniz"
+									rendered="#{!educationInfoView.updateTranscriptFile}" />
+							</p:column>
+							<p:column colspan="2">
+								<p:fileUpload
+									value="#{educationInfoView.uploadedTranscriptFile}"
+									rendered="#{!educationInfoView.updateTranscriptFile}" mode="simple"
+									update="selected_university_dialog_messages" uploadLabel="Yükle"
+									label="Seç" cancelLabel="İptal Et"
+									invalidFileMessage="Geçersiz dosya uzantısı."
+									fileLimitMessage="Yüklenecek olan dosya 2 MB dan küçük olması gerekmektedir."
+									sizeLimit="2000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+							</p:column>
+						</p:row>
 					</p:panelGrid>
 					<p:commandButton action="#{educationInfoView.updateEducationInfo}"
 						value="Kaydet" ajax="true" icon="ui-icon-disk"
@@ -231,7 +341,8 @@
 			<p:dialog header="Üniversite Ekle" widgetVar="universityAddDialog"
 				resizable="false" id="universityAddDlg" showEffect="fade"
 				modal="true">
-				<h:form id="dialog_university_add_form">
+				<h:form id="dialog_university_add_form"
+					enctype="multipart/form-data">
 					<p:growl id="university_add_messages" />
 					<p:panelGrid styleClass="no_border" id="university_add_display"
 						columns="2" cellpadding="4" style="margin:0 auto;">
@@ -335,7 +446,7 @@
 
 
 						<h:outputLabel rendered="#{educationInfoView.isStudent}"
-							value="Sınıf Bilgisi* :" id="form_class_info_label" />
+							value="Sınıf Bilgisi :" id="form_class_info_label" />
 						<p:selectOneMenu rendered="#{educationInfoView.isStudent}"
 							id="form_class_info" required="true"
 							requiredMessage="Lütfen sınıf bilgisi giriniz."
@@ -353,11 +464,22 @@
 							rendered="#{educationInfoView.isStudent}">
 						</p:inputText>
 
+						<h:outputLabel value="Lütfen transcriptinizi sisteme yükleyiniz"
+							rendered="#{educationInfoView.isStudent}" />
+						<p:fileUpload value="#{educationInfoView.uploadedTranscriptFile}"
+							rendered="#{educationInfoView.isStudent}" mode="simple"
+							update="university_add_messages" uploadLabel="Yükle" label="Seç"
+							cancelLabel="İptal Et"
+							invalidFileMessage="Geçersiz dosya uzantısı."
+							fileLimitMessage="Yüklenecek olan dosya 2 MB dan küçük olması gerekmektedir."
+							sizeLimit="2000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+
+
 
 
 					</p:panelGrid>
 					<p:commandButton action="#{educationInfoView.addEducationInfo}"
-						value="Ekle" ajax="true" icon="ui-icon-disk"
+						value="Ekle" ajax="false" icon="ui-icon-disk"
 						update=":list_university_form" />
 				</h:form>
 			</p:dialog>

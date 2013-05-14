@@ -40,7 +40,7 @@
 								icon="ui-icon-search" title="View">
 							</p:commandButton>
 							<p:commandButton id="deleteButton"
-								actionListener="#{certificationView.deleteSelectedCertification(certificationList)}"
+								action="#{certificationView.deleteSelectedCertification(certificationList)}"
 								icon="ui-icon-close" title="Delete">
 							</p:commandButton>
 						</p:column>
@@ -76,6 +76,10 @@
 					<p:panelGrid styleClass="no_border"
 						id="certification_detail_display" columns="2" cellpadding="4"
 						style="margin:0 auto;">
+
+						<h:outputLabel value="Sertifika Dosyası :" />
+						<h:outputLink
+							value="#{certificationView.selectedCertification.fileURL}">İndir</h:outputLink>
 
 						<h:outputLabel value="Sertifika İsmi :" />
 						<p:inputText
@@ -114,7 +118,8 @@
 			<p:dialog header="Sertifika Ekle" widgetVar="certificationAddDialog"
 				resizable="false" id="certificationAddDlg" showEffect="fade"
 				modal="true">
-				<h:form id="dialog_certification_add_form">
+				<h:form id="dialog_certification_add_form"
+					enctype="multipart/form-data">
 					<p:growl id="certification_add_messages" />
 					<p:panelGrid styleClass="no_border" id="certification_add_display"
 						columns="2" cellpadding="4" style="margin:0 auto;">
@@ -140,10 +145,19 @@
 							value="#{certificationView.certification.institution}"
 							required="true" requiredMessage="Lütfen alındığı kurumu giriniz." />
 
+						<h:outputLabel value="Lütfen sertifika dosyanızı belirleyiniz." />
+						<p:fileUpload required="true"
+							requiredMessage="Lütfen dosya seçiniz"
+							value="#{certificationView.uploadedFile}" mode="simple"
+							update="certification_add_messages" uploadLabel="Yükle"
+							label="Seç" cancelLabel="İptal Et"
+							invalidFileMessage="Geçersiz dosya uzantısı."
+							fileLimitMessage="Yüklenecek olan dosya 2 MB dan küçük olması gerekmektedir."
+							sizeLimit="2000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 
 					</p:panelGrid>
 					<p:commandButton action="#{certificationView.addCertification}"
-						value="Ekle" ajax="true" icon="ui-icon-disk"
+						value="Ekle" ajax="false" icon="ui-icon-disk"
 						update=":list_certification_form" />
 				</h:form>
 			</p:dialog>
