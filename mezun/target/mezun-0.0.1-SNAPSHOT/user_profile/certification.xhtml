@@ -71,41 +71,98 @@
 			<p:dialog header="Sertifika Ayrıntıları"
 				widgetVar="certificationUpdateDialog" resizable="false"
 				id="certificationUpdateDlg" showEffect="fade" modal="true">
-				<h:form id="certification_dialog_form">
+				<h:form id="certification_dialog_form" enctype="multipart/form-data">
 					<p:growl id="selected_certification_dialog_messages" />
 					<p:panelGrid styleClass="no_border"
-						id="certification_detail_display" columns="2" cellpadding="4"
+						id="certification_detail_display" cellpadding="4"
 						style="margin:0 auto;">
 
-						<h:outputLabel value="Sertifika Dosyası :" />
-						<h:outputLink
-							value="#{certificationView.selectedCertification.fileURL}">İndir</h:outputLink>
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Sertifika Dosyası :"
+									rendered="#{certificationView.isThereFile}" />
+							</p:column>
+							<p:column>
+								<h:outputLink rendered="#{certificationView.isThereFile}"
+									value="#{certificationView.selectedCertification.fileURL}">İndir</h:outputLink>
+							</p:column>
+							<p:column>
+								<p:selectBooleanButton value="#{certificationView.updateFile}"
+									onLabel="Düzenle" offLabel="Vazgeç" onIcon="ui-icon-check"
+									offIcon="ui-icon-close"
+									rendered="#{certificationView.isThereFile}">
+									<p:ajax update="certification_dialog_form" />
+								</p:selectBooleanButton>
+							</p:column>
+						</p:row>
+						
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Lütfen yeni sertifika dosyasını yükleyiniz."
+									rendered="#{!certificationView.updateFile}" />
+							</p:column>
+							<p:column colspan="2">
+								<p:fileUpload value="#{certificationView.uploadedFile}"
+									rendered="#{!certificationView.updateFile}" mode="simple"
+									update="selected_certification_dialog_messages"
+									uploadLabel="Yükle" label="Seç" cancelLabel="İptal Et"
+									invalidFileMessage="Geçersiz dosya uzantısı."
+									fileLimitMessage="Yüklenecek olan dosya 2 MB dan küçük olması gerekmektedir."
+									sizeLimit="2000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+							</p:column>
+						</p:row>
 
-						<h:outputLabel value="Sertifika İsmi :" />
-						<p:inputText
-							value="#{certificationView.selectedCertification.certificateName}"
-							required="true" requiredMessage="Lütfen sertifika ismi giriniz." />
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Sertifika İsmi :" />
+							</p:column>
+							<p:column colspan="2">
+								<p:inputText
+									value="#{certificationView.selectedCertification.certificateName}"
+									required="true"
+									requiredMessage="Lütfen sertifika ismi giriniz." />
+							</p:column>
+						</p:row>
 
-						<h:outputLabel value="Açıklama :" />
-						<p:inputTextarea
-							value="#{certificationView.selectedCertification.description}"
-							rows="5" cols="50" maxlength="100" autoResize="false"
-							required="true"
-							requiredMessage="Lütfen sertifikanızın detaylarını açıklayınız." />
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Açıklama :" />
+							</p:column>
+							<p:column colspan="2">
+								<p:inputTextarea
+									value="#{certificationView.selectedCertification.description}"
+									rows="5" cols="50" maxlength="100" autoResize="false"
+									required="true"
+									requiredMessage="Lütfen sertifikanızın detaylarını açıklayınız." />
+							</p:column>
+						</p:row>
 
-						<h:outputLabel value="Alınma Tarihi :" />
-						<p:calendar
-							value="#{certificationView.selectedCertification.certificateDate}"
-							showOn="button" />
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Alınma Tarihi :" />
+							</p:column>
+							<p:column colspan="2">
+								<p:calendar
+									value="#{certificationView.selectedCertification.certificateDate}"
+									showOn="button" />
+							</p:column>
+						</p:row>
 
-						<h:outputLabel value="Alındığı Kurum :" />
-						<p:inputText
-							value="#{certificationView.selectedCertification.institution}"
-							required="true" requiredMessage="Lütfen alındığı kurumu giriniz." />
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Alındığı Kurum :" />
+							</p:column>
+							<p:column colspan="2">
+								<p:inputText
+									value="#{certificationView.selectedCertification.institution}"
+									required="true"
+									requiredMessage="Lütfen alındığı kurumu giriniz." />
+							</p:column>
+						</p:row>
 
 					</p:panelGrid>
 					<p:commandButton action="#{certificationView.updateCertification}"
-						value="Kaydet" ajax="true" icon="ui-icon-disk"
+						value="Kaydet" ajax="false" icon="ui-icon-disk"
 						update=":certification_dialog_form" />
 				</h:form>
 			</p:dialog>
@@ -146,11 +203,9 @@
 							required="true" requiredMessage="Lütfen alındığı kurumu giriniz." />
 
 						<h:outputLabel value="Lütfen sertifika dosyanızı belirleyiniz." />
-						<p:fileUpload required="true"
-							requiredMessage="Lütfen dosya seçiniz"
-							value="#{certificationView.uploadedFile}" mode="simple"
-							update="certification_add_messages" uploadLabel="Yükle"
-							label="Seç" cancelLabel="İptal Et"
+						<p:fileUpload value="#{certificationView.uploadedFile}"
+							mode="simple" update="certification_add_messages"
+							uploadLabel="Yükle" label="Seç" cancelLabel="İptal Et"
 							invalidFileMessage="Geçersiz dosya uzantısı."
 							fileLimitMessage="Yüklenecek olan dosya 2 MB dan küçük olması gerekmektedir."
 							sizeLimit="2000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
