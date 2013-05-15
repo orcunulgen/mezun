@@ -38,15 +38,19 @@ public class CertificationView implements Serializable {
 	private List<Certification> certifications = new ArrayList<Certification>();
 
 	private Certification selectedCertification;
-	
+
 	private UploadedFile uploadedFile;
+
+	private Boolean updateFile = true;
+
+	private Boolean isThereFile;
 
 	@ManagedProperty(value = "#{certificationService}")
 	private CertificationService certificationService;
 
 	@ManagedProperty(value = "#{fileUploadService}")
 	private FileUploadService fileUploadService;
-	
+
 	@PostConstruct
 	public void init() {
 		certification = new Certification();
@@ -55,38 +59,55 @@ public class CertificationView implements Serializable {
 
 	public void initSelectedCertification(Certification selectedCertification) {
 		this.selectedCertification = selectedCertification;
+		if (this.selectedCertification.getFilePath() != null) {
+			setIsThereFile(true);
+		} else {
+			setIsThereFile(false);
+		}
 	}
 
-	public String deleteSelectedCertification(Certification selectedCertification)
-			throws IOException {
+	public String deleteSelectedCertification(
+			Certification selectedCertification) throws IOException {
 
 		initSelectedCertification(selectedCertification);
 
 		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
 				.getFlash();
 		flash.setKeepMessages(true);
-		
-		if(getFileUploadService().deleteFile(
-				UploadedFileDirectory.CERTIFICATES_PATH.getPath() + "/"
-						+ selectedCertification.getFilePath())){
-			
+
+		if (this.selectedCertification.getFilePath() != null) {
+			if (getFileUploadService().deleteFile(
+					UploadedFileDirectory.CERTIFICATES_PATH.getPath() + "/"
+							+ selectedCertification.getFilePath())) {
+
+				getCertificationService().deleteCertification(
+						getSelectedCertification());
+
+				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Sertifika başarıyla silindi.", "");
+
+				FacesContext.getCurrentInstance().addMessage(null, fm);
+			} else {
+				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Sertifika silinemedi.", "");
+
+				FacesContext.getCurrentInstance().addMessage(null, fm);
+
+			}
+
+		} else {
+
 			getCertificationService().deleteCertification(
 					getSelectedCertification());
-			
+
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Sertifika başarıyla silindi.", "");
 
 			FacesContext.getCurrentInstance().addMessage(null, fm);
-		}else{
-			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Sertifika silinemedi.", "");
-
-			FacesContext.getCurrentInstance().addMessage(null, fm);
-
 		}
 
-		return "announcement.xhtml?faces-redirect=true&user="
-		+ getLoggedUser().getTcno();
+		return "certification.xhtml?faces-redirect=true&user="
+				+ getLoggedUser().getTcno();
 
 	}
 
@@ -120,6 +141,22 @@ public class CertificationView implements Serializable {
 
 	public void setUploadedFile(UploadedFile uploadedFile) {
 		this.uploadedFile = uploadedFile;
+	}
+
+	public Boolean getUpdateFile() {
+		return updateFile;
+	}
+
+	public void setUpdateFile(Boolean updateFile) {
+		this.updateFile = updateFile;
+	}
+
+	public Boolean getIsThereFile() {
+		return isThereFile;
+	}
+
+	public void setIsThereFile(Boolean isThereFile) {
+		this.isThereFile = isThereFile;
 	}
 
 	public CertificationService getCertificationService() {
@@ -166,24 +203,24 @@ public class CertificationView implements Serializable {
 		if (differenceStartRegister > 0) {
 
 			getCertification().setUser(getLoggedUser());
-			
-			
-			try {
-				getFileUploadService().saveFile(
-						UploadedFileDirectory.CERTIFICATES_PATH.getPath(),
-						getUploadedFile());
 
-				getCertification().setFilePath(
-						getFileUploadService().getFileName());
-				
-				getCertificationService().addCertification(getCertification());
+			if (uploadedFile != null) {
+				try {
+					getFileUploadService().saveFile(
+							UploadedFileDirectory.CERTIFICATES_PATH.getPath(),
+							getUploadedFile());
 
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+					getCertification().setFilePath(
+							getFileUploadService().getFileName());
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}
 
-			
+			getCertificationService().addCertification(getCertification());
 
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Kaydınız başarıyla tamamlandı.", "");
@@ -214,15 +251,59 @@ public class CertificationView implements Serializable {
 		flash.setKeepMessages(true);
 
 		if (differenceStartRegister > 0) {
+			
+			
+			if (!updateFile && uploadedFile != null) {
+				try {
 
-			getCertificationService().updateCertification(
-					getSelectedCertification());
+					if (getFileUploadService().deleteFile(
+							UploadedFileDirectory.CERTIFICATES_PATH
+									.getPath()
+									+ "/"
+									+ getSelectedCertification().getFilePath())) {
 
-			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Kaydınız başarıyla güncellendi.", "");
+						getFileUploadService()
+								.saveFile(
+										UploadedFileDirectory.CERTIFICATES_PATH
+												.getPath(), getUploadedFile());
 
-			FacesContext.getCurrentInstance().addMessage(null, fm);
+						getSelectedCertification().setFilePath(
+								getFileUploadService().getFileName());
 
+						getCertificationService().updateCertification(
+								getSelectedCertification());
+
+						FacesMessage fm = new FacesMessage(
+								FacesMessage.SEVERITY_INFO,
+								"Kaydınız başarıyla güncellendi.", "");
+
+						FacesContext.getCurrentInstance().addMessage(null, fm);
+
+					} else {
+						FacesMessage fm = new FacesMessage(
+								FacesMessage.SEVERITY_INFO,
+								"Kaydınız güncellenemedi.", "");
+
+						FacesContext.getCurrentInstance().addMessage(null, fm);
+
+					}
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			} else {
+				getCertificationService().updateCertification(
+						getSelectedCertification());
+
+				FacesMessage fm = new FacesMessage(
+						FacesMessage.SEVERITY_INFO,
+						"Kaydınız başarıyla güncellendi.", "");
+
+				FacesContext.getCurrentInstance().addMessage(null, fm);
+			}
+			
 		} else {
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					"Sertifikanın alındığı tarih geçmiş zamana ait olmalıdır.",

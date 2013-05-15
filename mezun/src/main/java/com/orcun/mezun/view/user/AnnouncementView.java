@@ -42,6 +42,8 @@ public class AnnouncementView implements Serializable {
 
 	private UploadedFile uploadedPoster;
 
+	private Boolean updatePoster = true;
+
 	@ManagedProperty(value = "#{announcementService}")
 	private AnnouncementService announcementService;
 
@@ -70,17 +72,18 @@ public class AnnouncementView implements Serializable {
 		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
 				.getFlash();
 		flash.setKeepMessages(true);
-		
-		if(getFileUploadService().deleteFile(
+
+		if (getFileUploadService().deleteFile(
 				UploadedFileDirectory.ANNOUNCEMENT_POSTER_PATH.getPath() + "/"
-						+ selectedAnnouncement.getPosterPath())){
-			getAnnouncementService().deleteAnnouncement(getSelectedAnnouncement());
-			
+						+ selectedAnnouncement.getPosterPath())) {
+			getAnnouncementService().deleteAnnouncement(
+					getSelectedAnnouncement());
+
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Duyuru başarıyla silindi.", "");
 
 			FacesContext.getCurrentInstance().addMessage(null, fm);
-		}else{
+		} else {
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Duyuru silinemedi.", "");
 
@@ -89,7 +92,7 @@ public class AnnouncementView implements Serializable {
 		}
 
 		return "announcement.xhtml?faces-redirect=true&user="
-		+ getLoggedUser().getTcno();
+				+ getLoggedUser().getTcno();
 	}
 
 	public User getLoggedUser() {
@@ -142,6 +145,14 @@ public class AnnouncementView implements Serializable {
 
 	public void setUploadedPoster(UploadedFile uploadedPoster) {
 		this.uploadedPoster = uploadedPoster;
+	}
+
+	public Boolean getUpdatePoster() {
+		return updatePoster;
+	}
+
+	public void setUpdatePoster(Boolean updatePoster) {
+		this.updatePoster = updatePoster;
 	}
 
 	public AnnouncementService getAnnouncementService() {
@@ -222,12 +233,55 @@ public class AnnouncementView implements Serializable {
 
 	public String updateAnnouncement() {
 
-		getAnnouncementService().updateAnnouncement(getSelectedAnnouncement());
+		if (!updatePoster && uploadedPoster != null) {
+			try {
 
-		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"Kaydınız başarıyla güncellendi.", "");
+				if (getFileUploadService().deleteFile(
+						UploadedFileDirectory.ANNOUNCEMENT_POSTER_PATH
+								.getPath()
+								+ "/"
+								+ getSelectedAnnouncement().getPosterPath())) {
 
-		FacesContext.getCurrentInstance().addMessage(null, fm);
+					getFileUploadService()
+							.saveFile(
+									UploadedFileDirectory.ANNOUNCEMENT_POSTER_PATH
+											.getPath(), getUploadedPoster());
+
+					getSelectedAnnouncement().setPosterPath(
+							getFileUploadService().getFileName());
+
+					getAnnouncementService().updateAnnouncement(
+							getSelectedAnnouncement());
+
+					FacesMessage fm = new FacesMessage(
+							FacesMessage.SEVERITY_INFO,
+							"Kaydınız başarıyla güncellendi.", "");
+
+					FacesContext.getCurrentInstance().addMessage(null, fm);
+
+				} else {
+					FacesMessage fm = new FacesMessage(
+							FacesMessage.SEVERITY_INFO,
+							"Kaydınız güncellenemedi.", "");
+
+					FacesContext.getCurrentInstance().addMessage(null, fm);
+
+				}
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		} else {
+			getAnnouncementService().updateAnnouncement(
+					getSelectedAnnouncement());
+
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Kaydınız başarıyla güncellendi.", "");
+
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+		}
 
 		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
 				.getFlash();

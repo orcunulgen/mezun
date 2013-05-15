@@ -39,6 +39,8 @@ public class EventView implements Serializable {
 	private Event selectedEvent;
 	
 	private UploadedFile uploadedPoster;
+	
+	private Boolean updatePoster = true;
 
 	@ManagedProperty(value = "#{eventService}")
 	private EventService eventService;
@@ -136,6 +138,14 @@ public class EventView implements Serializable {
 		this.uploadedPoster = uploadedPoster;
 	}
 
+	public Boolean getUpdatePoster() {
+		return updatePoster;
+	}
+
+	public void setUpdatePoster(Boolean updatePoster) {
+		this.updatePoster = updatePoster;
+	}
+
 	public EventService getEventService() {
 		return eventService;
 	}
@@ -223,13 +233,56 @@ public class EventView implements Serializable {
 				new DateTime(registeredDate)).getDays();
 
 		if (differenceStartEnd > 0 && differenceStartRegister <= 0) {
+		
+			if (!updatePoster && uploadedPoster != null) {
+				try {
 
-			getEventService().updateEvent(getSelectedEvent());
+					if (getFileUploadService().deleteFile(
+							UploadedFileDirectory.EVENT_POSTER_PATH.getPath()
+									+ "/"
+									+ getSelectedEvent()
+											.getPosterPath())) {
 
-			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Kaydınız başarıyla güncellendi.", "");
+						getFileUploadService()
+								.saveFile(
+										UploadedFileDirectory.EVENT_POSTER_PATH
+												.getPath(),
+										getUploadedPoster());
 
-			FacesContext.getCurrentInstance().addMessage(null, fm);
+						getSelectedEvent().setPosterPath(
+								getFileUploadService().getFileName());
+
+						getEventService().updateEvent(getSelectedEvent());
+
+						FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+								"Kaydınız başarıyla güncellendi.", "");
+
+						FacesContext.getCurrentInstance().addMessage(null, fm);
+
+
+					} else {
+						FacesMessage fm = new FacesMessage(
+								FacesMessage.SEVERITY_INFO,
+								"Kaydınız güncellenemedi.", "");
+
+						FacesContext.getCurrentInstance().addMessage(null,
+								fm);
+
+					}
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			} else{
+				getEventService().updateEvent(getSelectedEvent());
+
+				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Kaydınız başarıyla güncellendi.", "");
+
+				FacesContext.getCurrentInstance().addMessage(null, fm);
+			}
 
 		} else {
 			FacesMessage fm = new FacesMessage(
