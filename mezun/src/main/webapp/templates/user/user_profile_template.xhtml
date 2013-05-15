@@ -23,9 +23,6 @@
 						<p:menuitem value="Profilim"
 							url="/user_profile/showcase/index.xhtml?user=#{showCaseView.loggedUser.tcno}"
 							icon="ui-icon-person" />
-						<p:menuitem value="Hesap Ayarları"
-							url="/user_profile/profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}"
-							icon="ui-icon-gear" />
 						<p:menuitem value="Yönetici Girişi"
 							url="/admin_profile/index.xhtml" icon="ui-icon-key"
 							rendered="#{adminPanelView.isAdmin}" />
@@ -46,13 +43,30 @@
 					</h:outputLabel>
 				</div>
 				<div class="bread_crumb">
-					<ui:insert name="bread_crumb_container"/>
+					<ui:insert name="bread_crumb_container" />
 				</div>
 
 			</div>
 
 			<div class="main_panel">
-				<div class="main_panel_left"></div>
+				<div class="main_panel_left">
+					<div class="profile_card">
+						<div class="profile_picture">
+							<p:graphicImage
+								value="#{profileSettingsView.loggedUser.profilePicURL}"
+								width="175px" height="175px" />
+						</div>
+						<div class="profile_info">
+							<h:outputLabel
+								value="#{profileSettingsView.loggedUser.name} #{profileSettingsView.loggedUser.surname} ">
+							</h:outputLabel>
+						</div>
+						<div class="edit_profile">
+							<h:outputLink
+								value="#{facesContext.externalContext.requestContextPath}/user_profile/profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}">Hesap Ayarları</h:outputLink>
+						</div>
+					</div>
+				</div>
 				<div class="main_panel_middle">
 					<ui:insert name="main_container" />
 				</div>

@@ -2,11 +2,13 @@ package com.orcun.mezun.model;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,10 +17,14 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.orcun.mezun.model.enums.UploadedFileDirectory;
+import com.orcun.mezun.util.MyURLUtil;
 
 @Entity
 @Table(name="user")
@@ -50,6 +56,10 @@ public class User implements Serializable,UserDetails{
 	
 	@Column(name="profile_photo_path",nullable=true)
 	private String profilePhotoPath;
+	
+	@SuppressWarnings("unused")
+	@Transient
+	private String profilePicURL;
 	
 	@Column(name="enabled",nullable = false)
 	private boolean enabled=true;
@@ -116,6 +126,15 @@ public class User implements Serializable,UserDetails{
 	}
 	public void setProfilePhotoPath(String profilePhotoPath) {
 		this.profilePhotoPath = profilePhotoPath;
+	}
+	public String getProfilePicURL() throws MalformedURLException {
+		return MyURLUtil.getBaseURL(FacesContext.getCurrentInstance())
+				+ UploadedFileDirectory.PROFILE_PICTURE_PATH.getPath()
+				+"/"
+				+ getProfilePhotoPath();
+	}
+	public void setProfilePicURL(String profilePicURL) {
+		this.profilePicURL = profilePicURL;
 	}
 	public boolean isEnabled() {
 		return enabled;
