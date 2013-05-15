@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.orcun.mezun.dao.user.EducationInfoDAO;
 import com.orcun.mezun.model.Department;
+import com.orcun.mezun.model.EducationFeedback;
 import com.orcun.mezun.model.EducationInfo;
 import com.orcun.mezun.model.EducationLevel;
 import com.orcun.mezun.model.Faculty;
@@ -16,12 +17,10 @@ import com.orcun.mezun.model.User;
 
 @Service
 public class EducationInfoService {
-	
+
 	@Autowired
 	private EducationInfoDAO educationInfoDAO;
 
-
-	
 	public EducationInfoDAO getEducationInfoDAO() {
 		return educationInfoDAO;
 	}
@@ -45,7 +44,7 @@ public class EducationInfoService {
 	public List<Faculty> allFaculties(University university) {
 		return getEducationInfoDAO().allFaculties(university);
 	}
-	
+
 	public List<Department> allDepartments(Faculty faculty) {
 		return getEducationInfoDAO().allDepartments(faculty);
 	}
@@ -53,16 +52,18 @@ public class EducationInfoService {
 	public List<EducationLevel> allEducationLevels() {
 		return getEducationInfoDAO().allEducationLevels();
 	}
+
 	public List<GradingSystem> allGradingSystems() {
 		return getEducationInfoDAO().allGradingSystems();
 	}
+
 	public List<EducationInfo> allEducations(User loggedUser) {
 		return getEducationInfoDAO().allEducations(loggedUser);
 	}
-	
+
 	public void deleteEducationInfo(EducationInfo selectedEducationInfo) {
 		getEducationInfoDAO().deleteEducationInfo(selectedEducationInfo);
-		
+
 	}
 
 	public void updateUser(User loggedUser) {
@@ -83,5 +84,24 @@ public class EducationInfoService {
 
 	public Department getYTUCE(long l) {
 		return getEducationInfoDAO().getYTUCE(l);
+	}
+
+	public EducationFeedback findFeedbackInfoByEduInfo(
+			EducationInfo selectedEducationInfo) {
+		if (selectedEducationInfo != null) {
+			return getEducationInfoDAO().findFeedbackInfoByEduInfo(
+					selectedEducationInfo);
+		} else {
+			return null;
+		}
+	}
+
+	public void addFeedbackInfo(EducationFeedback educationFeedback) {
+		getEducationInfoDAO().addFeedbackInfo(educationFeedback);
+
+	}
+
+	public void updateFeedbackInfo(EducationFeedback educationFeedback) {
+		getEducationInfoDAO().updateFeedbackInfo(educationFeedback);
 	}
 }

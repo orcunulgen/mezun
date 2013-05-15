@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.orcun.mezun.model.Department;
+import com.orcun.mezun.model.EducationFeedback;
 import com.orcun.mezun.model.EducationInfo;
 import com.orcun.mezun.model.EducationLevel;
 import com.orcun.mezun.model.Faculty;
@@ -110,6 +111,23 @@ public class EducationInfoDAO {
 	public Department getYTUCE(long l) {
 		return (Department) getSession().createCriteria(Department.class)
 				.add(Restrictions.eq("id", l)).list().get(0);
+	}
+
+	public EducationFeedback findFeedbackInfoByEduInfo(
+			EducationInfo selectedEducationInfo) {
+		return (EducationFeedback) getSession()
+				.createCriteria(EducationFeedback.class)
+				.add(Restrictions.eq("educationInfo", selectedEducationInfo))
+				.uniqueResult();
+	}
+
+	public void addFeedbackInfo(EducationFeedback educationFeedback) {
+		getSession().save(educationFeedback);
+	}
+
+	public void updateFeedbackInfo(EducationFeedback educationFeedback) {
+		getSession().update(educationFeedback);
+		
 	}
 
 }

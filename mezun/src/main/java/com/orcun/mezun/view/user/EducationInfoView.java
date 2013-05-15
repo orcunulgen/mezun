@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.commons.FileUploadService;
 import com.orcun.mezun.model.Department;
+import com.orcun.mezun.model.EducationFeedback;
 import com.orcun.mezun.model.EducationInfo;
 import com.orcun.mezun.model.EducationLevel;
 import com.orcun.mezun.model.Faculty;
@@ -65,6 +66,8 @@ public class EducationInfoView implements Serializable {
 	private EducationInfo selectedEducationInfo;
 	private Boolean selectedEduInfoIsStudent;
 
+	private EducationFeedback educationFeedback;
+
 	@ManagedProperty(value = "#{educationInfoService}")
 	private EducationInfoService educationInfoService;
 
@@ -83,6 +86,10 @@ public class EducationInfoView implements Serializable {
 		if (educationInfo == null) {
 			educationInfo = new EducationInfo();
 
+		}
+
+		if (educationFeedback == null) {
+			educationFeedback = new EducationFeedback();
 		}
 	}
 
@@ -148,6 +155,20 @@ public class EducationInfoView implements Serializable {
 		return "university.xhtml?faces-redirect=true&user="
 				+ getLoggedUser().getTcno();
 
+	}
+
+	public void initFeedbackSelectedEducation(
+			EducationInfo selectedEducationInfo) {
+
+		setSelectedEducationInfo(selectedEducationInfo);
+		
+		EducationFeedback eduFeed=getEducationInfoService().findFeedbackInfoByEduInfo(selectedEducationInfo);
+		if(eduFeed!=null){
+			setEducationFeedback(eduFeed);
+		}else{
+			getEducationFeedback().setEducationInfo(getSelectedEducationInfo());
+		}
+		
 	}
 
 	public void deleteSelectedEduInfoTranscriptFile() throws IOException {
@@ -351,6 +372,14 @@ public class EducationInfoView implements Serializable {
 		this.selectedEduInfoIsStudent = selectedEduInfoIsStudent;
 	}
 
+	public EducationFeedback getEducationFeedback() {
+		return educationFeedback;
+	}
+
+	public void setEducationFeedback(EducationFeedback educationFeedback) {
+		this.educationFeedback = educationFeedback;
+	}
+
 	public void addUniversityChangeFaculty() {
 		universityAddFaculties = getEducationInfoService().allFaculties(
 				getEducationInfo().getUniversity());
@@ -422,29 +451,43 @@ public class EducationInfoView implements Serializable {
 					- getEducationInfo().getStartYear();
 			if (differenceStartRegister > 0) {
 
-				try {
+				if (uploadedTranscriptFile != null) {
+					try {
 
+						getEducationInfo().setUser(getLoggedUser());
+						getFileUploadService()
+								.saveFile(
+										UploadedFileDirectory.TRANSCRIPT_PATH
+												.getPath(),
+										getUploadedTranscriptFile());
+
+						getEducationInfo().setTranscriptPath(
+								getFileUploadService().getFileName());
+
+						getEducationInfoService().addEducationInfo(
+								getEducationInfo());
+
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					FacesMessage fm = new FacesMessage(
+							FacesMessage.SEVERITY_INFO,
+							"Kaydınız başarıyla tamamlandı.", "");
+
+					FacesContext.getCurrentInstance().addMessage(null, fm);
+
+				} else {
 					getEducationInfo().setUser(getLoggedUser());
-					getFileUploadService().saveFile(
-							UploadedFileDirectory.TRANSCRIPT_PATH.getPath(),
-							getUploadedTranscriptFile());
-
-					getEducationInfo().setTranscriptPath(
-							getFileUploadService().getFileName());
-
 					getEducationInfoService().addEducationInfo(
 							getEducationInfo());
+					FacesMessage fm = new FacesMessage(
+							FacesMessage.SEVERITY_INFO,
+							"Kaydınız başarıyla tamamlandı.", "");
 
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					FacesContext.getCurrentInstance().addMessage(null, fm);
 				}
-
-				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
-						"Kaydınız başarıyla tamamlandı.", "");
-
-				FacesContext.getCurrentInstance().addMessage(null, fm);
-
 			} else {
 				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
 						"Başlangıç tarihi geçmiş zamana ait olmalıdır.",
@@ -624,5 +667,28 @@ public class EducationInfoView implements Serializable {
 		return "university.xhtml?faces-redirect=true&user="
 				+ getLoggedUser().getTcno();
 
+	}
+
+	public String addFeedBackSelectedEducationInfo() {
+		
+		if (getEducationInfoService()
+				.findFeedbackInfoByEduInfo(getSelectedEducationInfo()) != null) {
+			getEducationInfoService()
+					.updateFeedbackInfo(getEducationFeedback());
+		} else {
+			getEducationInfoService().addFeedbackInfo(getEducationFeedback());
+		}
+
+		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Kaydınız başarıyla güncellendi.", "");
+
+		FacesContext.getCurrentInstance().addMessage(null, fm);
+
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
+
+		return "university.xhtml?faces-redirect=true&user="
+				+ getLoggedUser().getTcno();
 	}
 }

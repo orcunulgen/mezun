@@ -41,6 +41,12 @@
 								action="#{educationInfoView.deleteSelectedEducationInfo(educationInfoList)}"
 								icon="ui-icon-close" title="Delete">
 							</p:commandButton>
+							<p:commandButton id="addEduFeedbackButton" rendered="#{educationInfoList.endYear!=null}"
+								actionListener="#{educationInfoView.initFeedbackSelectedEducation(educationInfoList)}"
+								update=":add_feedback_dialog_form"
+								oncomplete="addFeedBackDialog.show()" icon="ui-icon-pencil"
+								title="Feedback">
+							</p:commandButton>
 						</p:column>
 						<p:column>
 							<f:facet name="header">
@@ -288,8 +294,7 @@
 									rendered="#{educationInfoView.isThereTranscript}" />
 							</p:column>
 							<p:column>
-								<h:outputLink
-									rendered="#{educationInfoView.isThereTranscript}"
+								<h:outputLink rendered="#{educationInfoView.isThereTranscript}"
 									value="#{educationInfoView.selectedEducationInfo.transcriptFileURL}">İndir</h:outputLink>
 							</p:column>
 							<p:column>
@@ -305,7 +310,8 @@
 								<p:commandButton id="deleteFileButton"
 									rendered="#{educationInfoView.isThereTranscript}"
 									actionListener="#{educationInfoView.deleteSelectedEduInfoTranscriptFile}"
-									icon="ui-icon-close" value="Sil" update=":university_dialog_form" />
+									icon="ui-icon-close" value="Sil"
+									update=":university_dialog_form" />
 
 							</p:column>
 						</p:row>
@@ -318,9 +324,9 @@
 							<p:column colspan="2">
 								<p:fileUpload
 									value="#{educationInfoView.uploadedTranscriptFile}"
-									rendered="#{!educationInfoView.updateTranscriptFile}" mode="simple"
-									update="selected_university_dialog_messages" uploadLabel="Yükle"
-									label="Seç" cancelLabel="İptal Et"
+									rendered="#{!educationInfoView.updateTranscriptFile}"
+									mode="simple" update="selected_university_dialog_messages"
+									uploadLabel="Yükle" label="Seç" cancelLabel="İptal Et"
 									invalidFileMessage="Geçersiz dosya uzantısı."
 									fileLimitMessage="Yüklenecek olan dosya 2 MB dan küçük olması gerekmektedir."
 									sizeLimit="2000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
@@ -330,6 +336,28 @@
 					<p:commandButton action="#{educationInfoView.updateEducationInfo}"
 						value="Kaydet" ajax="false" icon="ui-icon-disk"
 						update=":university_dialog_form" />
+				</h:form>
+			</p:dialog>
+
+			<p:dialog header="Alınan Eğitim Hakkındaki Geri Beslemeler "
+				widgetVar="addFeedBackDialog" resizable="false" id="addFeedbackDlg"
+				showEffect="fade" modal="true">
+				<h:form id="add_feedback_dialog_form">
+					<p:growl id="selected_university_add_feedback_messages" />
+					<p:panelGrid styleClass="no_border"
+						id="university_feedback_display" columns="1" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputLabel value="Aldığınız eğitim hakkındaki kişisel görüşlerinizi belirtiniz." />
+						<p:inputTextarea id="add_feedback_info"
+							value="#{educationInfoView.educationFeedback.feedbackText}" rows="5"
+							cols="50" maxlength="100" autoResize="false" />
+
+
+					</p:panelGrid>
+					<p:commandButton action="#{educationInfoView.addFeedBackSelectedEducationInfo}"
+						value="Kaydet" ajax="true" icon="ui-icon-disk"
+						update=":add_feedback_dialog_form" />
 				</h:form>
 			</p:dialog>
 
