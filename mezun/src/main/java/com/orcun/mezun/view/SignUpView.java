@@ -172,15 +172,20 @@ public class SignUpView implements Serializable {
 
 				getSignUpService().addUser(user);
 
+				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Kaydınız başarıyla tamamlandı.", "");
+
+				FacesContext.getCurrentInstance().addMessage(null, fm);
+
 			} catch (IOException e) {
 				e.printStackTrace();
+				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Kaydınız tamamlanamadı.", "");
+
+				FacesContext.getCurrentInstance().addMessage(null, fm);
+
 			}
-
-			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Kaydınız başarıyla tamamlandı.", "");
-
-			FacesContext.getCurrentInstance().addMessage(null, fm);
-
+			
 			Flash flash = FacesContext.getCurrentInstance()
 					.getExternalContext().getFlash();
 			flash.setKeepMessages(true);

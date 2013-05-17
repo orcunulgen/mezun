@@ -1,8 +1,11 @@
 package com.orcun.mezun.model;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.util.Date;
 
+import javax.faces.context.FacesContext;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +15,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.orcun.mezun.model.enums.UploadedFileDirectory;
+import com.orcun.mezun.util.MyURLUtil;
 
 
 @Entity
@@ -36,6 +43,10 @@ public class Photo implements Serializable {
 	@Column(name="photo_path",nullable=false,length=200)
 	private String photoPath;
 	
+	@SuppressWarnings("unused")
+	@Transient
+	private String photoURL;
+	
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="album_id")
 	private PhotoAlbum photoAlbum;
@@ -52,16 +63,16 @@ public class Photo implements Serializable {
 		return place;
 	}
 
-	public void setPlace(String place) {
-		this.place = place;
+	public void setPlace(String place) throws UnsupportedEncodingException {
+		this.place = new String(place.getBytes("ISO-8859-1"), "UTF-8");
 	}
 
 	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDescription(String description) throws UnsupportedEncodingException {
+		this.description = new String(description.getBytes("ISO-8859-1"), "UTF-8");
 	}
 
 	public Date getDate() {
@@ -78,6 +89,17 @@ public class Photo implements Serializable {
 
 	public void setPhotoPath(String photoPath) {
 		this.photoPath = photoPath;
+	}
+
+	public String getPhotoURL() throws MalformedURLException {
+		 return MyURLUtil.getBaseURL(FacesContext.getCurrentInstance())
+				+ UploadedFileDirectory.ALBUM_PHOTO_PATH.getPath()
+				+"/"
+				+ getPhotoPath();
+	}
+
+	public void setPhotoURL(String photoURL) {
+		this.photoURL = photoURL;
 	}
 
 	public PhotoAlbum getPhotoAlbum() {

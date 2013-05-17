@@ -40,7 +40,7 @@ public class PostHistory implements Serializable{
 	@Column(name="content_type")
 	private ContentType contentType=ContentType.TEXT;
 	
-	@Column(name="content_id",nullable=false)
+	@Column(name="content_id",nullable=true)
 	private Long contentID;
 	
 	@ManyToOne(cascade=CascadeType.ALL)

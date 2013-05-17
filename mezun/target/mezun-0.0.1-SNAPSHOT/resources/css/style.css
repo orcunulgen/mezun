@@ -49,7 +49,7 @@
 			min-height: 600px;
 			width: 20%;
 			float: left;
-			margin:5px auto;
+			margin:10px auto;
 		}
 		
 			.profile_card{
@@ -57,19 +57,19 @@
 				width: 100%;
 			}
 				.profile_picture{
-					height: 175px;
-					width: 175px;
+					height: 150px;
+					width: 150px;
 					margin: 5px auto;
 				}
 				.profile_info{
 					height: 20px;
-					width: 175px;
+					width: 150px;
 					margin: 5px auto;
 					text-align: center;
 				}
 				.edit_profile{
 					height: 20px;
-					width: 175px;
+					width: 150px;
 					margin: 5px auto;
 					text-align: center;
 				}
