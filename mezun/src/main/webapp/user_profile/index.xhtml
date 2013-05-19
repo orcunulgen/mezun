@@ -36,8 +36,11 @@
 
 						</p:panelGrid>
 						<p:commandButton action="#{allPostView.addTextSharePost}"
-							value="Paylaş" ajax="false" icon="ui-icon-disk"
-							update=":form_all_post_share_text" />
+							value="Paylaş" ajax="false" update=":form_all_post_share_text" />
+						<p:menuButton value="Herkese Paylaş" style="float:right;">
+							<p:menuitem value="Kişileri Belirle"
+								onclick="shareListDialog.show()" icon="ui-icon-gear" />
+						</p:menuButton>
 					</h:form>
 				</p:tab>
 
@@ -80,8 +83,11 @@
 								rows="2" cols="50" maxlength="100" autoResize="false" />
 						</p:panelGrid>
 						<p:commandButton action="#{allPostView.addEventSharePost}"
-							value="Paylaş" ajax="false" icon="ui-icon-disk"
-							update=":dialog_event_add_form" />
+							value="Paylaş" ajax="false" update=":dialog_event_add_form" />
+						<p:menuButton value="Herkese Paylaş" style="float:right;">
+							<p:menuitem value="Kişileri Belirle"
+								onclick="shareListDialog.show()" icon="ui-icon-gear" />
+						</p:menuButton>
 					</h:form>
 				</p:tab>
 				<p:tab title="Duyuru">
@@ -129,8 +135,12 @@
 
 						</p:panelGrid>
 						<p:commandButton action="#{allPostView.addAnnouncementSharePost}"
-							value="Paylaş" ajax="false" icon="ui-icon-disk"
+							value="Paylaş" ajax="false"
 							update=":dialog_announcement_add_form" />
+						<p:menuButton value="Herkese Paylaş" style="float:right;">
+							<p:menuitem value="Kişileri Belirle"
+								onclick="shareListDialog.show()" icon="ui-icon-gear" />
+						</p:menuButton>
 					</h:form>
 
 				</p:tab>
@@ -172,15 +182,47 @@
 
 						</p:panelGrid>
 						<p:commandButton action="#{allPostView.addPhotoSharePost}"
-							value="Paylaş" ajax="false" icon="ui-icon-disk"
-							update=":dialog_photo_add_form" />
+							value="Paylaş" ajax="false" update=":dialog_photo_add_form" />
+						<p:menuButton value="Herkese Paylaş" style="float:right;">
+							<p:menuitem value="Kişileri Belirle"
+								onclick="shareListDialog.show()" icon="ui-icon-gear" />
+						</p:menuButton>
 					</h:form>
 				</p:tab>
 
 			</p:tabView>
+
+			<p:dataGrid value="#{allPostView.textTypePosts}" var="textTypePost"
+				id="text_type_post_list_dgrid" paginator="true" rows="10"
+				columns="1" paginatorAlwaysVisible="false">
+				<p:panelGrid styleClass="no_border" id="text_type_post_pgrid"
+					columns="1" cellpadding="4" style="margin:0 auto; width:100%;">
+					<p:row>
+						<p:column>
+							<p:graphicImage value="#{textTypePost.user.profilePicURL}"
+								width="30px" height="30px" />
+							<h:outputLink
+								value="#{facesContext.externalContext.requestContextPath}/user_profile/showcase/index.xhtml?user=#{textTypePost.user.tcno}">#{textTypePost.user.name} #{textTypePost.user.surname}</h:outputLink>
+							<h:outputLabel style="float:right;"
+								value="#{textTypePost.publishedDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+							</h:outputLabel>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel value="#{textTypePost.description}" />
+						</p:column>
+					</p:row>
+
+				</p:panelGrid>
+				
+				
+			</p:dataGrid>
+			<h:form>
+			<p:poll interval="3" update=":text_type_post_list_dgrid"/>
+			</h:form>
 		</div>
-		Tüm postlar burada olacak...
-		
 	</ui:define>
 
 </ui:composition>

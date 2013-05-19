@@ -22,15 +22,20 @@ import org.springframework.security.core.context.SecurityContext;
 import com.orcun.mezun.commons.FileUploadService;
 import com.orcun.mezun.model.Announcement;
 import com.orcun.mezun.model.AnnouncementType;
+import com.orcun.mezun.model.ChatGroup;
+import com.orcun.mezun.model.ChatList;
+import com.orcun.mezun.model.ChatPerson;
 import com.orcun.mezun.model.Event;
 import com.orcun.mezun.model.Photo;
 import com.orcun.mezun.model.PhotoAlbum;
 import com.orcun.mezun.model.PostHistory;
+import com.orcun.mezun.model.ShareList;
 import com.orcun.mezun.model.User;
 import com.orcun.mezun.model.enums.ContentType;
 import com.orcun.mezun.model.enums.UploadedFileDirectory;
 import com.orcun.mezun.service.user.AllPostService;
 import com.orcun.mezun.service.user.AnnouncementService;
+import com.orcun.mezun.service.user.ChatListService;
 import com.orcun.mezun.service.user.EventService;
 import com.orcun.mezun.service.user.PhotoService;
 
@@ -51,8 +56,12 @@ public class AllPostView implements Serializable {
 
 	private Photo photo;
 	private UploadedFile uploadedPhoto;
-
 	private List<PhotoAlbum> photoAlbumList = new ArrayList<PhotoAlbum>();
+
+	private List<ShareList> shareList = new ArrayList<ShareList>();
+	
+	
+	private List<PostHistory> textTypePosts=new ArrayList<PostHistory>();
 
 	private User loggedUser;
 
@@ -71,6 +80,9 @@ public class AllPostView implements Serializable {
 	@ManagedProperty(value = "#{fileUploadService}")
 	private FileUploadService fileUploadService;
 
+	@ManagedProperty(value = "#{chatListService}")
+	private ChatListService chatListService;
+
 	@PostConstruct
 	public void init() {
 		if (this.postHistory == null) {
@@ -85,9 +97,10 @@ public class AllPostView implements Serializable {
 		if (this.photo == null) {
 			this.photo = new Photo();
 		}
-
+		
 		announcementTypes = announcementService.allAnnouncementTypes();
 		photoAlbumList = getPhotoService().allPhotoAlbum(getLoggedUser());
+		textTypePosts=getAllPostService().allTextTypePosts(getLoggedUser());
 
 	}
 
@@ -164,6 +177,22 @@ public class AllPostView implements Serializable {
 		this.photoAlbumList = photoAlbumList;
 	}
 
+	public List<ShareList> getShareList() {
+		return shareList;
+	}
+
+	public void setShareList(List<ShareList> shareList) {
+		this.shareList = shareList;
+	}
+
+	public List<PostHistory> getTextTypePosts() {
+		return textTypePosts;
+	}
+
+	public void setTextTypePosts(List<PostHistory> textTypePosts) {
+		this.textTypePosts = textTypePosts;
+	}
+
 	public User getLoggedUser() {
 		SecurityContext securityContext = (SecurityContext) FacesContext
 				.getCurrentInstance().getExternalContext().getSessionMap()
@@ -216,14 +245,55 @@ public class AllPostView implements Serializable {
 		this.fileUploadService = fileUploadService;
 	}
 
+	public ChatListService getChatListService() {
+		return chatListService;
+	}
+
+	public void setChatListService(ChatListService chatListService) {
+		this.chatListService = chatListService;
+	}
+
+	public void shareToAllList(PostHistory posHistory) {
+		ChatList chatList = getChatListService().findChatListByUser(
+				getLoggedUser());
+
+		if (chatList != null) {
+			List<ChatGroup> chatGroupList = chatList.getChatGroups();
+
+			if (chatGroupList.size() != 0) {
+				for (int i = 0; i < chatGroupList.size();i++) {
+					List<ChatPerson> chatPersonList=chatGroupList.get(i).getChatPersons();
+					
+					for(int j=0;j<chatPersonList.size();j++){
+						ShareList temp=new ShareList();
+						temp.setUser(chatPersonList.get(j).getUser());
+						temp.setPostHistory(posHistory);
+						this.shareList.add(temp);
+					}
+				}
+			}
+
+		}
+		
+		ShareList shareToMe=new ShareList();
+		shareToMe.setUser(getLoggedUser());
+		shareToMe.setPostHistory(posHistory);
+		this.shareList.add(shareToMe);
+	}
+
 	public String addTextSharePost() {
-		
-		Date registeredDate=new Date();
-		
+
+		Date registeredDate = new Date();
+
 		getPostHistory().setContentType(ContentType.TEXT);
 		getPostHistory().setUser(getLoggedUser());
 		getPostHistory().setPublishedDate(registeredDate);
+
+		PostHistory savedPostHistory=getAllPostService().savePostHistory(getPostHistory());
 		
+		shareToAllList(savedPostHistory);
+		
+		getAllPostService().saveShareList(getShareList());
 
 		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"Kaydınız başarıyla güncellendi.", "");
@@ -234,7 +304,7 @@ public class AllPostView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return ("additional_info.xhtml?faces-redirect=true&user=" + getLoggedUser()
+		return ("index.xhtml?faces-redirect=true&user=" + getLoggedUser()
 				.getTcno());
 	}
 
