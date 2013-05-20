@@ -1,17 +1,18 @@
 ﻿INSERT INTO `user` (`tcno`, `birthdayYear`, `email`, `enabled`, `name`, `password`, `profile_photo_path`, `registered_date`, `send_mail`, `surname`, `city_id`, `country_code`) VALUES
-(9011003000, 1991, 'orcun.ulgen@gmail.com', 1, 'orcun', 'asd', 'orcun.jpg', '2013-04-14 21:17:24', 1, 'ulgen', 3374, 'TUR'),
-(9011061000, 1990, 'tayfurgurlesin@gmail.com', 1, 'tayfur', 'asd', 'tayfur.jpg', '2013-04-14 21:28:13', 1, 'gurlesin', 3373, 'TUR'),
-(9011062000, 1991, 'burakozer@gmail.com', 1, 'burak', 'asd', 'burak.jpg', '2013-04-14 21:22:10', 1, 'ozer', 3371, 'TUR'),
-(10011013000, 1991, 'ekremselcukoymak@gmail.com', 1, 'ekrem selcuk', 'asd', 'selcuk.jpg', '2013-04-14 21:19:22', 1, 'oymak', 3359, 'TUR'),
-(10011032000, 1992, 'ilyasoktay@gmail.com', 1, 'ilyas', 'asd', 'ilyas.jpg', '2013-04-14 21:39:32', 1, 'oktay', 3357, 'TUR'),
-(10011041000, 1991, 'halduntereman@gmail.com', 1, 'haldun', 'asd', 'haldun.jpg', '2013-04-14 21:38:23', 1, 'tereman', 3409, 'TUR'),
-(10011062000, 1991, 'semihkahya@gmail.com', 1, 'semih', 'asd', 'semih.jpg', '2013-04-14 21:23:13', 1, 'kahya', 3393, 'TUR'),
-(10011064000, 1992, 'silanturkdogan@gmail.com', 1, 'silan', 'asd', 'silan.jpg', '2013-04-14 21:27:17', 1, 'turkdogan', 3358, 'TUR'),
-(10011095000, 1992, 'berkaytacyildiz@gmail.com', 1, 'berkay', 'asd', 'berkay.jpg', '2013-04-14 21:24:42', 1, 'tacyildiz', 3404, 'TUR'),
-(11111111111, 1983, 'amacguvensan@gmail.com', 1, 'amac', 'asd', 'mag.jpg', '2013-04-14 22:29:36', 1, 'guvensan', 3357, 'TUR'),
-(22222222222, 1983, 'ziyacihantaysi@gmail.com', 1, 'ziya cihan', 'asd', 'zct.jpg', '2013-04-14 22:37:11', 1, 'taysi', 3357, 'TUR'),
-(33333333333, 1965, 'ahmettevfikinan@gmail.com', 1, 'ahmet tevfik', 'asd', 'ati.jpg', '2013-04-14 22:38:28', 1, 'inan', 3357, 'TUR'),
-(44444444444, 1965, 'gokhanyavuz@gmail.com', 1, 'gokhan', 'asd', 'agy.jpg', '2013-04-14 22:39:22', 1, 'yavuz', 3357, 'TUR');
+(9011003000, 1991, 'orcun.ulgen@gmail.com', 1, 'orcun', 'dkPw8rMX0oVcuVaieG/PFg==', 'orcun.jpg', '2013-04-14 21:17:24', 1, 'ulgen', 3374, 'TUR'),
+(9011061000, 1990, 'tayfurgurlesin@gmail.com', 1, 'tayfur', 'dkPw8rMX0oVcuVaieG/PFg==', 'tayfur.jpg', '2013-04-14 21:28:13', 1, 'gurlesin', 3373, 'TUR'),
+(9011062000, 1991, 'burakozer@gmail.com', 1, 'burak', 'dkPw8rMX0oVcuVaieG/PFg==', 'burak.jpg', '2013-04-14 21:22:10', 1, 'ozer', 3371, 'TUR'),
+(10011013000, 1991, 'ekremselcukoymak@gmail.com', 1, 'ekrem selcuk', 'dkPw8rMX0oVcuVaieG/PFg==', 'selcuk.jpg', '2013-04-14 21:19:22', 1, 'oymak', 3359, 'TUR'),
+(10011032000, 1992, 'ilyasoktay@gmail.com', 1, 'ilyas', 'dkPw8rMX0oVcuVaieG/PFg==', 'ilyas.jpg', '2013-04-14 21:39:32', 1, 'oktay', 3357, 'TUR'),
+(10011041000, 1991, 'halduntereman@gmail.com', 1, 'haldun', 'dkPw8rMX0oVcuVaieG/PFg==', 'haldun.jpg', '2013-04-14 21:38:23', 1, 'tereman', 3409, 'TUR'),
+(10011062000, 1991, 'semihkahya@gmail.com', 1, 'semih', 'dkPw8rMX0oVcuVaieG/PFg==', 'semih.jpg', '2013-04-14 21:23:13', 1, 'kahya', 3393, 'TUR'),
+(10011064000, 1992, 'silanturkdogan@gmail.com', 1, 'silan', 'dkPw8rMX0oVcuVaieG/PFg==', 'silan.jpg', '2013-04-14 21:27:17', 1, 'turkdogan', 3358, 'TUR'),
+(10011095000, 1992, 'berkaytacyildiz@gmail.com', 1, 'berkay', 'dkPw8rMX0oVcuVaieG/PFg==', 'berkay.jpg', '2013-04-14 21:24:42', 1, 'tacyildiz', 3404, 'TUR'),
+(11111111111, 1983, 'amacguvensan@gmail.com', 1, 'amac', 'dkPw8rMX0oVcuVaieG/PFg==', 'mag.jpg', '2013-04-14 22:29:36', 1, 'guvensan', 3357, 'TUR'),
+(22222222222, 1983, 'ziyacihantaysi@gmail.com', 1, 'ziya cihan', 'dkPw8rMX0oVcuVaieG/PFg==', 'zct.jpg', '2013-04-14 22:37:11', 1, 'taysi', 3357, 'TUR'),
+(33333333333, 1965, 'ahmettevfikinan@gmail.com', 1, 'ahmet tevfik', 'dkPw8rMX0oVcuVaieG/PFg==', 'ati.jpg', '2013-04-14 22:38:28', 1, 'inan', 3357, 'TUR'),
+(44444444444, 1965, 'gokhanyavuz@gmail.com', 1, 'gokhan', 'dkPw8rMX0oVcuVaieG/PFg==', 'agy.jpg', '2013-04-14 22:39:22', 1, 'yavuz', 3357, 'TUR');
+
 
 
 INSERT INTO `user_role` (`user_tcno`, `roles_id`) VALUES
