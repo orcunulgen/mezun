@@ -37,8 +37,9 @@ public class AnnouncementDAO{
 		return getSessionFactory().getCurrentSession();
 	}
 	
-	public void addAnnouncement(Announcement announcement) {
-		getSession().save(announcement);
+	public Long addAnnouncement(Announcement announcement) {
+		Long savedAnnouncement=(Long) getSession().save(announcement);
+		return savedAnnouncement;
 	}	
 	
 	public void updateAnnouncement(Announcement announcement){

@@ -1,0 +1,234 @@
+<ui:composition template="/templates/user/user_profile_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<ui:define name="bread_crumb_container">
+
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+			<p:menuitem value="Gönderilerim"
+				url="/user_profile/my_profile.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+		</p:breadCrumb>
+
+	</ui:define>
+	<ui:define name="main_container">
+
+		<h:outputStylesheet library="css" name="user_profile/my_profile.css" />
+		<div class="my_profile">
+
+			<p:tabView id="share_box_tabview">
+				<p:tab title="Gönderi">
+					<h:form id="form_my_profile_share_text">
+						<p:growl id="form_my_profile_share_text_messages" />
+						<p:panelGrid styleClass="no_border" id="share_text_display"
+							columns="2" cellpadding="4">
+
+							<h:outputLabel value="Gönderi Notu" />
+							<p:inputTextarea value="#{allPostView.postHistory.description}"
+								rows="2" cols="50" maxlength="100" autoResize="false"
+								required="true"
+								requiredMessage="Lütfen gönderi notunuzu giriniz." />
+
+						</p:panelGrid>
+						<p:commandButton action="#{allPostView.addTextSharePost}"
+							value="Paylaş" ajax="false" update=":form_my_profile_share_text" />
+						<p:menuButton value="Herkese Paylaş" style="float:right;">
+							<p:menuitem value="Kişileri Belirle"
+								onclick="shareListDialog.show()" icon="ui-icon-gear" />
+						</p:menuButton>
+					</h:form>
+				</p:tab>
+
+
+				<p:tab title="Etkinlik">
+					<h:form id="dialog_event_add_form" enctype="multipart/form-data">
+						<p:growl id="event_add_messages" />
+						<p:panelGrid styleClass="no_border" id="event_add_display"
+							columns="2" cellpadding="4" style="margin:0 auto;">
+
+							<h:outputLabel value="Etkinlik İsmi :" />
+							<p:inputText value="#{allPostView.event.title}" required="true"
+								requiredMessage="Lütfen etkinlik ismi giriniz." />
+
+							<h:outputLabel value="Açıklama :" />
+							<p:inputTextarea value="#{allPostView.event.description}"
+								rows="5" cols="50" maxlength="100" autoResize="false"
+								required="true"
+								requiredMessage="Lütfen etkinlik detaylarını açıklayınız." />
+
+							<h:outputLabel value="Başlangıç Tarihi :" />
+							<p:calendar value="#{allPostView.event.startDate}"
+								showOn="button" />
+
+							<h:outputLabel value="Bitiş Tarihi :" />
+							<p:calendar value="#{allPostView.event.endDate}" showOn="button" />
+
+							<h:outputLabel value="Lütfen duyuru afişinizi belirleyiniz." />
+							<p:fileUpload required="true"
+								requiredMessage="Lütfen dosya seçiniz"
+								value="#{allPostView.uploadedEventPoster}" mode="simple"
+								update="event_add_messages" uploadLabel="Yükle" label="Seç"
+								cancelLabel="İptal Et"
+								invalidFileMessage="Geçersiz dosya uzantısı."
+								fileLimitMessage="Yüklenecek olan dosya 2 MB dan küçük olması gerekmektedir."
+								sizeLimit="2000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+
+							<h:outputLabel value="Gönderi Notu" />
+							<p:inputTextarea value="#{allPostView.postHistory.description}"
+								rows="2" cols="50" maxlength="100" autoResize="false" />
+						</p:panelGrid>
+						<p:commandButton action="#{allPostView.addEventSharePost}"
+							value="Paylaş" ajax="false" update=":dialog_event_add_form" />
+						<p:menuButton value="Herkese Paylaş" style="float:right;">
+							<p:menuitem value="Kişileri Belirle"
+								onclick="shareListDialog.show()" icon="ui-icon-gear" />
+						</p:menuButton>
+					</h:form>
+				</p:tab>
+				<p:tab title="Duyuru">
+					<h:form id="dialog_announcement_add_form"
+						enctype="multipart/form-data">
+						<p:growl id="announcement_add_messages" />
+						<p:panelGrid styleClass="no_border" id="announcement_add_display"
+							columns="2" cellpadding="4" style="margin:0 auto;">
+
+							<h:outputLabel value="Duyuru Başlığı :" />
+							<p:inputText value="#{allPostView.announcement.title}"
+								required="true" requiredMessage="Lütfen duyuru başlığı giriniz." />
+
+							<h:outputLabel value="Açıklama :" />
+							<p:inputTextarea value="#{allPostView.announcement.description}"
+								rows="5" cols="50" maxlength="100" autoResize="false"
+								required="true"
+								requiredMessage="Lütfen duyuru detaylarını açıklayınız." />
+
+							<h:outputLabel value="Duyuru Tipi :" />
+							<h:selectOneMenu validator="announcementTypeValidator"
+								converter="announcementTypeConverter"
+								id="form_add_announcement_announcement_type"
+								value="#{allPostView.announcement.announcementType}">
+								<f:selectItem itemValue="0"
+									itemLabel="Lütfen duyuru tipi seçiniz" />
+								<f:selectItems value="#{allPostView.announcementTypes}"
+									var="announcementType" itemValue="#{announcementType}"
+									itemLabel="#{announcementType.announcementType}" />
+							</h:selectOneMenu>
+
+							<h:outputLabel value="Lütfen duyuru afişinizi belirleyiniz." />
+							<p:fileUpload required="true"
+								requiredMessage="Lütfen dosya seçiniz"
+								value="#{allPostView.uploadedAnnouncementPoster}" mode="simple"
+								update="announcement_add_messages" uploadLabel="Yükle"
+								label="Seç" cancelLabel="İptal Et"
+								invalidFileMessage="Geçersiz dosya uzantısı."
+								fileLimitMessage="Yüklenecek olan dosya 2 MB dan küçük olması gerekmektedir."
+								sizeLimit="2000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+
+							<h:outputLabel value="Gönderi Notu" />
+							<p:inputTextarea value="#{allPostView.postHistory.description}"
+								rows="2" cols="50" maxlength="100" autoResize="false" />
+
+						</p:panelGrid>
+						<p:commandButton action="#{allPostView.addAnnouncementSharePost}"
+							value="Paylaş" ajax="false"
+							update=":dialog_announcement_add_form" />
+						<p:menuButton value="Herkese Paylaş" style="float:right;">
+							<p:menuitem value="Kişileri Belirle"
+								onclick="shareListDialog.show()" icon="ui-icon-gear" />
+						</p:menuButton>
+					</h:form>
+
+				</p:tab>
+				<p:tab title="Fotoğraf">
+					<h:form id="dialog_photo_add_form" enctype="multipart/form-data">
+						<p:growl id="photo_add_messages" />
+						<p:panelGrid styleClass="no_border" id="photo_add_display"
+							columns="2" cellpadding="4" style="margin:0 auto;">
+
+							<h:outputLabel value="Açıklama :" />
+							<p:inputText value="#{allPostView.photo.description}" />
+
+							<h:outputLabel value="Fotoğrafın çekildiği yer :" />
+							<p:inputText value="#{allPostView.photo.place}" />
+
+							<h:outputLabel value="Albüm Seçiniz :" />
+							<h:selectOneMenu validator="photoAlbumValidator"
+								converter="photoAlbumConverter" id="form_add_photo_photo_album"
+								value="#{allPostView.photo.photoAlbum}">
+								<f:selectItem itemValue="0" itemLabel="Lütfen albüm seçiniz" />
+								<f:selectItems value="#{allPostView.photoAlbumList}"
+									var="photoAlbum" itemValue="#{photoAlbum}"
+									itemLabel="#{photoAlbum.albumName}" />
+							</h:selectOneMenu>
+
+							<h:outputLabel value="Lütfen fotoğraf seçiniz." />
+							<p:fileUpload required="true"
+								requiredMessage="Lütfen dosya seçiniz"
+								value="#{allPostView.uploadedPhoto}" mode="simple"
+								update="photo_add_messages" uploadLabel="Yükle" label="Seç"
+								cancelLabel="İptal Et"
+								invalidFileMessage="Geçersiz dosya uzantısı."
+								fileLimitMessage="Yüklenecek olan dosya 2 MB dan küçük olması gerekmektedir."
+								sizeLimit="2000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+
+							<h:outputLabel value="Gönderi Notu" />
+							<p:inputTextarea value="#{allPostView.postHistory.description}"
+								rows="2" cols="50" maxlength="100" autoResize="false" />
+
+						</p:panelGrid>
+						<p:commandButton action="#{allPostView.addPhotoSharePost}"
+							value="Paylaş" ajax="false" update=":dialog_photo_add_form" />
+						<p:menuButton value="Herkese Paylaş" style="float:right;">
+							<p:menuitem value="Kişileri Belirle"
+								onclick="shareListDialog.show()" icon="ui-icon-gear" />
+						</p:menuButton>
+					</h:form>
+				</p:tab>
+
+			</p:tabView>
+
+			<p:dataGrid value="#{allPostView.myTextTypePosts}" var="textTypePost"
+				id="text_type_post_list_dgrid" paginator="true" rows="10"
+				columns="1" paginatorAlwaysVisible="false">
+				<p:panelGrid styleClass="no_border" id="text_type_post_pgrid"
+					columns="1" cellpadding="4" style="margin:0 auto; width:100%;">
+					<p:row>
+						<p:column>
+							<p:graphicImage value="#{textTypePost.getTextTypePost().user.profilePicURL}"
+								width="30px" height="30px" />
+							<h:outputLink
+								value="#{facesContext.externalContext.requestContextPath}/user_profile/showcase/index.xhtml?user=#{textTypePost.getTextTypePost().user.tcno}">#{textTypePost.getTextTypePost().user.name} #{textTypePost.getTextTypePost().user.surname}</h:outputLink>
+							<h:outputLabel style="float:right;"
+								value="#{textTypePost.getTextTypePost().publishedDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+							</h:outputLabel>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel value="#{textTypePost.getTextTypePost().description}" />
+						</p:column>
+					</p:row>
+					<p:row rendered="#{textTypePost.getTextTypePost().contentType == 'PHOTO'}">
+						<p:column>
+							<p:graphicImage value="#{textTypePost.getPhotoPost().photo.photoURL}"
+								width="200px" height="200px" />
+						</p:column>
+					</p:row>
+
+				</p:panelGrid>
+				
+				
+			</p:dataGrid>
+			<h:form>
+			<!-- <p:poll interval="3" update=":text_type_post_list_dgrid"/> -->
+			</h:form>
+		</div>
+	</ui:define>
+
+</ui:composition>

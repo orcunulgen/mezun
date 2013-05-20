@@ -37,8 +37,9 @@ public class PhotoDAO{
 		return getSessionFactory().getCurrentSession();
 	}
 	
-	public void addPhoto(Photo photo) {
-		getSession().save(photo);
+	public Long addPhoto(Photo photo) {
+		Long savedPhoto=(Long)getSession().save(photo);
+		return savedPhoto;
 	}
 	
 	public void addPhotoAlbum(PhotoAlbum photoAlbum) {

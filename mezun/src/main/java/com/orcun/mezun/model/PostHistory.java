@@ -1,6 +1,7 @@
 package com.orcun.mezun.model;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -22,7 +23,7 @@ import com.orcun.mezun.model.enums.ContentType;
 
 @Entity
 @Table(name="post_history")
-public class PostHistory implements Serializable{
+public class PostHistory implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -59,8 +60,8 @@ public class PostHistory implements Serializable{
 		return description;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDescription(String description) throws UnsupportedEncodingException {
+		this.description =  new String(description.getBytes("ISO-8859-1"), "UTF-8");
 	}
 
 	public Date getPublishedDate() {
@@ -119,7 +120,6 @@ public class PostHistory implements Serializable{
 			return false;
 		return true;
 	}
-	
 	
 
 }

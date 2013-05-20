@@ -24,8 +24,8 @@ public class PhotoService {
 		this.photoDAO = photoDAO;
 	}
 
-	public void addPhoto(Photo photo) {
-		getPhotoDAO().addPhoto(photo);
+	public Long addPhoto(Photo photo) {
+		return getPhotoDAO().addPhoto(photo);
 	}
 	
 	public void addPhotoAlbum(PhotoAlbum photoAlbum) {

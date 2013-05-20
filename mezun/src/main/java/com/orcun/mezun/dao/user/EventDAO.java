@@ -36,8 +36,9 @@ public class EventDAO{
 		return getSessionFactory().getCurrentSession();
 	}
 	
-	public void addEvent(Event event) {
-		getSession().save(event);
+	public Long addEvent(Event event) {
+		Long savedEvent=(Long)getSession().save(event);
+		return savedEvent;
 	}	
 	
 	public void updateEvent(Event event){

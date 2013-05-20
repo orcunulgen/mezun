@@ -33,6 +33,8 @@ import com.orcun.mezun.model.ShareList;
 import com.orcun.mezun.model.User;
 import com.orcun.mezun.model.enums.ContentType;
 import com.orcun.mezun.model.enums.UploadedFileDirectory;
+import com.orcun.mezun.model.post.PhotoPostHistory;
+import com.orcun.mezun.model.post.Post;
 import com.orcun.mezun.service.user.AllPostService;
 import com.orcun.mezun.service.user.AnnouncementService;
 import com.orcun.mezun.service.user.ChatListService;
@@ -46,6 +48,7 @@ public class AllPostView implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private PostHistory postHistory;
+	private PhotoPostHistory photoPostHistory;
 
 	private Event event;
 	private UploadedFile uploadedEventPoster;
@@ -61,7 +64,8 @@ public class AllPostView implements Serializable {
 	private List<ShareList> shareList = new ArrayList<ShareList>();
 	
 	
-	private List<PostHistory> textTypePosts=new ArrayList<PostHistory>();
+	private List<Post> textTypePosts=new ArrayList<Post>();
+	private List<Post> myTextTypePosts=new ArrayList<Post>();
 
 	private User loggedUser;
 
@@ -98,9 +102,14 @@ public class AllPostView implements Serializable {
 			this.photo = new Photo();
 		}
 		
+		if(this.photoPostHistory==null){
+			this.photoPostHistory=new PhotoPostHistory();
+		}
+		
 		announcementTypes = announcementService.allAnnouncementTypes();
 		photoAlbumList = getPhotoService().allPhotoAlbum(getLoggedUser());
 		textTypePosts=getAllPostService().allTextTypePosts(getLoggedUser());
+		myTextTypePosts=getAllPostService().myTextTypePosts(getLoggedUser());
 
 	}
 
@@ -110,6 +119,14 @@ public class AllPostView implements Serializable {
 
 	public void setPostHistory(PostHistory postHistory) {
 		this.postHistory = postHistory;
+	}
+
+	public PhotoPostHistory getPhotoPostHistory() {
+		return photoPostHistory;
+	}
+
+	public void setPhotoPostHistory(PhotoPostHistory photoPostHistory) {
+		this.photoPostHistory = photoPostHistory;
 	}
 
 	public Event getEvent() {
@@ -185,12 +202,20 @@ public class AllPostView implements Serializable {
 		this.shareList = shareList;
 	}
 
-	public List<PostHistory> getTextTypePosts() {
+	public List<Post> getTextTypePosts() {
 		return textTypePosts;
 	}
 
-	public void setTextTypePosts(List<PostHistory> textTypePosts) {
+	public void setTextTypePosts(List<Post> textTypePosts) {
 		this.textTypePosts = textTypePosts;
+	}
+
+	public List<Post> getMyTextTypePosts() {
+		return myTextTypePosts;
+	}
+
+	public void setMyTextTypePosts(List<Post> myTextTypePosts) {
+		this.myTextTypePosts = myTextTypePosts;
 	}
 
 	public User getLoggedUser() {
@@ -304,7 +329,7 @@ public class AllPostView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return ("index.xhtml?faces-redirect=true&user=" + getLoggedUser()
+		return ("my_profile.xhtml?faces-redirect=true&user=" + getLoggedUser()
 				.getTcno());
 	}
 
@@ -336,7 +361,18 @@ public class AllPostView implements Serializable {
 
 				getEvent().setPosterPath(getFileUploadService().getFileName());
 
-				getEventService().addEvent(getEvent());
+				Long savedEventID=getEventService().addEvent(getEvent());
+				
+				getPostHistory().setContentID(savedEventID);
+				getPostHistory().setContentType(ContentType.EVENT);
+				getPostHistory().setPublishedDate(registeredDate);
+				getPostHistory().setUser(getLoggedUser());
+				
+				PostHistory savedPostHistory=getAllPostService().savePostHistory(getPostHistory());
+				
+				shareToAllList(savedPostHistory);
+				
+				getAllPostService().saveShareList(getShareList());
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -356,7 +392,7 @@ public class AllPostView implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, fm);
 
 		}
-		return "index.xhtml?faces-redirect=true&user="
+		return "my_profile.xhtml?faces-redirect=true&user="
 				+ getLoggedUser().getTcno();
 	}
 
@@ -374,7 +410,19 @@ public class AllPostView implements Serializable {
 
 			getAnnouncement().setPosterPath(
 					getFileUploadService().getFileName());
-			getAnnouncementService().addAnnouncement(getAnnouncement());
+			Long savedAnnouncementID=getAnnouncementService().addAnnouncement(getAnnouncement());
+			
+			getPostHistory().setContentID(savedAnnouncementID);
+			getPostHistory().setContentType(ContentType.ANNOUNCEMENT);
+			getPostHistory().setPublishedDate(registeredDate);
+			getPostHistory().setUser(getLoggedUser());
+			
+			PostHistory savedPostHistory=getAllPostService().savePostHistory(getPostHistory());
+			
+			shareToAllList(savedPostHistory);
+			
+			getAllPostService().saveShareList(getShareList());
+			
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -390,7 +438,7 @@ public class AllPostView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return "index.xhtml?faces-redirect=true&user="
+		return "my_profile.xhtml?faces-redirect=true&user="
 				+ getLoggedUser().getTcno();
 	}
 
@@ -410,7 +458,18 @@ public class AllPostView implements Serializable {
 					getUploadedPhoto());
 
 			getPhoto().setPhotoPath(getFileUploadService().getFileName());
-			getPhotoService().addPhoto(getPhoto());
+			Long savedPhotoID=getPhotoService().addPhoto(getPhoto());
+			
+			getPostHistory().setContentID(savedPhotoID);
+			getPostHistory().setContentType(ContentType.PHOTO);
+			getPostHistory().setPublishedDate(registerDate);
+			getPostHistory().setUser(getLoggedUser());
+			
+			PostHistory savedPostHistory=getAllPostService().savePostHistory(getPostHistory());
+			
+			shareToAllList(savedPostHistory);
+			
+			getAllPostService().saveShareList(getShareList());
 
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Fotoğrafınız başarıyla yüklenmiştir.", "");
@@ -428,7 +487,7 @@ public class AllPostView implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, fm);
 		}
 
-		return "index.xhtml?faces-redirect=true&user="
+		return "my_profile.xhtml?faces-redirect=true&user="
 				+ getLoggedUser().getTcno();
 
 	}

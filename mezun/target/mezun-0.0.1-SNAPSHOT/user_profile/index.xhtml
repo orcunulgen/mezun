@@ -22,13 +22,12 @@
 		<div class="all_post">
 
 			<p:tabView id="share_box_tabview">
-
 				<p:tab title="Gönderi">
 					<h:form id="form_all_post_share_text">
 						<p:growl id="form_all_post_share_text_messages" />
 						<p:panelGrid styleClass="no_border" id="share_text_display"
 							columns="2" cellpadding="4">
-							
+
 							<h:outputLabel value="Gönderi Notu" />
 							<p:inputTextarea value="#{allPostView.postHistory.description}"
 								rows="2" cols="50" maxlength="100" autoResize="false"
@@ -36,8 +35,12 @@
 								requiredMessage="Lütfen gönderi notunuzu giriniz." />
 
 						</p:panelGrid>
-						<p:commandButton action="#{allPostView.addTextSharePost}" value="Paylaş"
-						ajax="false" icon="ui-icon-disk" update=":form_all_post_share_text" />
+						<p:commandButton action="#{allPostView.addTextSharePost}"
+							value="Paylaş" ajax="false" update=":form_all_post_share_text" />
+						<p:menuButton value="Herkese Paylaş" style="float:right;">
+							<p:menuitem value="Kişileri Belirle"
+								onclick="shareListDialog.show()" icon="ui-icon-gear" />
+						</p:menuButton>
 					</h:form>
 				</p:tab>
 
@@ -79,8 +82,12 @@
 							<p:inputTextarea value="#{allPostView.postHistory.description}"
 								rows="2" cols="50" maxlength="100" autoResize="false" />
 						</p:panelGrid>
-						<p:commandButton action="#{allPostView.addEventSharePost}" value="Paylaş"
-						ajax="false" icon="ui-icon-disk" update=":dialog_event_add_form" />
+						<p:commandButton action="#{allPostView.addEventSharePost}"
+							value="Paylaş" ajax="false" update=":dialog_event_add_form" />
+						<p:menuButton value="Herkese Paylaş" style="float:right;">
+							<p:menuitem value="Kişileri Belirle"
+								onclick="shareListDialog.show()" icon="ui-icon-gear" />
+						</p:menuButton>
 					</h:form>
 				</p:tab>
 				<p:tab title="Duyuru">
@@ -101,7 +108,7 @@
 								requiredMessage="Lütfen duyuru detaylarını açıklayınız." />
 
 							<h:outputLabel value="Duyuru Tipi :" />
-							<p:selectOneMenu validator="announcementTypeValidator"
+							<h:selectOneMenu validator="announcementTypeValidator"
 								converter="announcementTypeConverter"
 								id="form_add_announcement_announcement_type"
 								value="#{allPostView.announcement.announcementType}">
@@ -110,7 +117,7 @@
 								<f:selectItems value="#{allPostView.announcementTypes}"
 									var="announcementType" itemValue="#{announcementType}"
 									itemLabel="#{announcementType.announcementType}" />
-							</p:selectOneMenu>
+							</h:selectOneMenu>
 
 							<h:outputLabel value="Lütfen duyuru afişinizi belirleyiniz." />
 							<p:fileUpload required="true"
@@ -128,8 +135,12 @@
 
 						</p:panelGrid>
 						<p:commandButton action="#{allPostView.addAnnouncementSharePost}"
-						value="Paylaş" ajax="false" icon="ui-icon-disk"
-						update=":dialog_announcement_add_form" />
+							value="Paylaş" ajax="false"
+							update=":dialog_announcement_add_form" />
+						<p:menuButton value="Herkese Paylaş" style="float:right;">
+							<p:menuitem value="Kişileri Belirle"
+								onclick="shareListDialog.show()" icon="ui-icon-gear" />
+						</p:menuButton>
 					</h:form>
 
 				</p:tab>
@@ -146,14 +157,14 @@
 							<p:inputText value="#{allPostView.photo.place}" />
 
 							<h:outputLabel value="Albüm Seçiniz :" />
-							<p:selectOneMenu validator="photoAlbumValidator"
+							<h:selectOneMenu validator="photoAlbumValidator"
 								converter="photoAlbumConverter" id="form_add_photo_photo_album"
 								value="#{allPostView.photo.photoAlbum}">
 								<f:selectItem itemValue="0" itemLabel="Lütfen albüm seçiniz" />
 								<f:selectItems value="#{allPostView.photoAlbumList}"
 									var="photoAlbum" itemValue="#{photoAlbum}"
 									itemLabel="#{photoAlbum.albumName}" />
-							</p:selectOneMenu>
+							</h:selectOneMenu>
 
 							<h:outputLabel value="Lütfen fotoğraf seçiniz." />
 							<p:fileUpload required="true"
@@ -170,15 +181,56 @@
 								rows="2" cols="50" maxlength="100" autoResize="false" />
 
 						</p:panelGrid>
-						<p:commandButton action="#{allPostView.addPhotoSharePost}" value="Paylaş"
-					ajax="false" icon="ui-icon-disk" update=":dialog_photo_add_form" />
+						<p:commandButton action="#{allPostView.addPhotoSharePost}"
+							value="Paylaş" ajax="false" update=":dialog_photo_add_form" />
+						<p:menuButton value="Herkese Paylaş" style="float:right;">
+							<p:menuitem value="Kişileri Belirle"
+								onclick="shareListDialog.show()" icon="ui-icon-gear" />
+						</p:menuButton>
 					</h:form>
 				</p:tab>
 
 			</p:tabView>
+
+			<p:dataGrid value="#{allPostView.textTypePosts}" var="textTypePost"
+				id="text_type_post_list_dgrid" paginator="true" rows="10"
+				columns="1" paginatorAlwaysVisible="false">
+				<p:panelGrid styleClass="no_border" id="text_type_post_pgrid"
+					columns="1" cellpadding="4" style="margin:0 auto; width:100%;">
+					<p:row>
+						<p:column>
+							<p:graphicImage value="#{textTypePost.getTextTypePost().user.profilePicURL}"
+								width="30px" height="30px" />
+							<h:outputLink
+								value="#{facesContext.externalContext.requestContextPath}/user_profile/showcase/index.xhtml?user=#{textTypePost.getTextTypePost().user.tcno}">#{textTypePost.getTextTypePost().user.name} #{textTypePost.getTextTypePost().user.surname}</h:outputLink>
+							<h:outputLabel style="float:right;"
+								value="#{textTypePost.getTextTypePost().publishedDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+							</h:outputLabel>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel value="#{textTypePost.getTextTypePost().description}" />
+						</p:column>
+					</p:row>
+					<p:row rendered="#{textTypePost.getTextTypePost().contentType == 'PHOTO'}">
+						<p:column>
+							<p:graphicImage value="#{textTypePost.getPhotoPost().photoURL}"
+								width="200px" height="200px" />
+							
+						</p:column>
+					</p:row>
+
+
+				</p:panelGrid>
+
+
+			</p:dataGrid>
+			<h:form>
+				<!-- <p:poll interval="3" update=":text_type_post_list_dgrid" /> -->
+			</h:form>
 		</div>
-		Tüm postlar burada olacak...
-		
 	</ui:define>
 
 </ui:composition>

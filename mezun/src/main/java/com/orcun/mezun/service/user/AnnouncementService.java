@@ -28,8 +28,8 @@ public class AnnouncementService {
 		getAnnouncementDAO().updateAnnouncement(announcement);
 	}
 
-	public void addAnnouncement(Announcement announcement) {
-		getAnnouncementDAO().addAnnouncement(announcement);
+	public Long addAnnouncement(Announcement announcement) {
+		return getAnnouncementDAO().addAnnouncement(announcement);
 	}
 
 	public List<AnnouncementType> allAnnouncementTypes() {

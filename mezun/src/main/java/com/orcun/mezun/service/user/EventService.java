@@ -27,8 +27,8 @@ public class EventService {
 		getEventDAO().updateEvent(event);
 	}
 
-	public void addEvent(Event event) {
-		getEventDAO().addEvent(event);
+	public Long addEvent(Event event) {
+		return getEventDAO().addEvent(event);
 	}
 
 	public List<Event> allEvent(User loggedUser) {
