@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.crypto.Cipher;
 import javax.faces.context.FacesContext;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,6 +25,7 @@ import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.orcun.mezun.model.enums.UploadedFileDirectory;
+import com.orcun.mezun.util.CipherUtils;
 import com.orcun.mezun.util.MyURLUtil;
 
 @Entity
@@ -89,11 +91,13 @@ public class User implements Serializable,UserDetails{
 	    this.email=email;    
 	}
 	public String getPassword() {
+		this.password=CipherUtils.decrypt(password);
 		return password;
 	}
 	public void setPassword(String password) throws UnsupportedEncodingException {
 		//this.password=password;
 		this.password = new String(password.getBytes("ISO-8859-1"), "UTF-8");
+		this.password=CipherUtils.encrypt(password);
 	}
 	public String getName() {
 		return name;
