@@ -41,34 +41,32 @@
 								icon="ui-icon-close" value="Grubu Sil">
 							</p:commandButton>
 
+								<h:dataTable var="chatPersonList"
+									value="#{chatGroupList.chatPersons}">
 
-							<p:dataTable var="chatPersonList"
-								value="#{chatGroupList.chatPersons}">
+									<h:column>
+										<f:facet name="header">
+											<h:outputLabel value="İşlemler" />
+										</f:facet>
+										<p:commandButton id="deleteChatPersonButton"
+											actionListener="#{chatListView.deleteSelectedChatPerson(chatPersonList)}"
+											icon="ui-icon-close" value="Sil">
+										</p:commandButton>
+									</h:column>
+									<h:column>
+										<f:facet name="header">
+											<h:outputLabel value="İsim" />
+										</f:facet>
+										<h:outputLabel value="#{chatPersonList.user.name}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">
+											<h:outputLabel value="Soyisim" />
+										</f:facet>
+										<h:outputLabel value="#{chatPersonList.user.surname}" />
+									</h:column>
 
-								<p:column>
-									<f:facet name="header">
-										<h:outputLabel value="İşlemler" />
-									</f:facet>
-									<p:commandButton id="deleteChatPersonButton"
-										actionListener="#{chatListView.deleteSelectedChatPerson(chatPersonList)}"
-										icon="ui-icon-close" value="Sil">
-									</p:commandButton>
-								</p:column>
-								<p:column>
-									<f:facet name="header">
-										<h:outputLabel value="İsim" />
-									</f:facet>
-									<h:outputLabel value="#{chatPersonList.user.name}" />
-								</p:column>
-								<p:column>
-									<f:facet name="header">
-										<h:outputLabel value="Soyisim" />
-									</f:facet>
-									<h:outputLabel value="#{chatPersonList.user.surname}" />
-								</p:column>
-
-							</p:dataTable>
-
+								</h:dataTable>
 
 
 						</p:tab>
@@ -117,11 +115,11 @@
 						<h:outputLabel value="E-Mail Adresi :" />
 						<p:inputText
 							value="#{searchChatPersonHelper.searchCriteria.searchByEmail}" />
-							
+
 						<h:outputLabel value="YTÜ Bilgisayar Giriş Yılı :" />
 						<p:inputMask mask="9999"
 							value="#{searchChatPersonHelper.searchCriteria.searchByEduStartYear}" />
-							
+
 						<h:outputLabel value="YTÜ Bilgisayar Mezuniyet Yılı :" />
 						<p:inputMask mask="9999"
 							value="#{searchChatPersonHelper.searchCriteria.searchByEduEndYear}" />
@@ -142,9 +140,8 @@
 								<h:outputLabel value="İşlemler" />
 							</f:facet>
 							<p:commandButton id="followChatPersonButton"
-								actionListener="#{chatListView.followSearchedPerson(searchedPersonList)}"
-								icon="ui-icon-disk" value="Ekle"
-								update=":list_chat_group_form">
+								action="#{chatListView.followSearchedPerson(searchedPersonList)}"
+								icon="ui-icon-disk" value="Ekle" update=":list_chat_group_form">
 							</p:commandButton>
 						</p:column>
 						<p:column>
