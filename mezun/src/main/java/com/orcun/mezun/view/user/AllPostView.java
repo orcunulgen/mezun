@@ -13,6 +13,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
+import javax.servlet.http.HttpServletRequest;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -62,10 +63,9 @@ public class AllPostView implements Serializable {
 	private List<PhotoAlbum> photoAlbumList = new ArrayList<PhotoAlbum>();
 
 	private List<ShareList> shareList = new ArrayList<ShareList>();
-	
-	
-	private List<Post> textTypePosts=new ArrayList<Post>();
-	private List<Post> myTextTypePosts=new ArrayList<Post>();
+
+	private List<Post> allPosts = new ArrayList<Post>();
+	private List<Post> myPosts = new ArrayList<Post>();
 
 	private User loggedUser;
 
@@ -101,15 +101,20 @@ public class AllPostView implements Serializable {
 		if (this.photo == null) {
 			this.photo = new Photo();
 		}
-		
-		if(this.photoPostHistory==null){
-			this.photoPostHistory=new PhotoPostHistory();
+
+		if (this.photoPostHistory == null) {
+			this.photoPostHistory = new PhotoPostHistory();
 		}
-		
+
 		announcementTypes = announcementService.allAnnouncementTypes();
 		photoAlbumList = getPhotoService().allPhotoAlbum(getLoggedUser());
-		textTypePosts=getAllPostService().allTextTypePosts(getLoggedUser());
-		myTextTypePosts=getAllPostService().myTextTypePosts(getLoggedUser());
+
+		String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+		if (viewId.equals("/user_profile/index.xhtml")) {
+			allPosts = getAllPostService().allTextTypePosts(getLoggedUser());
+		} else if (viewId.equals("/user_profile/my_profile.xhtml")) {
+			myPosts = getAllPostService().myTextTypePosts(getLoggedUser());
+		}
 
 	}
 
@@ -202,20 +207,20 @@ public class AllPostView implements Serializable {
 		this.shareList = shareList;
 	}
 
-	public List<Post> getTextTypePosts() {
-		return textTypePosts;
+	public List<Post> getAllPosts() {
+		return allPosts;
 	}
 
-	public void setTextTypePosts(List<Post> textTypePosts) {
-		this.textTypePosts = textTypePosts;
+	public void setAllPosts(List<Post> allPosts) {
+		this.allPosts = allPosts;
 	}
 
-	public List<Post> getMyTextTypePosts() {
-		return myTextTypePosts;
+	public List<Post> getMyPosts() {
+		return myPosts;
 	}
 
-	public void setMyTextTypePosts(List<Post> myTextTypePosts) {
-		this.myTextTypePosts = myTextTypePosts;
+	public void setMyPosts(List<Post> myPosts) {
+		this.myPosts = myPosts;
 	}
 
 	public User getLoggedUser() {
@@ -286,11 +291,12 @@ public class AllPostView implements Serializable {
 			List<ChatGroup> chatGroupList = chatList.getChatGroups();
 
 			if (chatGroupList.size() != 0) {
-				for (int i = 0; i < chatGroupList.size();i++) {
-					List<ChatPerson> chatPersonList=chatGroupList.get(i).getChatPersons();
-					
-					for(int j=0;j<chatPersonList.size();j++){
-						ShareList temp=new ShareList();
+				for (int i = 0; i < chatGroupList.size(); i++) {
+					List<ChatPerson> chatPersonList = chatGroupList.get(i)
+							.getChatPersons();
+
+					for (int j = 0; j < chatPersonList.size(); j++) {
+						ShareList temp = new ShareList();
 						temp.setUser(chatPersonList.get(j).getUser());
 						temp.setPostHistory(posHistory);
 						this.shareList.add(temp);
@@ -299,8 +305,8 @@ public class AllPostView implements Serializable {
 			}
 
 		}
-		
-		ShareList shareToMe=new ShareList();
+
+		ShareList shareToMe = new ShareList();
 		shareToMe.setUser(getLoggedUser());
 		shareToMe.setPostHistory(posHistory);
 		this.shareList.add(shareToMe);
@@ -314,10 +320,11 @@ public class AllPostView implements Serializable {
 		getPostHistory().setUser(getLoggedUser());
 		getPostHistory().setPublishedDate(registeredDate);
 
-		PostHistory savedPostHistory=getAllPostService().savePostHistory(getPostHistory());
-		
+		PostHistory savedPostHistory = getAllPostService().savePostHistory(
+				getPostHistory());
+
 		shareToAllList(savedPostHistory);
-		
+
 		getAllPostService().saveShareList(getShareList());
 
 		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -361,17 +368,18 @@ public class AllPostView implements Serializable {
 
 				getEvent().setPosterPath(getFileUploadService().getFileName());
 
-				Long savedEventID=getEventService().addEvent(getEvent());
-				
+				Long savedEventID = getEventService().addEvent(getEvent());
+
 				getPostHistory().setContentID(savedEventID);
 				getPostHistory().setContentType(ContentType.EVENT);
 				getPostHistory().setPublishedDate(registeredDate);
 				getPostHistory().setUser(getLoggedUser());
-				
-				PostHistory savedPostHistory=getAllPostService().savePostHistory(getPostHistory());
-				
+
+				PostHistory savedPostHistory = getAllPostService()
+						.savePostHistory(getPostHistory());
+
 				shareToAllList(savedPostHistory);
-				
+
 				getAllPostService().saveShareList(getShareList());
 
 			} catch (IOException e) {
@@ -410,19 +418,20 @@ public class AllPostView implements Serializable {
 
 			getAnnouncement().setPosterPath(
 					getFileUploadService().getFileName());
-			Long savedAnnouncementID=getAnnouncementService().addAnnouncement(getAnnouncement());
-			
+			Long savedAnnouncementID = getAnnouncementService()
+					.addAnnouncement(getAnnouncement());
+
 			getPostHistory().setContentID(savedAnnouncementID);
 			getPostHistory().setContentType(ContentType.ANNOUNCEMENT);
 			getPostHistory().setPublishedDate(registeredDate);
 			getPostHistory().setUser(getLoggedUser());
-			
-			PostHistory savedPostHistory=getAllPostService().savePostHistory(getPostHistory());
-			
+
+			PostHistory savedPostHistory = getAllPostService().savePostHistory(
+					getPostHistory());
+
 			shareToAllList(savedPostHistory);
-			
+
 			getAllPostService().saveShareList(getShareList());
-			
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -458,17 +467,18 @@ public class AllPostView implements Serializable {
 					getUploadedPhoto());
 
 			getPhoto().setPhotoPath(getFileUploadService().getFileName());
-			Long savedPhotoID=getPhotoService().addPhoto(getPhoto());
-			
+			Long savedPhotoID = getPhotoService().addPhoto(getPhoto());
+
 			getPostHistory().setContentID(savedPhotoID);
 			getPostHistory().setContentType(ContentType.PHOTO);
 			getPostHistory().setPublishedDate(registerDate);
 			getPostHistory().setUser(getLoggedUser());
-			
-			PostHistory savedPostHistory=getAllPostService().savePostHistory(getPostHistory());
-			
+
+			PostHistory savedPostHistory = getAllPostService().savePostHistory(
+					getPostHistory());
+
 			shareToAllList(savedPostHistory);
-			
+
 			getAllPostService().saveShareList(getShareList());
 
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
