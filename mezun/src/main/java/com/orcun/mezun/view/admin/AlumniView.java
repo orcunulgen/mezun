@@ -14,15 +14,18 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContext;
 
 
+import com.orcun.mezun.commons.FileUploadService;
 import com.orcun.mezun.model.City;
 import com.orcun.mezun.model.Country;
 import com.orcun.mezun.model.Role;
 import com.orcun.mezun.model.User;
+import com.orcun.mezun.model.enums.UploadedFileDirectory;
 import com.orcun.mezun.service.SignUpService;
 import com.orcun.mezun.service.admin.AlumniService;
 
@@ -53,6 +56,9 @@ public class AlumniView implements Serializable {
 	
 	@ManagedProperty(value = "#{signUpService}")
 	private SignUpService signUpService;
+	
+	@ManagedProperty(value = "#{fileUploadService}")
+	private FileUploadService fileUploadService;
 
 	@PostConstruct
 	public void init() {
@@ -81,19 +87,43 @@ public class AlumniView implements Serializable {
 		updateAlumniChangeCountry();
 	}
 
-	public void deleteSelectedAlumni(User selectedAlumni) throws IOException {
+	public String deleteSelectedAlumni(User selectedAlumni) throws IOException {
 		initSelectedAlumni(selectedAlumni);
 		try {
-			getAlumniService().deleteAlumni(getSelectedAlumni());
+			
+			if (getFileUploadService().deleteFile(
+					UploadedFileDirectory.PROFILE_PICTURE_PATH.getPath() + "/"
+							+ getSelectedAlumni().getProfilePhotoPath())) {
+				
+				getAlumniService().deleteAlumni(getSelectedAlumni());
 
-			FacesContext
-					.getCurrentInstance()
-					.getExternalContext()
-					.redirect("alumni.xhtml?user=" + getLoggedUser().getTcno());
+				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Kullanıcı sistemden kaldırıldı.", "");
 
+				FacesContext.getCurrentInstance().addMessage(null, fm);
+
+			} else {
+				FacesMessage fm = new FacesMessage(
+						FacesMessage.SEVERITY_INFO,
+						"Kullanıcı sistemden kaldırılamadı.Lütfen daha sonra tekrar deneyin",
+						"");
+
+				FacesContext.getCurrentInstance().addMessage(null, fm);
+
+			}
+
+			
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}
+		
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
+
+		return ("alumni.xhtml?faces-redirect=true&user=" + getLoggedUser()
+				.getTcno());
+ 
 	}
 
 	public User getAlumni() {
@@ -175,6 +205,14 @@ public class AlumniView implements Serializable {
 
 	public void setSignUpService(SignUpService signUpService) {
 		this.signUpService = signUpService;
+	}
+
+	public FileUploadService getFileUploadService() {
+		return fileUploadService;
+	}
+
+	public void setFileUploadService(FileUploadService fileUploadService) {
+		this.fileUploadService = fileUploadService;
 	}
 
 	public void addAlumniChangeCountry() {
