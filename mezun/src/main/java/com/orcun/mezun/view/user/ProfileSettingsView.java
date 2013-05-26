@@ -88,7 +88,7 @@ public class ProfileSettingsView implements Serializable {
 				"6e9ebf", true);
 		MindmapNode announcements = new DefaultMindmapNode("Duyurular", "",
 				"6e9ebf", true);
-		MindmapNode posts = new DefaultMindmapNode("Gönderiler", "", "6e9ebf",
+		MindmapNode posts = new DefaultMindmapNode("Profilim", "", "6e9ebf",
 				true);
 
 		MindmapNode contactInfo = new DefaultMindmapNode("İletişim Bilgileri",
@@ -282,12 +282,12 @@ public class ProfileSettingsView implements Serializable {
 						.redirect(
 								"announcement.xhtml?user="
 										+ getLoggedUser().getTcno());
-			} else if (label.equals("Gönderiler")) {
+			} else if (label.equals("Profilim")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"post.xhtml?user=" + getLoggedUser().getTcno());
+								"my_profile.xhtml?user=" + getLoggedUser().getTcno());
 			}
 
 		}

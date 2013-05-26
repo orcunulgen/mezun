@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -16,6 +17,13 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.primefaces.model.UploadedFile;
 
@@ -28,6 +36,8 @@ import com.orcun.mezun.model.Role;
 import com.orcun.mezun.model.User;
 import com.orcun.mezun.model.enums.UploadedFileDirectory;
 import com.orcun.mezun.service.SignUpService;
+import com.orcun.mezun.util.CipherUtils;
+import com.orcun.mezun.util.MyURLUtil;
 
 @ManagedBean
 @ViewScoped
@@ -169,11 +179,64 @@ public class SignUpView implements Serializable {
 						getUploadedProfilePic());
 
 				user.setProfilePhotoPath(getFileUploadService().getFileName());
+				
+				getUser().setPassword(new String(getUser().getPassword().getBytes("ISO-8859-1"), "UTF-8"));
+				getUser().setPassword(CipherUtils.encrypt(user.getPassword()));
 
 				getSignUpService().addUser(user);
 
-				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
-						"Kaydınız başarıyla tamamlandı.", "");
+				// -------------------Email sending-----------------
+
+				final String username = "orcun.ulgen@gmail.com";
+				final String password = "1986105?cos\"";
+
+				Properties props = new Properties();
+				props.put("mail.smtp.auth", "true");
+				props.put("mail.smtp.starttls.enable", "true");
+				props.put("mail.smtp.host", "smtp.gmail.com");
+				props.put("mail.smtp.port", "587");
+
+				Session session = Session.getInstance(props,
+						new javax.mail.Authenticator() {
+							protected PasswordAuthentication getPasswordAuthentication() {
+								return new PasswordAuthentication(username,
+										password);
+							}
+						});
+
+				Message message = new MimeMessage(session);
+				message.setFrom(new InternetAddress(
+						"orcun.ulgen@gmail.com"));
+				message.setRecipients(Message.RecipientType.TO,
+						InternetAddress.parse(user.getEmail()));
+				message.setSubject("Üyelik Aktivasyonu");
+				String messageText = "Sayın "
+						+ user.getName()
+						+ " "
+						+ user.getSurname()
+						+ ",<br/><br/>"
+						+ "YTÜ Bilgisayar Mühendisliği Mezun Bilgi Sistemine giriş yapabilmek için öncelikle aşağıdaki linke tıklayarak aktivasyonunuzu tamamlamanız gerekmektedir.<br/>"
+						+ "<a href=\""
+						+ MyURLUtil.getBaseURL(FacesContext
+								.getCurrentInstance())
+						+ "/activation.xhtml?u="
+						+ CipherUtils.encrypt(user.getTcno().toString())
+						+ "\">"
+						+ MyURLUtil.getBaseURL(FacesContext
+								.getCurrentInstance()) + "/activation.xhtml?u="
+						+ CipherUtils.encrypt(user.getTcno().toString())
+						+ "</a>";
+
+				message.setContent(messageText,"text/html; charset=utf-8");
+
+				Transport.send(message);
+
+				// -------------------------------------------------
+
+				FacesMessage fm = new FacesMessage(
+						FacesMessage.SEVERITY_INFO,
+						"Kaydınız başarıyla tamamlandı.Lütfen email adresinizi kontrol ediniz.",
+						"");
 
 				FacesContext.getCurrentInstance().addMessage(null, fm);
 
@@ -184,8 +247,10 @@ public class SignUpView implements Serializable {
 
 				FacesContext.getCurrentInstance().addMessage(null, fm);
 
+			} catch (MessagingException e) {
+				throw new RuntimeException(e);
 			}
-			
+
 			Flash flash = FacesContext.getCurrentInstance()
 					.getExternalContext().getFlash();
 			flash.setKeepMessages(true);
@@ -212,9 +277,9 @@ public class SignUpView implements Serializable {
 			KPSPublicSoapProxy tcCheckProxy = new KPSPublicSoapProxy();
 
 			try {
-				if (!tcCheckProxy.TCKimlikNoDogrula(user.getTcno(), user
-						.getName().toUpperCase(), user.getSurname()
-						.toUpperCase(), user.getBirthdayYear())) {
+				if (!tcCheckProxy.TCKimlikNoDogrula(user.getTcno(),
+						user.getName(), user.getSurname(),
+						user.getBirthdayYear())) {
 					FacesMessage fm = new FacesMessage(
 							FacesMessage.SEVERITY_INFO,
 							"TC kimlik numarası doğrulanamadı",

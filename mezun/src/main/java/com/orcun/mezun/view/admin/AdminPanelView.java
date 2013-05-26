@@ -60,9 +60,12 @@ public class AdminPanelView implements Serializable {
 
 		MindmapNode alumni = new DefaultMindmapNode("Mezunlar", "",
 				"6e9ebf", true);
+		
+		MindmapNode newUsers = new DefaultMindmapNode("Yeni Üyeler", "", "6e9ebf", true);
 
 
 		root.addNode(userList);
+		root.addNode(newUsers);
 		
 		userList.addNode(student);
 		userList.addNode(alumni);
@@ -121,7 +124,14 @@ public class AdminPanelView implements Serializable {
 						.redirect(
 								"alumni.xhtml?user="
 										+ getLoggedUser().getTcno());
-			} 
+			}else if (label.equals("Yeni Üyeler")) {
+				FacesContext
+				.getCurrentInstance()
+				.getExternalContext()
+				.redirect(
+						"new_user.xhtml?user="
+								+ getLoggedUser().getTcno());
+	}  
 		}
 
 	}

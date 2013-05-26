@@ -1,12 +1,16 @@
 package com.orcun.mezun.security;
 
+import java.io.UnsupportedEncodingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.orcun.mezun.model.User;
 import com.orcun.mezun.service.UserService;
+import com.orcun.mezun.util.CipherUtils;
 
 
 @Service("userDetailsService")
@@ -19,15 +23,18 @@ public class MezunUserDetailsService implements UserDetailsService {
 		
 		
 			if ((username == null) || (username.length() == 0)) {
-				//throw new BusinessRuleException(ErrorCodeCategory.AUTHENTICATION, "usernameisempty");
-				//FacesContext context=FacesContext.getCurrentInstance();
-				//FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN,"Geçersiz kullanıcı adı veya şifre.","Lütfen yeniden deneyiniz.");
-				//context.addMessage("fail_auth", fm);
 				return null;
 			}
 		
-			return userService.findByUserId(username);
-
+			User user=userService.findByUserId(username);
+			String pass=user.getPassword();
+			try {
+				user.setPassword(CipherUtils.decrypt(pass));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			
+			return user;
 	}
 	
 }
