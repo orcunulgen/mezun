@@ -31,31 +31,41 @@
 					<p:commandButton value="Yeni Albüm Oluştur" type="button"
 						onclick="photoAlbumAddDialog.show()" icon="ui-icon-plus" />
 
-					<div style="margin:20px auto;">
-						<h:outputLabel
-							value="Albüm Adı : #{photoView.selectedPhotoAlbum.albumName}"
-							style="float:left;" />
-						<h:outputLabel
-							value="Tarih : #{photoView.selectedPhotoAlbum.date}"
-							style="float:right;">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputLabel>
+					<div style="margin: 20px auto;">
+						<p:panelGrid  styleClass="no_border" cellpadding="4" style="margin:0 auto; width:100%;">
+
+							<p:row>
+								<p:column>
+									<h:outputLabel value="Albüm Adı :" />
+									<h:outputLabel
+										value="#{photoView.selectedPhotoAlbum.albumName}"/>
+								</p:column>
+								<p:column style="float:right;">
+									<h:outputLabel value="Tarih :" />
+									<h:outputLabel value="#{photoView.selectedPhotoAlbum.date}">
+										<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+									</h:outputLabel>
+								</p:column>
+							</p:row>
+
+						</p:panelGrid>
 					</div>
 					<p:galleria value="#{photoView.currentPhotos}" var="currentPhoto"
 						panelWidth="550" panelHeight="350">
 						<p:graphicImage value="#{currentPhoto.photoURL}"
-							title="#{currentPhoto.description}"
-							width="500px" height="330px" />
-						
+							title="#{currentPhoto.description}" width="500px" height="330px" />
+
 					</p:galleria>
-					<div style="margin:20px auto;">
-						<h:outputLabel rendered="#{not empty photoView.selectedPhotoAlbum.description}"
+					<div style="margin: 20px auto;">
+						<h:outputLabel
+							rendered="#{not empty photoView.selectedPhotoAlbum.description}"
 							value="Albüm Açıklaması : #{photoView.selectedPhotoAlbum.description}"
 							style="float:left;" />
-							<br/>
-						<h:outputLabel rendered="#{not empty photoView.selectedPhotoAlbum.place}"
+						<br />
+						<h:outputLabel
+							rendered="#{not empty photoView.selectedPhotoAlbum.place}"
 							value="Fotoğrafın Çekildiği Yer : #{photoView.selectedPhotoAlbum.place}"
-							style="float:left;"/>
+							style="float:left;" />
 					</div>
 
 					<p:panel header="Albümler" style="text-align:center">

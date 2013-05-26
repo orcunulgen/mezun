@@ -91,14 +91,7 @@
 							value="#{alumniView.selectedAlumni.email}" />
 
 						<h:outputLabel value="Şifre" />
-						<p:password id="form_password"
-							value="#{alumniView.selectedAlumni.password}" required="true"
-							requiredMessage="Lütfen şifre giriniz."
-							validatorMessage="Şifreniz eşleşmiyor.Lütfen yeniden deneyiniz."
-							match="form_confirm_password" />
-						<h:outputLabel value="Şifre Tekrarı" />
-						<p:password id="form_confirm_password"
-							value="#{alumniView.selectedAlumni.password}" />
+						<h:outputLabel value="#{alumniView.selectedAlumni.password}" />
 
 						<h:outputLabel value="Doğum yılı" />
 						<h:outputLabel value="#{alumniView.selectedAlumni.birthdayYear}" />

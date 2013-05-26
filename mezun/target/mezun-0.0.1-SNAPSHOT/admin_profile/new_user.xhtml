@@ -1,0 +1,102 @@
+<ui:composition template="/templates/admin/admin_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<ui:define name="main_container">
+		<h:outputStylesheet library="css" name="admin_profile/new_user.css" />
+		<div class="new_user">
+
+			<h:form id="list_new_user_form">
+				<p:growl id="list_new_user_messages" />
+				<p:dataTable var="newUserList" value="#{newUserView.newUsers}"
+					paginator="true" rows="10">
+					<p:column style="width:15%">
+						<f:facet name="header">
+							<h:outputLabel value="İşlemler" />
+						</f:facet>
+						<p:commandButton id="selectButton"
+							actionListener="#{newUserView.initSelectedNewUser(newUserList)}"
+							update=":new_user_dialog_form"
+							oncomplete="newUserUpdateDialog.show()" icon="ui-icon-search"
+							title="View">
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="TC Kimlik" />
+						</f:facet>
+						<h:outputLabel value="#{newUserList.tcno}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="İsim" />
+						</f:facet>
+						<h:outputLabel value="#{newUserList.name}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Soyisim" />
+						</f:facet>
+						<h:outputLabel value="#{newUserList.surname}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Email" />
+						</f:facet>
+						<h:outputLabel value="#{newUserList.email}" />
+					</p:column>
+
+
+				</p:dataTable>
+			</h:form>
+
+			<p:dialog header="Kullanıcı Ayrıntıları"
+				widgetVar="newUserUpdateDialog" resizable="false"
+				id="newUserUpdateDlg" showEffect="fade" modal="true">
+				<h:form id="new_user_dialog_form">
+					<p:growl id="selected_new_user_dialog_messages" />
+					<p:panelGrid styleClass="no_border" id="new_user_detail_display"
+						columns="2" cellpadding="4" style="margin:0 auto;">
+
+						<h:outputLabel value="TC Kimlik :" />
+						<h:outputLabel value="#{newUserView.selectedNewUser.tcno}" />
+
+						<h:outputLabel value="İsim" />
+						<h:outputLabel value="#{newUserView.selectedNewUser.name}" />
+
+						<h:outputLabel value="Soyisim" />
+						<h:outputLabel value="#{newUserView.selectedNewUser.surname}" />
+
+						<h:outputLabel value="E-Mail" />
+						<h:outputLabel value="#{newUserView.selectedNewUser.email}" />
+
+						<h:outputLabel value="Şifre" />
+						<h:outputLabel value="#{newUserView.selectedNewUser.password}" />
+
+						<h:outputLabel value="Doğum yılı" />
+						<h:outputLabel value="#{newUserView.selectedNewUser.birthdayYear}" />
+
+						<h:outputLabel value="Doğduğu Ülke " />
+						<h:outputLabel value="#{newUserView.selectedNewUser.country.countryName}" />
+
+						<h:outputLabel value="Doğduğu Şehir " />
+						<h:outputLabel value="#{newUserView.selectedNewUser.city.cityName}" />
+
+					</p:panelGrid>
+					<p:commandButton action="#{newUserView.updateNewUser}"
+						value="Onayla" ajax="true" icon="ui-icon-disk"
+						update=":new_user_dialog_form" />
+					<p:commandButton action="#{newUserView.deleteSelectedUser}"
+						value="Kullanıcıyı Sil" ajax="true" icon="ui-icon-close"
+						update=":new_user_dialog_form" />
+				</h:form>
+			</p:dialog>
+
+		</div>
+	</ui:define>
+
+</ui:composition>
