@@ -27,12 +27,12 @@ public class MezunUserDetailsService implements UserDetailsService {
 			}
 		
 			User user=userService.findByUserId(username);
-			String pass=user.getPassword();
+			/*String pass=user.getPassword();
 			try {
-				user.setPassword(CipherUtils.decrypt(pass));
+				user.setPassword(CipherUtils.encrypt(pass));
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
-			}
+			}*/
 			
 			return user;
 	}

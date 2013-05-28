@@ -6,16 +6,18 @@ import java.net.MalformedURLException;
 import java.util.Date;
 
 import javax.faces.context.FacesContext;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.orcun.mezun.model.enums.UploadedFileDirectory;
 import com.orcun.mezun.util.MyURLUtil;
@@ -47,7 +49,8 @@ public class Photo implements Serializable {
 	@Transient
 	private String photoURL;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@OneToOne
+	@OnDelete(action=OnDeleteAction.CASCADE)
 	@JoinColumn(name="album_id")
 	private PhotoAlbum photoAlbum;
 

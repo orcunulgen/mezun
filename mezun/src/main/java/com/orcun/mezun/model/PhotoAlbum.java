@@ -5,15 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
@@ -43,12 +42,13 @@ public class PhotoAlbum implements Serializable {
 	@Column(name="date",nullable=false)
 	private Date date=new Date();
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@OneToOne
 	@OnDelete(action=OnDeleteAction.CASCADE)
 	private User user;
 	
 	@OneToMany(mappedBy="photoAlbum",fetch= FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
+	@OnDelete(action=OnDeleteAction.CASCADE)
     private List<Photo> photos=new ArrayList<Photo>();
 
 	public Long getId() {

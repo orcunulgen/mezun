@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -33,8 +32,9 @@ public class ChatPerson implements Serializable{
 	@Column(name="activation")
 	private Boolean activation=false;
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name="chat_group_id")
+	@OnDelete(action=OnDeleteAction.CASCADE)
 	private ChatGroup chatGroup;
 	
 	@OneToOne

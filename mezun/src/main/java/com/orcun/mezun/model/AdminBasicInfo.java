@@ -2,7 +2,6 @@ package com.orcun.mezun.model;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -20,17 +19,20 @@ public class AdminBasicInfo implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne
 	@OnDelete(action=OnDeleteAction.CASCADE)
 	private User user;
 		
 	@OneToOne(fetch=FetchType.EAGER)
+	@OnDelete(action=OnDeleteAction.CASCADE)
 	private University university;
 	
 	@OneToOne(fetch=FetchType.EAGER)
+	@OnDelete(action=OnDeleteAction.CASCADE)
 	private Faculty faculty;
 	
 	@OneToOne(fetch=FetchType.EAGER)
+	@OnDelete(action=OnDeleteAction.CASCADE)
 	private Department department;
 
 

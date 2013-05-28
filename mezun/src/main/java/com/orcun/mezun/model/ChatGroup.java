@@ -12,12 +12,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 @Entity
@@ -33,12 +35,14 @@ public class ChatGroup implements Serializable{
 	@Column(name="group_name",nullable=false,length=200)
 	private String groupName;
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name="chat_list_id")
+	@OnDelete(action=OnDeleteAction.CASCADE)
     private ChatList chatList;
 	
 	@OneToMany(mappedBy="chatGroup",fetch= FetchType.EAGER,cascade=CascadeType.ALL)
 	@Fetch(value = FetchMode.SUBSELECT)
+	@OnDelete(action=OnDeleteAction.CASCADE)
     private List<ChatPerson> chatPersons=new ArrayList<ChatPerson>();
 
 	public Long getId() {

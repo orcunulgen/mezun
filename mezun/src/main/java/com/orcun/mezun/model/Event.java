@@ -6,13 +6,12 @@ import java.net.MalformedURLException;
 import java.util.Date;
 
 import javax.faces.context.FacesContext;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -55,7 +54,7 @@ public class Event implements Serializable {
 	@Column(name="end_date",nullable=false)
 	private Date endDate=new Date();
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@OneToOne
 	@OnDelete(action=OnDeleteAction.CASCADE)
 	private User user;
 

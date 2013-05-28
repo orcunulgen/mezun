@@ -2,13 +2,12 @@ package com.orcun.mezun.model;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.OnDelete;
@@ -33,7 +32,7 @@ public class AreaOfInterest implements Serializable {
 	@Column(name="experience_level",nullable=false)
 	private Integer experienceLevel;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@OneToOne
 	@OnDelete(action=OnDeleteAction.CASCADE)
 	private User user;
 

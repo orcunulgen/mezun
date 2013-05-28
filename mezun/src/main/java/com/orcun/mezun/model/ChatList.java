@@ -30,12 +30,13 @@ public class ChatList implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne
 	@OnDelete(action=OnDeleteAction.CASCADE)
 	private User user;
 	
 	@OneToMany(mappedBy="chatList",fetch= FetchType.EAGER,cascade=CascadeType.ALL)
 	@Fetch(value = FetchMode.SUBSELECT)
+	@OnDelete(action=OnDeleteAction.CASCADE)
     private List<ChatGroup> chatGroups=new ArrayList<ChatGroup>();
 
 	public Long getId() {

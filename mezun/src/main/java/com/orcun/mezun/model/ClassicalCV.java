@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 
 import javax.faces.context.FacesContext;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -25,7 +24,7 @@ public class ClassicalCV implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne
 	@OnDelete(action=OnDeleteAction.CASCADE)
 	private User user;
 	

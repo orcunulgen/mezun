@@ -93,13 +93,18 @@ public class User implements Serializable,UserDetails{
 	    this.email=email;    
 	}
 	public String getPassword() {
-		//this.password=CipherUtils.decrypt(password);
+		if(password!=null){
+		this.password=CipherUtils.decrypt(password);
+		}
 		return password;
 	}
 	public void setPassword(String password) throws UnsupportedEncodingException {
 		this.password=password;
 		//this.password = new String(password.getBytes("ISO-8859-1"), "UTF-8");
-		//this.password=CipherUtils.encrypt(password);
+		if(this.password!=null){
+			this.password=CipherUtils.encrypt(password);	
+		}
+		
 	}
 	public String getName() {
 		return name;
