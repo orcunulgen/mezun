@@ -93,9 +93,9 @@ public class User implements Serializable,UserDetails{
 	    this.email=email;    
 	}
 	public String getPassword() {
-		if(password!=null){
+		/*if(password!=null){
 		this.password=CipherUtils.decrypt(password);
-		}
+		}*/
 		return password;
 	}
 	public void setPassword(String password) throws UnsupportedEncodingException {
@@ -105,6 +105,9 @@ public class User implements Serializable,UserDetails{
 			this.password=CipherUtils.encrypt(password);	
 		}
 		
+	}
+	public void setPasswordDirectly(String password){
+		this.password=password;
 	}
 	public String getName() {
 		return name;

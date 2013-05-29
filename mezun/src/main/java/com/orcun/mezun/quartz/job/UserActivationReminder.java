@@ -37,48 +37,55 @@ public class UserActivationReminder implements StatefulJob {
 		List<User> inactiveUserList = getInactiveUserService()
 				.inactiveUserList(now);
 
-		// -------------------Email sending-----------------
+		if (inactiveUserList.size() != 0) {
 
-		final String username = "orcun.ulgen@gmail.com";
-		final String password = "1986105?cos\"";
+			// -------------------Email sending-----------------
 
-		Properties props = new Properties();
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.host", "smtp.gmail.com");
-		props.put("mail.smtp.port", "587");
+			final String username = "orcun.ulgen@gmail.com";
+			final String password = "1986105?cos\"";
 
-		Session session = Session.getInstance(props,
-				new javax.mail.Authenticator() {
-					protected PasswordAuthentication getPasswordAuthentication() {
-						return new PasswordAuthentication(username, password);
-					}
-				});
+			Properties props = new Properties();
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.host", "smtp.gmail.com");
+			props.put("mail.smtp.port", "587");
 
-		try {
+			Session session = Session.getInstance(props,
+					new javax.mail.Authenticator() {
+						protected PasswordAuthentication getPasswordAuthentication() {
+							return new PasswordAuthentication(username,
+									password);
+						}
+					});
 
-			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("orcun.ulgen@gmail.com"));
-			message.setRecipients(Message.RecipientType.TO,
-					InternetAddress.parse("orcun_hacker@hotmail.com"));
-			message.setSubject("Bekleyen Kullanıcı Aktivasyonları");
-			
-			String messageText="Sayın Yönetici,\n\n" +
-					"Aktivasyon için beklemekte olan "+inactiveUserList.size()+" kullanıcı bulunmaktadır.\n\n" +
-							"Beklemekte Olan Kullanıcı Listesi :\n ";
-			for(int i=0;i<inactiveUserList.size();i++){
-				messageText+=inactiveUserList.get(i).getName()+" "+inactiveUserList.get(i).getSurname()+"\n";
+			try {
+
+				Message message = new MimeMessage(session);
+				message.setFrom(new InternetAddress("orcun.ulgen@gmail.com"));
+				message.setRecipients(Message.RecipientType.TO,
+						InternetAddress.parse("orcun_hacker@hotmail.com"));
+				message.setSubject("Bekleyen Kullanıcı Aktivasyonları");
+
+				String messageText = "Sayın Yönetici,\n\n"
+						+ "Aktivasyon için beklemekte olan "
+						+ inactiveUserList.size()
+						+ " kullanıcı bulunmaktadır.\n\n"
+						+ "Beklemekte Olan Kullanıcı Listesi :\n ";
+				for (int i = 0; i < inactiveUserList.size(); i++) {
+					messageText += inactiveUserList.get(i).getName() + " "
+							+ inactiveUserList.get(i).getSurname() + "\n";
+				}
+
+				message.setText(messageText);
+
+				Transport.send(message);
+
+			} catch (MessagingException e) {
+				throw new RuntimeException(e);
 			}
-		  
-			message.setText(messageText);
 
-			Transport.send(message);
-
-		} catch (MessagingException e) {
-			throw new RuntimeException(e);
+			// -------------------------------------------------
 		}
-
-		// -------------------------------------------------
 
 	}
 

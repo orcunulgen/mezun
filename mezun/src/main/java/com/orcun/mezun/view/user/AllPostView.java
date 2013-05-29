@@ -13,7 +13,6 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
-import javax.servlet.http.HttpServletRequest;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -111,9 +110,9 @@ public class AllPostView implements Serializable {
 
 		String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
 		if (viewId.equals("/user_profile/index.xhtml")) {
-			allPosts = getAllPostService().allTextTypePosts(getLoggedUser());
+			allPosts = getAllPostService().allPosts(getLoggedUser());
 		} else if (viewId.equals("/user_profile/my_profile.xhtml")) {
-			myPosts = getAllPostService().myTextTypePosts(getLoggedUser());
+			myPosts = getAllPostService().myPosts(getLoggedUser());
 		}
 
 	}

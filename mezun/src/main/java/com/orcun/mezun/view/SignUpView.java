@@ -180,8 +180,8 @@ public class SignUpView implements Serializable {
 
 				user.setProfilePhotoPath(getFileUploadService().getFileName());
 				
-				getUser().setPassword(new String(getUser().getPassword().getBytes("ISO-8859-1"), "UTF-8"));
-				getUser().setPassword(CipherUtils.encrypt(user.getPassword()));
+				//getUser().setPassword(new String(getUser().getPassword().getBytes("ISO-8859-1"), "UTF-8"));
+				//getUser().setPassword(CipherUtils.encrypt(user.getPassword()));
 
 				getSignUpService().addUser(user);
 

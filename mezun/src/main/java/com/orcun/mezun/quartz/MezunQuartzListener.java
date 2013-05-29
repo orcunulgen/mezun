@@ -14,6 +14,7 @@ import org.quartz.SimpleTrigger;
 import org.quartz.impl.StdSchedulerFactory;
 
 import com.orcun.mezun.quartz.job.UserActivationReminder;
+import com.orcun.mezun.quartz.job.UserPostReminder;
 
 public class MezunQuartzListener implements ServletContextListener {
 
@@ -29,8 +30,8 @@ public class MezunQuartzListener implements ServletContextListener {
 			setScheduler(sf.getScheduler());
 
 			Calendar startTime = java.util.Calendar.getInstance();
-			startTime.set(Calendar.HOUR_OF_DAY, 15);
-			startTime.set(Calendar.MINUTE, 45);
+			startTime.set(Calendar.HOUR_OF_DAY, 01);
+			startTime.set(Calendar.MINUTE, 49);
 			startTime.set(Calendar.SECOND, 0);
 			startTime.set(Calendar.MILLISECOND, 0);
 
@@ -38,21 +39,34 @@ public class MezunQuartzListener implements ServletContextListener {
 				startTime.add(Calendar.DAY_OF_MONTH, 1);
 			}
 
-			SimpleTrigger adminReminderTrigger = new SimpleTrigger(
-					"adminReminderTrigger", "adminReminderGroup");
-			adminReminderTrigger.setRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY);
-			adminReminderTrigger.setStartTime(startTime.getTime());
-			adminReminderTrigger.setRepeatInterval(24L * 60L * 60L * 1000L);
+			SimpleTrigger userActivationReminderTrigger = new SimpleTrigger(
+					"userActivationReminderTrigger", "adminReminderGroup");
+			userActivationReminderTrigger
+					.setRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY);
+			userActivationReminderTrigger.setStartTime(startTime.getTime());
+			userActivationReminderTrigger
+					.setRepeatInterval(24L * 60L * 60L * 1000L);
 
-			
 			JobDetail userActivationReminder = new JobDetail(
 					"userActivationReminder", "adminReminderGroup",
 					UserActivationReminder.class);
-			
+
+			SimpleTrigger userPostReminderTrigger = new SimpleTrigger(
+					"userPostReminderTrigger", "userReminderGroup");
+			userPostReminderTrigger
+					.setRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY);
+			userPostReminderTrigger.setStartTime(startTime.getTime());
+			userPostReminderTrigger.setRepeatInterval(24L * 60L * 60L * 1000L);
+
+			JobDetail userPostReminder = new JobDetail("userPostReminder",
+					"userReminderGroup", UserPostReminder.class);
+
 			getScheduler().start();
 			// getScheduler().scheduleJob(syncCheck, syncTrigger);
 			getScheduler().scheduleJob(userActivationReminder,
-					adminReminderTrigger);
+					userActivationReminderTrigger);
+			getScheduler().scheduleJob(userPostReminder,
+					userPostReminderTrigger);
 
 		} catch (SchedulerException e) {
 			e.printStackTrace();
