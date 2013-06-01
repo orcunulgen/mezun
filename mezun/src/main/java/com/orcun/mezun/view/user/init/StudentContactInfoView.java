@@ -102,7 +102,7 @@ public class StudentContactInfoView implements Serializable {
 					.getExternalContext().getFlash();
 			flash.setKeepMessages(true);
 
-			return "init_student_info.xhtml?faces-redirect=true&user="
+			return "init_student_info.xhtml?faces-redirect=true&u="
 					+ getLoggedUser().getTcno();
 		} else {
 			FacesMessage fm = new FacesMessage(

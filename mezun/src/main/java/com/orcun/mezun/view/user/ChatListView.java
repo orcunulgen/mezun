@@ -68,7 +68,7 @@ public class ChatListView implements Serializable {
 		getChatListService().deleteChatGrup(selectedChatGroup);
 		
 		FacesContext.getCurrentInstance().getExternalContext()
-		.redirect("chat_list.xhtml?user=" + getLoggedUser().getTcno());
+		.redirect("chat_list.xhtml?u=" + getLoggedUser().getTcno());
 		
 	}
 	
@@ -77,7 +77,7 @@ public class ChatListView implements Serializable {
 		getChatListService().deleteChatPerson(selectedChatPerson);
 		
 		FacesContext.getCurrentInstance().getExternalContext()
-		.redirect("chat_list.xhtml?user=" + getLoggedUser().getTcno());
+		.redirect("chat_list.xhtml?u=" + getLoggedUser().getTcno());
 		
 	}
 
@@ -194,7 +194,7 @@ public class ChatListView implements Serializable {
 			FacesContext.getCurrentInstance().addMessage("form_tcno", fm);
 		}
 		
-		return "chat_list.xhtml?faces-redirect=true&user="+getLoggedUser().getTcno();
+		return "chat_list.xhtml?faces-redirect=true&u="+getLoggedUser().getTcno();
 		
 	}
 
@@ -209,7 +209,7 @@ public class ChatListView implements Serializable {
 					.getCurrentInstance()
 					.getExternalContext()
 					.redirect(
-							"chat_list.xhtml?user=" + getLoggedUser().getTcno());
+							"chat_list.xhtml?u=" + getLoggedUser().getTcno());
 
 	}
 

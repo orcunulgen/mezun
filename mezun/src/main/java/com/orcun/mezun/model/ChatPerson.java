@@ -33,12 +33,13 @@ public class ChatPerson implements Serializable{
 	private Boolean activation=false;
 	
 	@OneToOne
-	@JoinColumn(name="chat_group_id")
+	@JoinColumn(name="chat_group_id",nullable=false)
 	@OnDelete(action=OnDeleteAction.CASCADE)
 	private ChatGroup chatGroup;
 	
 	@OneToOne
 	@OnDelete(action=OnDeleteAction.CASCADE)
+	@JoinColumn(nullable=false)
 	private User user;
 
 	public Long getId() {

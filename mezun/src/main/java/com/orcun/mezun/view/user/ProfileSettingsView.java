@@ -184,110 +184,110 @@ public class ProfileSettingsView implements Serializable {
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"personal_info.xhtml?user="
+								"personal_info.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("Aile Bilgileri")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"parent_info.xhtml?user="
+								"parent_info.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("Üniversite")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"university.xhtml?user="
+								"university.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("Lise")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"high_school.xhtml?user="
+								"high_school.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("Yabancı Dil")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"foreign_language.xhtml?user="
+								"foreign_language.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("İletişim Bilgileri")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"contact_info.xhtml?user="
+								"contact_info.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("İş Tecrübeleri")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"job_experience.xhtml?user="
+								"job_experience.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("Ek Bilgiler")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"additional_info.xhtml?user="
+								"additional_info.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("Klasik CV")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"classical_cv.xhtml?user="
+								"classical_cv.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("Sertifikalar")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"certification.xhtml?user="
+								"certification.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("İlgi Alanları")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"area_of_interest.xhtml?user="
+								"area_of_interest.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("Kişi Listesi")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"chat_list.xhtml?user="
+								"chat_list.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("Fotoğraflar")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"photo.xhtml?user=" + getLoggedUser().getTcno());
+								"photo.xhtml?u=" + getLoggedUser().getTcno());
 			} else if (label.equals("Etkinlikler")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"event.xhtml?user=" + getLoggedUser().getTcno());
+								"event.xhtml?u=" + getLoggedUser().getTcno());
 			} else if (label.equals("Duyurular")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"announcement.xhtml?user="
+								"announcement.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("Profilim")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"my_profile.xhtml?user=" + getLoggedUser().getTcno());
+								"my_profile.xhtml?u=" + getLoggedUser().getTcno());
 			}
 
 		}

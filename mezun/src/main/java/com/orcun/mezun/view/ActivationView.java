@@ -46,7 +46,8 @@ public class ActivationView implements Serializable {
 	}
 	
 	public void activate() throws IOException {
-				Long tcno=StringConvertUtil.stringToLong(CipherUtils.decrypt(getParam()));
+		
+				Long tcno=StringConvertUtil.stringToLong(getParam());
 		
 		getUser().setTcno(tcno);
 		

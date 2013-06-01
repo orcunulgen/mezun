@@ -31,7 +31,7 @@ public class Faculty implements Serializable {
 	private String facultyName;
 	
 	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="university_id")
+	@JoinColumn(name="university_id",nullable=false)
 	private University university;
 	
 	@OneToMany(mappedBy="faculty",fetch=FetchType.LAZY)

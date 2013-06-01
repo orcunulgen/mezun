@@ -335,7 +335,7 @@ public class AllPostView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return ("my_profile.xhtml?faces-redirect=true&user=" + getLoggedUser()
+		return ("my_profile.xhtml?faces-redirect=true&u=" + getLoggedUser()
 				.getTcno());
 	}
 
@@ -399,7 +399,7 @@ public class AllPostView implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, fm);
 
 		}
-		return "my_profile.xhtml?faces-redirect=true&user="
+		return "my_profile.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 	}
 
@@ -446,7 +446,7 @@ public class AllPostView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return "my_profile.xhtml?faces-redirect=true&user="
+		return "my_profile.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 	}
 
@@ -496,7 +496,7 @@ public class AllPostView implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, fm);
 		}
 
-		return "my_profile.xhtml?faces-redirect=true&user="
+		return "my_profile.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 
 	}

@@ -112,14 +112,14 @@ public class InitAlumniInfoView implements Serializable {
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"alumni_university.xhtml?user="
+								"alumni_university.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("İletişim Bilgileri")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"alumni_contact_info.xhtml?user="
+								"alumni_contact_info.xhtml?u="
 										+ getLoggedUser().getTcno());
 			}
 		}

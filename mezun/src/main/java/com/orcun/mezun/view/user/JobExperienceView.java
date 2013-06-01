@@ -93,7 +93,7 @@ public class JobExperienceView implements Serializable {
 				.getCurrentInstance()
 				.getExternalContext()
 				.redirect(
-						"job_experience.xhtml?user="
+						"job_experience.xhtml?u="
 								+ getLoggedUser().getTcno());
 
 	}
@@ -286,7 +286,7 @@ public class JobExperienceView implements Serializable {
 
 		}
 
-		return "job_experience.xhtml?faces-redirect=true&user="
+		return "job_experience.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 
 	}
@@ -359,7 +359,7 @@ public class JobExperienceView implements Serializable {
 
 		}
 
-		return "job_experience.xhtml?faces-redirect=true&user="
+		return "job_experience.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 	}
 }

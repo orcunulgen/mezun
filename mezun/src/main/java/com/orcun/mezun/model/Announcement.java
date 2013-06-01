@@ -50,11 +50,12 @@ public class Announcement implements Serializable {
 	private String posterURL;
 	
 	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "announcement_type_id")
+	@JoinColumn(name = "announcement_type_id",nullable=false)
 	private AnnouncementType announcementType;
 
 	@OneToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn(nullable=false)
 	private User user;
 
 	public Long getId() {

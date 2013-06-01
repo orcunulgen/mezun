@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -44,6 +45,7 @@ public class PhotoAlbum implements Serializable {
 	
 	@OneToOne
 	@OnDelete(action=OnDeleteAction.CASCADE)
+	@JoinColumn(name="user_tcno",nullable=false)
 	private User user;
 	
 	@OneToMany(mappedBy="photoAlbum",fetch= FetchType.EAGER)

@@ -85,7 +85,7 @@ public class ContactInfoView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return ("contact_info.xhtml?faces-redirect=true&user=" + getLoggedUser()
+		return ("contact_info.xhtml?faces-redirect=true&u=" + getLoggedUser()
 				.getTcno());
 	}
 

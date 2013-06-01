@@ -119,7 +119,7 @@ public class ParentInfoView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return ("parent_info.xhtml?faces-redirect=true&user=" + getLoggedUser()
+		return ("parent_info.xhtml?faces-redirect=true&u=" + getLoggedUser()
 				.getTcno());
 	}
 

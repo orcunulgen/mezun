@@ -152,7 +152,7 @@ public class EducationInfoView implements Serializable {
 
 		}
 
-		return "university.xhtml?faces-redirect=true&user="
+		return "university.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 
 	}
@@ -536,7 +536,7 @@ public class EducationInfoView implements Serializable {
 
 		}
 
-		return "university.xhtml?faces-redirect=true&user="
+		return "university.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 	}
 
@@ -664,7 +664,7 @@ public class EducationInfoView implements Serializable {
 			}
 		}
 
-		return "university.xhtml?faces-redirect=true&user="
+		return "university.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 
 	}
@@ -688,7 +688,7 @@ public class EducationInfoView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return "university.xhtml?faces-redirect=true&user="
+		return "university.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 	}
 }

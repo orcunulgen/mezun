@@ -12,9 +12,9 @@
 		<p:breadCrumb>
 			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
 			<p:menuitem value="Hesap Ayarları"
-				url="profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+				url="profile_settings.xhtml?u=#{profileSettingsView.loggedUser.tcno}" />
 			<p:menuitem value="Lise Bilgileri"
-				url="high_school.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+				url="high_school.xhtml?u=#{profileSettingsView.loggedUser.tcno}" />
 		</p:breadCrumb>
 
 	</ui:define>
@@ -31,7 +31,7 @@
 
 						<p:row>
 							<p:column>
-								<h:outputLabel value="Lise İsimi *" />
+								<h:outputLabel value="Lise İsmi *" />
 							</p:column>
 							<p:column>
 								<p:inputText id="form_high_school_name"

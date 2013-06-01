@@ -11,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -45,6 +46,7 @@ public class PostHistory implements Serializable {
 	
 	@OneToOne
 	@OnDelete(action=OnDeleteAction.CASCADE)
+	@JoinColumn(name="user_tcno",nullable=false)
 	private User user;
 
 	public Long getId() {

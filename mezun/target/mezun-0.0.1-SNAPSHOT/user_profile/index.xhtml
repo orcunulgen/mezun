@@ -12,7 +12,7 @@
 		<p:breadCrumb>
 			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
 			<p:menuitem value="Tüm Gönderiler"
-				url="/user_profile/index.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+				url="/user_profile/index.xhtml?u=#{profileSettingsView.loggedUser.tcno}" />
 		</p:breadCrumb>
 
 	</ui:define>
@@ -203,7 +203,7 @@
 								value="#{allPost.getTextTypePost().user.profilePicURL}"
 								width="30px" height="30px" />
 							<h:outputLink
-								value="#{facesContext.externalContext.requestContextPath}/user_profile/showcase/index.xhtml?user=#{allPost.getTextTypePost().user.tcno}">#{allPost.getTextTypePost().user.name} #{allPost.getTextTypePost().user.surname}</h:outputLink>
+								value="#{facesContext.externalContext.requestContextPath}/user_profile/showcase/index.xhtml?u=#{allPost.getTextTypePost().user.tcno}">#{allPost.getTextTypePost().user.name} #{allPost.getTextTypePost().user.surname}</h:outputLink>
 							<h:outputLabel style="float:right;"
 								value="#{allPost.getTextTypePost().publishedDate}">
 								<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />

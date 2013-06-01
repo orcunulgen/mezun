@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -25,14 +26,17 @@ public class AdminBasicInfo implements Serializable{
 		
 	@OneToOne(fetch=FetchType.EAGER)
 	@OnDelete(action=OnDeleteAction.CASCADE)
+	@JoinColumn(nullable=false)
 	private University university;
 	
 	@OneToOne(fetch=FetchType.EAGER)
 	@OnDelete(action=OnDeleteAction.CASCADE)
+	@JoinColumn(nullable=false)
 	private Faculty faculty;
 	
 	@OneToOne(fetch=FetchType.EAGER)
 	@OnDelete(action=OnDeleteAction.CASCADE)
+	@JoinColumn(nullable=false)
 	private Department department;
 
 

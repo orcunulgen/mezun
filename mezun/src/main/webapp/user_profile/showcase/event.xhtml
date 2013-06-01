@@ -1,0 +1,143 @@
+<ui:composition
+	template="/templates/user/showcase/user_profile_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<ui:define name="bread_crumb_container">
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+			<p:menuitem
+				value="#{showcaseMainView.loggedUser.name} #{showcaseMainView.loggedUser.surname}"
+				url="/user_profile/showcase/index.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="Profil Detayları"
+				url="/user_profile/showcase/user_info.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="Etkinlikler"
+				url="/user_profile/showcase/event.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+		</p:breadCrumb>
+
+	</ui:define>
+	<ui:define name="main_container">
+		<h:outputStylesheet library="css" name="user_profile/event.css" />
+		<div class="event">
+
+			<h:form id="list_event_form">
+				<p:growl id="list_event_messages" />
+				<p:fieldset legend="Etkinlik Listesi">
+					<p:dataTable var="eventList" value="#{showEventView.events}"
+						paginator="true" rows="10">
+						<p:column width="110">
+							<f:facet name="header">
+								<h:outputLabel value="İşlemler" />
+							</f:facet>
+							<p:commandButton id="selectButton"
+								actionListener="#{showEventView.initSelectedEvent(eventList)}"
+								update=":event_dialog_form"
+								oncomplete="eventUpdateDialog.show()" icon="ui-icon-search"
+								title="View">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Etkinlik İsmi" />
+							</f:facet>
+							<h:outputLabel value="#{eventList.title}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Başlangıç Tarihi" />
+							</f:facet>
+							<h:outputLabel value="#{eventList.startDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Bitiş Tarihi" />
+							</f:facet>
+							<h:outputLabel value="#{eventList.endDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Etkinliğin Eklendiği Tarih" />
+							</f:facet>
+							<h:outputLabel value="#{eventList.registeredDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+					</p:dataTable>
+				</p:fieldset>
+			</h:form>
+
+			<p:dialog header="Etkinliğin Ayrıntıları"
+				widgetVar="eventUpdateDialog" resizable="false" id="eventUpdateDlg"
+				showEffect="fade" modal="true">
+				<h:form id="event_dialog_form" enctype="multipart/form-data">
+					<p:growl id="selected_event_dialog_messages" />
+					<p:panelGrid styleClass="no_border" id="event_detail_display"
+						cellpadding="4" style="margin:0 auto;">
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Etkinlik Afişi :" />
+							</p:column>
+							<p:column>
+								<p:graphicImage value="#{showEventView.selectedEvent.posterURL}"
+									width="250px" height="220px" />
+								<br />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Etkinlik İsmi :" />
+							</p:column>
+							<p:column>
+								<h:outputLabel value="#{showEventView.selectedEvent.title}" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Açıklama :" />
+							</p:column>
+							<p:column>
+								<h:outputLabel value="#{showEventView.selectedEvent.description}" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Başlangıç Tarihi :" />
+							</p:column>
+							<p:column>
+								<h:outputLabel value="#{showEventView.selectedEvent.startDate}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputLabel>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Bitiş Tarihi :" />
+							</p:column>
+							<p:column>
+								<h:outputLabel value="#{showEventView.selectedEvent.endDate}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputLabel>
+							</p:column>
+						</p:row>
+
+					</p:panelGrid>
+				</h:form>
+			</p:dialog>
+		</div>
+
+	</ui:define>
+</ui:composition>

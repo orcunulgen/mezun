@@ -25,11 +25,12 @@ public class ShareList implements Serializable{
 	
 	@OneToOne
 	@OnDelete(action=OnDeleteAction.CASCADE)
-	@JoinColumn(name="post_history_id")
+	@JoinColumn(name="post_history_id",nullable=false)
 	private PostHistory postHistory;
 	
 	@OneToOne
 	@OnDelete(action=OnDeleteAction.CASCADE)
+	@JoinColumn(name="user_tcno",nullable=false)
 	private User user;
 
 	public Long getId() {

@@ -88,7 +88,7 @@ public class NewUserView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return ("new_user.xhtml?faces-redirect=true&user=" + getLoggedUser()
+		return ("new_user.xhtml?faces-redirect=true&u=" + getLoggedUser()
 				.getTcno());
 	}
 
@@ -173,7 +173,7 @@ public class NewUserView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return ("new_user.xhtml?faces-redirect=true&user=" + getLoggedUser()
+		return ("new_user.xhtml?faces-redirect=true&u=" + getLoggedUser()
 				.getTcno());
 
 	}

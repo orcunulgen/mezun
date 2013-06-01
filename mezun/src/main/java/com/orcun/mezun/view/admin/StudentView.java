@@ -119,7 +119,7 @@ public class StudentView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return ("student.xhtml?faces-redirect=true&user=" + getLoggedUser()
+		return ("student.xhtml?faces-redirect=true&u=" + getLoggedUser()
 				.getTcno());
 
 	}
@@ -254,7 +254,7 @@ public class StudentView implements Serializable {
 				.getCurrentInstance()
 				.getExternalContext()
 				.redirect(
-						"student.xhtml?user="
+						"student.xhtml?u="
 								+ getLoggedUser().getTcno());
 			} else {
 				FacesMessage fm = new FacesMessage(
@@ -281,7 +281,7 @@ public class StudentView implements Serializable {
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"student.xhtml?user="
+								"student.xhtml?u="
 										+ getLoggedUser().getTcno());
 
 			} else {

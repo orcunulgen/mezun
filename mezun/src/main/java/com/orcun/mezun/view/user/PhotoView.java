@@ -194,7 +194,7 @@ public class PhotoView implements Serializable {
 		
 
 
-		return "photo.xhtml?faces-redirect=true&user="
+		return "photo.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 
 	}
@@ -216,7 +216,7 @@ public class PhotoView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return "photo.xhtml?faces-redirect=true&user="
+		return "photo.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 
 		

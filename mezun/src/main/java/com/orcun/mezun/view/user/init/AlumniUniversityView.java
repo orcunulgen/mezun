@@ -194,7 +194,7 @@ public class AlumniUniversityView implements Serializable {
 						.getExternalContext().getFlash();
 				flash.setKeepMessages(true);
 
-				return "init_alumni_info.xhtml?faces-redirect=true&user="
+				return "init_alumni_info.xhtml?faces-redirect=true&u="
 						+ getLoggedUser().getTcno();
 			} else {
 				FacesMessage fm = new FacesMessage(
@@ -220,7 +220,7 @@ public class AlumniUniversityView implements Serializable {
 					"Üniversite başlangıç ve bitiş tarihi geçmiş zamana ait olmalıdır ve başlangıç tarihi bitiş tarihinden ilerde olamaz.",
 					"Lütfen yeniden deneyiniz.");
 			FacesContext.getCurrentInstance().addMessage(null, fm);
-			return "init_alumni_info.xhtml?faces-redirect=true&user="
+			return "init_alumni_info.xhtml?faces-redirect=true&u="
 					+ getLoggedUser().getTcno();
 		}
 

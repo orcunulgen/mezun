@@ -106,7 +106,7 @@ public class CertificationView implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, fm);
 		}
 
-		return "certification.xhtml?faces-redirect=true&user="
+		return "certification.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 
 	}
@@ -234,7 +234,7 @@ public class CertificationView implements Serializable {
 
 		}
 
-		return "certification.xhtml?faces-redirect=true&user="
+		return "certification.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 	}
 
@@ -312,7 +312,7 @@ public class CertificationView implements Serializable {
 
 		}
 
-		return "certification.xhtml?faces-redirect=true&user="
+		return "certification.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 
 	}

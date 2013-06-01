@@ -133,28 +133,28 @@ public class InitStudentInfoView implements Serializable {
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"student_parent_info.xhtml?user="
+								"student_parent_info.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("Üniversite")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"student_university.xhtml?user="
+								"student_university.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("Lise")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"student_highschool.xhtml?user="
+								"student_highschool.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("İletişim Bilgileri")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"student_contact_info.xhtml?user="
+								"student_contact_info.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} 
 		}

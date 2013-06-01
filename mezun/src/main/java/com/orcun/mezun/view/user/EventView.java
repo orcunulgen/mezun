@@ -88,7 +88,7 @@ public class EventView implements Serializable {
 
 		}
 
-		return "event.xhtml?faces-redirect=true&user="
+		return "event.xhtml?faces-redirect=true&u="
 		+ getLoggedUser().getTcno();
 
 
@@ -212,7 +212,7 @@ public class EventView implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, fm);
 
 		}
-		return "event.xhtml?faces-redirect=true&user="
+		return "event.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 	}
 
@@ -292,7 +292,7 @@ public class EventView implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, fm);
 
 		}
-		return "event.xhtml?faces-redirect=true&user="
+		return "event.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 	}
 

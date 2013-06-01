@@ -43,23 +43,28 @@ public class JobExperience implements Serializable{
 	private Date registeredDate=new Date();
 	
 	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(nullable=false)
 	private Position position;
 	
 	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(nullable=false)
 	private Sector sector;
 	
 	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(nullable=false)
 	private Country country;
 	
 	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(nullable=false)
 	private City city;
 	
 	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="working_type_id")
+	@JoinColumn(name="working_type_id",nullable=false)
 	private WorkingType workingType;
 	
 	@OneToOne
 	@OnDelete(action=OnDeleteAction.CASCADE)
+	@JoinColumn(nullable=false)
 	private User user;
 
 	public Long getId() {

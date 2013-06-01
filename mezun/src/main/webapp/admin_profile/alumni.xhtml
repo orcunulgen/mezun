@@ -5,7 +5,20 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	
+
+	<ui:define name="bread_crumb_container">
+
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/admin_profile/index.xhtml" />
+			<p:menuitem value="Yönetim Paneli"
+				url="/admin_profile/index.xhtml?u=#{profileSettingsView.loggedUser.tcno}" />
+			<p:menuitem value="Mezun Listesi"
+				url="/admin_profile/alumni.xhtml?u=#{profileSettingsView.loggedUser.tcno}" />
+		</p:breadCrumb>
+
+	</ui:define>
+
 	<ui:define name="main_container">
 		<h:outputStylesheet library="css" name="admin_profile/alumni.css" />
 		<div class="alumni">
@@ -14,7 +27,7 @@
 				<p:growl id="list_alumni_messages" />
 				<p:dataTable var="alumniList" value="#{alumniView.alumnis}"
 					paginator="true" rows="10">
-					<p:column style="width:15%">
+					<p:column width="110">
 						<f:facet name="header">
 							<h:outputLabel value="İşlemler" />
 						</f:facet>
@@ -58,9 +71,9 @@
 				</p:dataTable>
 			</h:form>
 
-			<p:dialog header="Mezun Ayrıntıları"
-				widgetVar="alumniUpdateDialog" resizable="false"
-				id="alumniUpdateDlg" showEffect="fade" modal="true">
+			<p:dialog header="Mezun Ayrıntıları" widgetVar="alumniUpdateDialog"
+				resizable="false" id="alumniUpdateDlg" showEffect="fade"
+				modal="true">
 				<h:form id="alumni_dialog_form">
 					<p:growl id="selected_alumni_dialog_messages" />
 					<p:panelGrid styleClass="no_border" id="alumni_detail_display"
@@ -86,7 +99,7 @@
 							<p:ajax event="blur" update="selected_alumni_dialog_messages" />
 							<f:attribute name="formName" value="alumni_dialog_form" />
 						</p:inputText>
-						<h:outputLabel  value="E-Mail Tekrarı" />
+						<h:outputLabel value="E-Mail Tekrarı" />
 						<p:inputText id="form_confirm_email"
 							value="#{alumniView.selectedAlumni.email}" />
 
@@ -118,9 +131,8 @@
 						</p:selectOneMenu>
 
 					</p:panelGrid>
-					<p:commandButton action="#{alumniView.updateAlumni}"
-						value="Kaydet" ajax="true" icon="ui-icon-disk"
-						update=":alumni_dialog_form" />
+					<p:commandButton action="#{alumniView.updateAlumni}" value="Kaydet"
+						ajax="true" icon="ui-icon-disk" update=":alumni_dialog_form" />
 				</h:form>
 			</p:dialog>
 
@@ -152,8 +164,8 @@
 						</p:inputText>
 
 						<h:outputLabel value="Soyisim" />
-						<p:inputText value="#{alumniView.alumni.surname}"
-							required="true" requiredMessage="Lütfen soyisminizi giriniz.">
+						<p:inputText value="#{alumniView.alumni.surname}" required="true"
+							requiredMessage="Lütfen soyisminizi giriniz.">
 						</p:inputText>
 
 						<h:outputLabel value="E-Mail" />
@@ -176,7 +188,7 @@
 							requiredMessage="Lütfen şifre giriniz."
 							validatorMessage="Şifreniz eşleşmiyor.Lütfen yeniden deneyiniz."
 							match="form_confirm_password" />
-						<h:outputLabel  value="Şifre Tekrarı" />
+						<h:outputLabel value="Şifre Tekrarı" />
 						<p:password id="form_confirm_password"
 							value="#{alumniView.alumni.password}" />
 
@@ -191,8 +203,7 @@
 
 						<h:outputLabel value="Doğduğu Ülke " />
 						<p:selectOneMenu validator="countryValidator"
-							converter="countryConverter"
-							value="#{alumniView.alumni.country}">
+							converter="countryConverter" value="#{alumniView.alumni.country}">
 							<f:selectItem itemValue="0" itemLabel="Lütfen bir ülke seçiniz" />
 							<f:selectItems value="#{alumniView.countries}" var="country"
 								itemValue="#{country}" itemLabel="#{country.countryName}" />

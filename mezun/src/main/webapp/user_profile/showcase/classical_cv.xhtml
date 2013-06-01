@@ -1,0 +1,51 @@
+<ui:composition
+	template="/templates/user/showcase/user_profile_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<ui:define name="bread_crumb_container">
+
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+			<p:menuitem
+				value="#{showcaseMainView.loggedUser.name} #{showcaseMainView.loggedUser.surname}"
+				url="/user_profile/showcase/index.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="Profil Detayları"
+				url="/user_profile/showcase/user_info.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="Klasik Özgeçmiş"
+				url="/user_profile/showcase/classical_cv.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+		</p:breadCrumb>
+	</ui:define>
+	<ui:define name="main_container">
+		<h:outputStylesheet library="css" name="user_profile/classical_cv.css" />
+
+
+		<div class="classical_cv">
+			<h:form id="form_classical_cv_panel" prependId="false"
+				enctype="multipart/form-data">
+				<p:growl id="form_classical_cv_messages" />
+				<p:fieldset legend="Klasik Özgeçmiş">
+					<p:panelGrid styleClass="no_border" id="addClassicalCvPanelGrid"
+						columns="1">
+
+						<h:outputLabel rendered="#{showClassicalCvView.classicalCV!=null}"
+							value="Kullanıcının özgeçmişinizi buradan indirebilirsiniz." />
+						<h:outputLink rendered="#{showClassicalCvView.classicalCV!=null}"
+							value="#{showClassicalCvView.classicalCV.cvURL}">İndir</h:outputLink>
+
+						<h:outputLabel rendered="#{showClassicalCvView.classicalCV==null}"
+							value="Bu alan kullanıcı tarafından henüz güncellenmemiştir." />
+
+					</p:panelGrid>
+				</p:fieldset>
+			</h:form>
+		</div>
+
+
+	</ui:define>
+</ui:composition>

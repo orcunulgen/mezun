@@ -88,7 +88,7 @@ public class PersonalInfoView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return ("personal_info.xhtml?faces-redirect=true&user=" + getLoggedUser()
+		return ("personal_info.xhtml?faces-redirect=true&u=" + getLoggedUser()
 				.getTcno());
 	}
 

@@ -83,7 +83,7 @@ public class AdditionalInfoView implements Serializable {
 					.getCurrentInstance()
 					.getExternalContext()
 					.redirect(
-							"personal_info.xhtml?user="
+							"personal_info.xhtml?u="
 									+ getLoggedUser().getTcno());
 
 		} else if (!userParameter.equals(getLoggedUser().getTcno().toString())) {
@@ -91,7 +91,7 @@ public class AdditionalInfoView implements Serializable {
 					.getCurrentInstance()
 					.getExternalContext()
 					.redirect(
-							"personal_info.xhtml?user="
+							"personal_info.xhtml?u="
 									+ getLoggedUser().getTcno());
 
 		}
@@ -118,7 +118,7 @@ public class AdditionalInfoView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return ("additional_info.xhtml?faces-redirect=true&user=" + getLoggedUser()
+		return ("additional_info.xhtml?faces-redirect=true&u=" + getLoggedUser()
 				.getTcno());
 	}
 

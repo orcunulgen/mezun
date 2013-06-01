@@ -9,6 +9,19 @@
 		<f:event type="preRenderView" listener="#{personalInfoView.checkURL}" />
 	</f:metadata> -->
 
+	<ui:define name="bread_crumb_container">
+
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/admin_profile/index.xhtml" />
+			<p:menuitem value="Yönetim Paneli"
+				url="/admin_profile/index.xhtml?u=#{profileSettingsView.loggedUser.tcno}" />
+			<p:menuitem value="Öğrenci Listesi"
+				url="/admin_profile/student.xhtml?u=#{profileSettingsView.loggedUser.tcno}" />
+		</p:breadCrumb>
+
+	</ui:define>
+
 	<ui:define name="main_container">
 		<h:outputStylesheet library="css" name="admin_profile/student.css" />
 		<div class="student">
@@ -17,7 +30,7 @@
 				<p:growl id="list_student_messages" />
 				<p:dataTable var="studentList" value="#{studentView.students}"
 					paginator="true" rows="10">
-					<p:column style="width:15%">
+					<p:column width="110">
 						<f:facet name="header">
 							<h:outputLabel value="İşlemler" />
 						</f:facet>
@@ -79,8 +92,9 @@
 						<h:outputLabel value="#{studentView.selectedStudent.surname}" />
 
 						<h:outputLabel value="E-Mail" />
-						<p:inputText id="form_email" value="#{studentView.selectedStudent.email}"
-							required="true" requiredMessage="Lütfen e-mail adresi giriniz.">
+						<p:inputText id="form_email"
+							value="#{studentView.selectedStudent.email}" required="true"
+							requiredMessage="Lütfen e-mail adresi giriniz.">
 							<f:validator validatorId="emailFormatValidator" />
 							<f:validator validatorId="emailMatchValidator" />
 							<f:validator validatorId="emailUniquenessValidator" />
@@ -91,9 +105,9 @@
 						<h:outputLabel value="E-Mail Tekrarı" />
 						<p:inputText id="form_confirm_email"
 							value="#{studentView.selectedStudent.email}" />
-							
-						<h:outputLabel  value="Şifre" />
-						<h:outputLabel  value="#{studentView.selectedStudent.password}" />
+
+						<h:outputLabel value="Şifre" />
+						<h:outputLabel value="#{studentView.selectedStudent.password}" />
 
 						<h:outputLabel value="Doğum yılı" />
 						<h:outputLabel value="#{studentView.selectedStudent.birthdayYear}" />
@@ -131,7 +145,7 @@
 
 			<p:commandButton value="Yeni Öğrenci Ekle" type="button"
 				onclick="studentAddDialog.show()" />
-			<p:dialog  header="Öğrenci Ekle" widgetVar="studentAddDialog"
+			<p:dialog header="Öğrenci Ekle" widgetVar="studentAddDialog"
 				resizable="false" id="studentAddDlg" showEffect="fade" modal="true">
 				<h:form id="dialog_student_add_form">
 					<p:growl id="student_add_messages" />
@@ -168,17 +182,17 @@
 							<p:ajax event="blur" update="student_add_messages" />
 							<f:attribute name="formName" value="dialog_student_add_form" />
 						</p:inputText>
-						<h:outputLabel  value="E-Mail Tekrarı" />
+						<h:outputLabel value="E-Mail Tekrarı" />
 						<p:inputText id="form_confirm_email"
 							value="#{studentView.student.email}" />
 
-						<h:outputLabel  value="Şifre" />
+						<h:outputLabel value="Şifre" />
 						<p:password id="form_password"
 							value="#{studentView.student.password}" required="true"
 							requiredMessage="Lütfen şifre giriniz."
 							validatorMessage="Şifreniz eşleşmiyor.Lütfen yeniden deneyiniz."
 							match="form_confirm_password" />
-						<h:outputLabel  value="Şifre Tekrarı" />
+						<h:outputLabel value="Şifre Tekrarı" />
 						<p:password id="form_confirm_password"
 							value="#{studentView.student.password}" />
 

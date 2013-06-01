@@ -51,7 +51,7 @@ public class Photo implements Serializable {
 	
 	@OneToOne
 	@OnDelete(action=OnDeleteAction.CASCADE)
-	@JoinColumn(name="album_id")
+	@JoinColumn(name="album_id",nullable=false)
 	private PhotoAlbum photoAlbum;
 
 	public Long getId() {

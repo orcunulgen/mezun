@@ -36,7 +36,6 @@ import com.orcun.mezun.model.Role;
 import com.orcun.mezun.model.User;
 import com.orcun.mezun.model.enums.UploadedFileDirectory;
 import com.orcun.mezun.service.SignUpService;
-import com.orcun.mezun.util.CipherUtils;
 import com.orcun.mezun.util.MyURLUtil;
 
 @ManagedBean
@@ -158,7 +157,7 @@ public class SignUpView implements Serializable {
 
 	public String saveUser() {
 
-		if (!checkUserTcno(user)) { // geçici olarak devre dışı
+		if (checkUserTcno(user)) { // geçici olarak devre dışı
 
 			List<Role> userRoles = new ArrayList<Role>();
 
@@ -220,11 +219,11 @@ public class SignUpView implements Serializable {
 						+ MyURLUtil.getBaseURL(FacesContext
 								.getCurrentInstance())
 						+ "/activation.xhtml?u="
-						+ CipherUtils.encrypt(user.getTcno().toString())
+						+ user.getTcno().toString()
 						+ "\">"
 						+ MyURLUtil.getBaseURL(FacesContext
 								.getCurrentInstance()) + "/activation.xhtml?u="
-						+ CipherUtils.encrypt(user.getTcno().toString())
+						+ user.getTcno().toString()
 						+ "</a>";
 
 				message.setContent(messageText,"text/html; charset=utf-8");

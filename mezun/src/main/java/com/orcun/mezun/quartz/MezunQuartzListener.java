@@ -30,8 +30,8 @@ public class MezunQuartzListener implements ServletContextListener {
 			setScheduler(sf.getScheduler());
 
 			Calendar startTime = java.util.Calendar.getInstance();
-			startTime.set(Calendar.HOUR_OF_DAY, 02);
-			startTime.set(Calendar.MINUTE, 20);
+			startTime.set(Calendar.HOUR_OF_DAY, 15);
+			startTime.set(Calendar.MINUTE, 11);
 			startTime.set(Calendar.SECOND, 0);
 			startTime.set(Calendar.MILLISECOND, 0);
 

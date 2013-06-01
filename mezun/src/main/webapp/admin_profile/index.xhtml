@@ -4,6 +4,18 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	
+	<ui:define name="bread_crumb_container">
+
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/admin_profile/index.xhtml" />
+			<p:menuitem value="Yönetim Paneli"
+				url="/admin_profile/index.xhtml?u=#{profileSettingsView.loggedUser.tcno}" />
+		</p:breadCrumb>
+
+	</ui:define>
 	
 	<ui:define name="main_container">
 		<h:form>

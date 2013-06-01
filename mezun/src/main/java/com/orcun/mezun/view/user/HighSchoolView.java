@@ -131,7 +131,7 @@ public class HighSchoolView implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, fm);
 		}
 
-		return "high_school.xhtml?faces-redirect=true&user="
+		return "high_school.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 	}
 

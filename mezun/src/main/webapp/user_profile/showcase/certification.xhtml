@@ -1,0 +1,138 @@
+<ui:composition
+	template="/templates/user/showcase/user_profile_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<ui:define name="bread_crumb_container">
+
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+			<p:menuitem
+				value="#{showcaseMainView.loggedUser.name} #{showcaseMainView.loggedUser.surname}"
+				url="/user_profile/showcase/index.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="Profil Detayları"
+				url="/user_profile/showcase/user_info.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="Sertifikalar"
+				url="/user_profile/showcase/certification.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+		</p:breadCrumb>
+
+	</ui:define>
+	<ui:define name="main_container">
+		<h:outputStylesheet library="css"
+			name="user_profile/certification.css" />
+		<div class="certification">
+
+			<h:form id="list_certification_form">
+				<p:growl id="list_certification_messages" />
+				<p:fieldset legend="Sertifikalar">
+					<p:dataTable var="certificationList"
+						value="#{showCertificationView.certifications}" paginator="true"
+						rows="10">
+						<p:column width="110">
+							<f:facet name="header">
+								<h:outputLabel value="İşlemler" />
+							</f:facet>
+							<p:commandButton id="selectButton"
+								actionListener="#{showCertificationView.initSelectedCertification(certificationList)}"
+								update=":certification_dialog_form"
+								oncomplete="certificationUpdateDialog.show()"
+								icon="ui-icon-search" title="View">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Sertifika İsmi" />
+							</f:facet>
+							<h:outputLabel value="#{certificationList.certificateName}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Alınma Tarihi" />
+							</f:facet>
+							<h:outputLabel value="#{certificationList.certificateDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Alındığı Kurum" />
+							</f:facet>
+							<h:outputLabel value="#{certificationList.institution}" />
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
+			</h:form>
+
+			<p:dialog header="Sertifika Ayrıntıları"
+				widgetVar="certificationUpdateDialog" resizable="false"
+				id="certificationUpdateDlg" showEffect="fade" modal="true">
+				<h:form id="certification_dialog_form" enctype="multipart/form-data">
+					<p:growl id="selected_certification_dialog_messages" />
+					<p:panelGrid styleClass="no_border"
+						id="certification_detail_display" cellpadding="4"
+						style="margin:0 auto;">
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Sertifika Dosyası :"
+									rendered="#{showCertificationView.isThereFile}" />
+							</p:column>
+							<p:column colspan="2">
+								<h:outputLink rendered="#{showCertificationView.isThereFile}"
+									value="#{showCertificationView.selectedCertification.fileURL}">İndir</h:outputLink>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Sertifika İsmi :" />
+							</p:column>
+							<p:column colspan="2">
+								<h:outputLabel
+									value="#{showCertificationView.selectedCertification.certificateName}" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Açıklama :" />
+							</p:column>
+							<p:column colspan="2">
+								<h:outputLabel
+									value="#{showCertificationView.selectedCertification.description}" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Alınma Tarihi :" />
+							</p:column>
+							<p:column colspan="2">
+								<h:outputLabel
+									value="#{showCertificationView.selectedCertification.certificateDate}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputLabel>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Alındığı Kurum :" />
+							</p:column>
+							<p:column colspan="2">
+								<h:outputLabel
+									value="#{showCertificationView.selectedCertification.institution}" />
+							</p:column>
+						</p:row>
+
+					</p:panelGrid>
+				</h:form>
+			</p:dialog>
+		</div>
+	</ui:define>
+</ui:composition>

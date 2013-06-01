@@ -12,9 +12,9 @@
 		<p:breadCrumb>
 			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
 			<p:menuitem value="Hesap Ayarları"
-				url="profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+				url="profile_settings.xhtml?u=#{profileSettingsView.loggedUser.tcno}" />
 			<p:menuitem value="Yabancı Dil Bilgileri"
-				url="foreign_language.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+				url="foreign_language.xhtml?u=#{profileSettingsView.loggedUser.tcno}" />
 		</p:breadCrumb>
 
 	</ui:define>
@@ -30,7 +30,7 @@
 					<p:dataTable var="foreignLanguageList"
 						value="#{foreignLanguageView.foreignLanguages}" paginator="true"
 						rows="10">
-						<p:column style="width:15%">
+						<p:column width="110">
 							<f:facet name="header">
 								<h:outputLabel value="İşlemler" />
 							</f:facet>

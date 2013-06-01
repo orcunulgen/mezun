@@ -12,9 +12,9 @@
 		<p:breadCrumb>
 			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
 			<p:menuitem value="Hesap Ayarları"
-				url="profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+				url="profile_settings.xhtml?u=#{profileSettingsView.loggedUser.tcno}" />
 			<p:menuitem value="Etkinlikler"
-				url="event.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+				url="event.xhtml?u=#{profileSettingsView.loggedUser.tcno}" />
 		</p:breadCrumb>
 
 	</ui:define>
@@ -27,7 +27,7 @@
 				<p:fieldset legend="Etkinlik Listesi">
 					<p:dataTable var="eventList" value="#{eventView.events}"
 						paginator="true" rows="10">
-						<p:column style="width:15%">
+						<p:column width="110">
 							<f:facet name="header">
 								<h:outputLabel value="İşlemler" />
 							</f:facet>

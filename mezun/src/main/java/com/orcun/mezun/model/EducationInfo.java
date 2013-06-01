@@ -33,7 +33,7 @@ public class EducationInfo implements Serializable{
 	private Long id;
 	
 	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="education_level_id")
+	@JoinColumn(name="education_level_id",nullable=false)
 	private EducationLevel educationLevel;
 	
 	@Column(name="start_year",nullable=false)
@@ -43,16 +43,19 @@ public class EducationInfo implements Serializable{
 	private Integer endYear;
 	
 	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(nullable=false)
 	private University university;
 	
 	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(nullable=false)
 	private Faculty faculty;
 	
 	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(nullable=false)
 	private Department department;
 	
 	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="grading_system_id")
+	@JoinColumn(name="grading_system_id",nullable=false)
 	private GradingSystem gradingSystem;
 	
 	@Column(name="graduation_degree")
@@ -70,6 +73,7 @@ public class EducationInfo implements Serializable{
 	
 	@OneToOne
 	@OnDelete(action=OnDeleteAction.CASCADE)
+	@JoinColumn(nullable=false)
 	private User user;
 	
 	

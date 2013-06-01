@@ -121,7 +121,7 @@ public class AlumniView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return ("alumni.xhtml?faces-redirect=true&user=" + getLoggedUser()
+		return ("alumni.xhtml?faces-redirect=true&u=" + getLoggedUser()
 				.getTcno());
  
 	}
@@ -256,7 +256,7 @@ public class AlumniView implements Serializable {
 				.getCurrentInstance()
 				.getExternalContext()
 				.redirect(
-						"alumni.xhtml?user="
+						"alumni.xhtml?u="
 								+ getLoggedUser().getTcno());
 			} else {
 				FacesMessage fm = new FacesMessage(
@@ -283,7 +283,7 @@ public class AlumniView implements Serializable {
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"alumni.xhtml?user="
+								"alumni.xhtml?u="
 										+ getLoggedUser().getTcno());
 
 			} else {

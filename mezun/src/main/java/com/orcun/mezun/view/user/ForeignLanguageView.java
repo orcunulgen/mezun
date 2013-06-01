@@ -66,7 +66,7 @@ public class ForeignLanguageView implements Serializable {
 				.getCurrentInstance()
 				.getExternalContext()
 				.redirect(
-						"foreign_language.xhtml?user="
+						"foreign_language.xhtml?u="
 								+ getLoggedUser().getTcno());
 
 	}
@@ -142,7 +142,7 @@ public class ForeignLanguageView implements Serializable {
 
 		FacesContext.getCurrentInstance().addMessage(null, fm);
 
-		return "foreign_language.xhtml?faces-redirect=true&user="
+		return "foreign_language.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 	}
 
@@ -160,7 +160,7 @@ public class ForeignLanguageView implements Serializable {
 
 		FacesContext.getCurrentInstance().addMessage(null, fm);
 
-		return "foreign_language.xhtml?faces-redirect=true&user="
+		return "foreign_language.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 	}
 }

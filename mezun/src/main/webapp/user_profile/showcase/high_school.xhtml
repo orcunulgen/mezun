@@ -1,0 +1,132 @@
+<ui:composition
+	template="/templates/user/showcase/user_profile_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<ui:define name="bread_crumb_container">
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+			<p:menuitem
+				value="#{showcaseMainView.loggedUser.name} #{showcaseMainView.loggedUser.surname}"
+				url="/user_profile/showcase/index.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="Profil Detayları"
+				url="/user_profile/showcase/user_info.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="Lise Bilgileri"
+				url="/user_profile/showcase/high_school.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+		</p:breadCrumb>
+
+	</ui:define>
+	<ui:define name="main_container">
+
+		<h:outputStylesheet library="css" name="user_profile/high_school.css" />
+		<div class="high_school">
+			<h:form id="form_high_school_panel" prependId="false">
+
+				<p:growl id="form_high_school_messages" />
+				<p:fieldset legend="Lise Bilgileri">
+					<p:panelGrid rendered="#{showHighSchoolView.highSchool!=null}"
+						styleClass="no_border">
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Lise İsmi" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{showHighSchoolView.highSchool.highSchoolName}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Lisedeki Bölümü" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{showHighSchoolView.highSchool.highSchoolDepartment}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Mezuniyet Yılı" />
+							</p:column>
+							<p:column>
+								<h:outputLabel value="#{showHighSchoolView.highSchool.endYear}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Lise Tipi" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{showHighSchoolView.highSchool.highSchoolType.highSchoolType}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Diploma Not Sistemi" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{showHighSchoolView.highSchool.gradingSystem}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Lise Mezuniyet Not Ortalaması" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{showHighSchoolView.highSchool.graduationDegree}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel value="YTÜ Bilgisayar Tercih Sırası" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{showHighSchoolView.highSchool.ytuCeOrderOfPreference}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel value="1.Tercihi ( Üniversite/Bölüm )" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{showHighSchoolView.highSchool.ossFirstChoise}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel value="2.Tercihi ( Üniversite/Bölüm )" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{showHighSchoolView.highSchool.ossSecondChoise}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel value="3.Tercihi ( Üniversite/Bölüm )" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{showHighSchoolView.highSchool.ossThirdChoise}" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<h:outputLabel rendered="#{showHighSchoolView.highSchool==null}"
+						value="Bu alan kullanıcı tarafından henüz güncellenmemiştir." />
+
+				</p:fieldset>
+
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

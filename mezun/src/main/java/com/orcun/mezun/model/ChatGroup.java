@@ -36,7 +36,7 @@ public class ChatGroup implements Serializable{
 	private String groupName;
 	
 	@OneToOne
-	@JoinColumn(name="chat_list_id")
+	@JoinColumn(name="chat_list_id",nullable=false)
 	@OnDelete(action=OnDeleteAction.CASCADE)
     private ChatList chatList;
 	

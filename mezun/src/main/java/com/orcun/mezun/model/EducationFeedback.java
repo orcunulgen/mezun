@@ -27,7 +27,7 @@ public class EducationFeedback implements Serializable{
 	
 	@OneToOne(cascade=CascadeType.ALL)
 	@OnDelete(action=OnDeleteAction.CASCADE)
-	@JoinColumn(name="education_info_id")
+	@JoinColumn(name="education_info_id",nullable=false)
 	private EducationInfo educationInfo;
 	
 	@Column(name="feedback_text",nullable=false,length=200)

@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -26,6 +27,7 @@ public class ForeignLanguage implements Serializable{
 	private Long id;
 	
 	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(nullable=false)
 	private Language language;
 	
 	@Column(name="writing_rank",nullable=false)
@@ -42,6 +44,7 @@ public class ForeignLanguage implements Serializable{
 	
 	@OneToOne
 	@OnDelete(action=OnDeleteAction.CASCADE)
+	@JoinColumn(nullable=false)
 	private User user;
 
 	public Long getId() {

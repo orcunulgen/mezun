@@ -141,7 +141,7 @@ public class StudentHighschoolView implements Serializable {
 							.getExternalContext().getFlash();
 					flash.setKeepMessages(true);
 
-					return "init_student_info.xhtml?faces-redirect=true&user="
+					return "init_student_info.xhtml?faces-redirect=true&u="
 							+ getLoggedUser().getTcno();
 				} else {
 					FacesMessage fm = new FacesMessage(
@@ -168,7 +168,7 @@ public class StudentHighschoolView implements Serializable {
 						"Lütfen yeniden deneyiniz.");
 				FacesContext.getCurrentInstance().addMessage(null, fm);
 				
-				return "init_student_info.xhtml?faces-redirect=true&user="+getLoggedUser().getTcno();
+				return "init_student_info.xhtml?faces-redirect=true&u="+getLoggedUser().getTcno();
 			}
 	}
 

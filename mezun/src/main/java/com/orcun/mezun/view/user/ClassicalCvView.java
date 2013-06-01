@@ -176,7 +176,7 @@ public class ClassicalCvView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return ("classical_cv.xhtml?faces-redirect=true&user=" + getLoggedUser()
+		return ("classical_cv.xhtml?faces-redirect=true&u=" + getLoggedUser()
 				.getTcno());
 	}
 

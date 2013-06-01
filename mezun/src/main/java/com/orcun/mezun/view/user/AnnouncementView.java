@@ -91,7 +91,7 @@ public class AnnouncementView implements Serializable {
 
 		}
 
-		return "announcement.xhtml?faces-redirect=true&user="
+		return "announcement.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 	}
 
@@ -183,7 +183,7 @@ public class AnnouncementView implements Serializable {
 					.getCurrentInstance()
 					.getExternalContext()
 					.redirect(
-							"personal_info.xhtml?user="
+							"personal_info.xhtml?u="
 									+ getLoggedUser().getTcno());
 
 		} else if (!userParameter.equals(getLoggedUser().getTcno().toString())) {
@@ -191,7 +191,7 @@ public class AnnouncementView implements Serializable {
 					.getCurrentInstance()
 					.getExternalContext()
 					.redirect(
-							"personal_info.xhtml?user="
+							"personal_info.xhtml?u="
 									+ getLoggedUser().getTcno());
 
 		}
@@ -227,7 +227,7 @@ public class AnnouncementView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return "announcement.xhtml?faces-redirect=true&user="
+		return "announcement.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 	}
 
@@ -287,7 +287,7 @@ public class AnnouncementView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return "announcement.xhtml?faces-redirect=true&user="
+		return "announcement.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 	}
 

@@ -34,11 +34,11 @@ public class HighSchool implements Serializable{
 	private Integer endYear;
 	
 	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="high_school_type_id")
+	@JoinColumn(name="high_school_type_id",nullable=false)
 	private HighSchoolType highSchoolType;
 	
 	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="grading_system_id")
+	@JoinColumn(name="grading_system_id",nullable=false)
 	private GradingSystem gradingSystem;
 	
 	@Column(name="graduation_degree")

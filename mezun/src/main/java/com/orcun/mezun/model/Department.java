@@ -29,14 +29,15 @@ public class Department implements Serializable {
 	private String departmentName;
 	
 	@OneToOne(fetch=FetchType.LAZY)
+	@JoinColumn(nullable=false)
 	private Language language;
 	
 	@OneToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="education_type_id")
+	@JoinColumn(name="education_type_id",nullable=false)
 	private EducationType educationType;
 	
 	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="faculty_id")
+	@JoinColumn(name="faculty_id",nullable=false)
 	private Faculty faculty;
 
 	public Long getId() {

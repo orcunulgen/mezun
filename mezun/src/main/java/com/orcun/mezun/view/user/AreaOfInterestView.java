@@ -57,7 +57,7 @@ public class AreaOfInterestView implements Serializable {
 				.getCurrentInstance()
 				.getExternalContext()
 				.redirect(
-						"area_of_interest.xhtml?user="
+						"area_of_interest.xhtml?u="
 								+ getLoggedUser().getTcno());
 
 	}
@@ -121,7 +121,7 @@ public class AreaOfInterestView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return "area_of_interest.xhtml?faces-redirect=true&user="
+		return "area_of_interest.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 	}
 
@@ -139,7 +139,7 @@ public class AreaOfInterestView implements Serializable {
 				.getFlash();
 		flash.setKeepMessages(true);
 
-		return "area_of_interest.xhtml?faces-redirect=true&user="
+		return "area_of_interest.xhtml?faces-redirect=true&u="
 				+ getLoggedUser().getTcno();
 	}
 

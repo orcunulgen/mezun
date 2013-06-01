@@ -55,7 +55,7 @@ public class InitUserInfoPhaseListener implements PhaseListener {
 									.getCurrentInstance()
 									.getExternalContext()
 									.redirect(
-											"init_student_info.xhtml?user="
+											"init_student_info.xhtml?u="
 													+ getLoggedUser().getTcno());
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
@@ -77,7 +77,7 @@ public class InitUserInfoPhaseListener implements PhaseListener {
 									.getCurrentInstance()
 									.getExternalContext()
 									.redirect(
-											"init_alumni_info.xhtml?user="
+											"init_alumni_info.xhtml?u="
 													+ getLoggedUser().getTcno());
 						} catch (IOException e) {
 							// TODO Auto-generated catch block

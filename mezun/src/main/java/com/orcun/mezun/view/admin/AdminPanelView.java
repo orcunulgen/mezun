@@ -115,21 +115,21 @@ public class AdminPanelView implements Serializable {
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"student.xhtml?user="
+								"student.xhtml?u="
 										+ getLoggedUser().getTcno());
 			} else if (label.equals("Mezunlar")) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.redirect(
-								"alumni.xhtml?user="
+								"alumni.xhtml?u="
 										+ getLoggedUser().getTcno());
 			}else if (label.equals("Yeni Üyeler")) {
 				FacesContext
 				.getCurrentInstance()
 				.getExternalContext()
 				.redirect(
-						"new_user.xhtml?user="
+						"new_user.xhtml?u="
 								+ getLoggedUser().getTcno());
 	}  
 		}

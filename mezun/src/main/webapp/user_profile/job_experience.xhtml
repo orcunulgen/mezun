@@ -12,9 +12,9 @@
 		<p:breadCrumb>
 			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
 			<p:menuitem value="Hesap Ayarları"
-				url="profile_settings.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+				url="profile_settings.xhtml?u=#{profileSettingsView.loggedUser.tcno}" />
 			<p:menuitem value="İş Tecrübeleri"
-				url="job_experience.xhtml?user=#{profileSettingsView.loggedUser.tcno}" />
+				url="job_experience.xhtml?u=#{profileSettingsView.loggedUser.tcno}" />
 		</p:breadCrumb>
 
 	</ui:define>
@@ -29,7 +29,7 @@
 					<p:dataTable var="jobExperienceList"
 						value="#{jobExperienceView.jobExperiences}" paginator="true"
 						rows="10">
-						<p:column style="width:15%">
+						<p:column width="110">
 							<f:facet name="header">
 								<h:outputLabel value="İşlemler" />
 							</f:facet>
