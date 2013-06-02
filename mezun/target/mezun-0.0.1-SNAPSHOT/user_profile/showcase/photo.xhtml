@@ -1,0 +1,96 @@
+<ui:composition
+	template="/templates/user/showcase/user_profile_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<ui:define name="bread_crumb_container">
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+			<p:menuitem
+				value="#{showcaseMainView.loggedUser.name} #{showcaseMainView.loggedUser.surname}"
+				url="/user_profile/showcase/index.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="Profil Detayları"
+				url="/user_profile/showcase/user_info.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="Fotoğraflar"
+				url="/user_profile/showcase/photo.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+		</p:breadCrumb>
+	</ui:define>
+
+	<ui:define name="main_container">
+		<h:outputStylesheet library="css" name="user_profile/photo.css" />
+		<div class="photo">
+			<h:form id="form_photo_panel" prependId="false">
+
+				<p:growl id="form_photo_messages" />
+				<p:fieldset legend="Fotoğraflar">
+					<h:outputLabel rendered="#{showPhotoView.photoAlbumList.size()==0}"
+						value="Bu alan kullanıcı tarafından henüz güncellenmemiştir." />
+					<div style="margin: 20px auto;">
+						<p:panelGrid rendered="#{showPhotoView.photoAlbumList.size()!=0}"
+							styleClass="no_border" cellpadding="4"
+							style="margin:0 auto; width:100%;">
+
+							<p:row>
+								<p:column>
+									<h:outputLabel value="Albüm Adı :" />
+									<h:outputLabel
+										value="#{showPhotoView.selectedPhotoAlbum.albumName}" />
+								</p:column>
+								<p:column style="float:right;">
+									<h:outputLabel value="Tarih :" />
+									<h:outputLabel value="#{showPhotoView.selectedPhotoAlbum.date}">
+										<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+									</h:outputLabel>
+								</p:column>
+							</p:row>
+
+						</p:panelGrid>
+					</div>
+					<p:galleria rendered="#{showPhotoView.photoAlbumList.size()!=0}"
+						value="#{showPhotoView.currentPhotos}" var="currentPhoto"
+						panelWidth="550" panelHeight="350">
+						<p:graphicImage value="#{currentPhoto.photoURL}"
+							title="#{currentPhoto.description}" width="500px" height="330px" />
+
+					</p:galleria>
+					<div style="margin: 20px auto;">
+						<h:outputLabel
+							rendered="#{not empty showPhotoView.selectedPhotoAlbum.description}"
+							value="Albüm Açıklaması : #{showPhotoView.selectedPhotoAlbum.description}"
+							style="float:left;" />
+						<br />
+						<h:outputLabel
+							rendered="#{not empty showPhotoView.selectedPhotoAlbum.place}"
+							value="Fotoğrafın Çekildiği Yer : #{showPhotoView.selectedPhotoAlbum.place}"
+							style="float:left;" />
+					</div>
+
+					<p:panel rendered="#{showPhotoView.photoAlbumList.size()!=0}"
+						header="Albümler" style="text-align:center">
+						<p:dataGrid value="#{showPhotoView.photoAlbumList}"
+							var="photoAlbumList" id="photo_album_list_acc_panel"
+							paginator="true" rows="10" columns="2"
+							paginatorAlwaysVisible="false">
+							<p:panelGrid styleClass="no_border" id="photo_album_grid"
+								columns="2" cellpadding="4">
+
+								<p:commandButton id="selectPhotoAlbumButton"
+									actionListener="#{showPhotoView.initSelectedPhotoAlbum(photoAlbumList)}"
+									update=":form_photo_panel" icon="ui-icon-search" />
+
+								<h:outputLabel value="#{photoAlbumList.albumName}" />
+
+							</p:panelGrid>
+
+						</p:dataGrid>
+					</p:panel>
+				</p:fieldset>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

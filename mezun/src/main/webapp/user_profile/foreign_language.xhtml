@@ -27,7 +27,13 @@
 			<h:form id="list_foreign_language_form">
 				<p:growl id="list_foreign_language_messages" />
 				<p:fieldset legend="Yabancı Dil Bilgileri">
-					<p:dataTable var="foreignLanguageList"
+					<h:outputLabel
+						rendered="#{foreignLanguageView.foreignLanguages.size()==0}"
+						style="color: red; font-weight: bold;"
+						value="Herhangi bir kayıt bulunamamıştır." />
+					<p:dataTable
+						rendered="#{foreignLanguageView.foreignLanguages.size()!=0}"
+						var="foreignLanguageList"
 						value="#{foreignLanguageView.foreignLanguages}" paginator="true"
 						rows="10">
 						<p:column width="110">

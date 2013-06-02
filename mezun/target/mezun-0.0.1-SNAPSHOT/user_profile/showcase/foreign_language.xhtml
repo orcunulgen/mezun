@@ -1,0 +1,106 @@
+<ui:composition
+	template="/templates/user/showcase/user_profile_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<ui:define name="bread_crumb_container">
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+			<p:menuitem
+				value="#{showcaseMainView.loggedUser.name} #{showcaseMainView.loggedUser.surname}"
+				url="/user_profile/showcase/index.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="Profil Detayları"
+				url="/user_profile/showcase/user_info.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="Yabancı Dil Bilgileri"
+				url="/user_profile/showcase/foreign_language.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+		</p:breadCrumb>
+	</ui:define>
+	<ui:define name="main_container">
+
+		<h:outputStylesheet library="css"
+			name="user_profile/foreign_language.css" />
+		<div class="foreign_language">
+
+			<h:form id="list_foreign_language_form">
+				<p:growl id="list_foreign_language_messages" />
+				<p:fieldset legend="Yabancı Dil Bilgileri">
+					<p:dataTable var="foreignLanguageList"
+						value="#{showForeignLanguageView.foreignLanguages}" paginator="true"
+						rows="10">
+						<p:column width="110">
+							<f:facet name="header">
+								<h:outputLabel value="İşlemler" />
+							</f:facet>
+							<p:commandButton id="selectButton"
+								actionListener="#{showForeignLanguageView.initSelectedForeignLanguage(foreignLanguageList)}"
+								update=":foreign_language_dialog_form"
+								oncomplete="foreignLanguageUpdateDialog.show()"
+								icon="ui-icon-search" title="View">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Yabancı Dil" />
+							</f:facet>
+							<h:outputLabel value="#{foreignLanguageList.language.language}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Okuma Seviyesi" />
+							</f:facet>
+							<p:rating value="#{foreignLanguageList.readingRank}" stars="10" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Yazma Seviyesi" />
+							</f:facet>
+							<p:rating value="#{foreignLanguageList.writingRank}" stars="10" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Konuşma Seviyesi" />
+							</f:facet>
+							<p:rating value="#{foreignLanguageList.speakingRank}" stars="10" />
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
+			</h:form>
+
+			<p:dialog header="Yabancı Dil Ayrıntıları"
+				widgetVar="foreignLanguageUpdateDialog" resizable="false"
+				id="foreignLanguageUpdateDlg" showEffect="fade" modal="true">
+				<h:form id="foreign_language_dialog_form">
+					<p:growl id="selected_foreign_language_dialog_messages" />
+					<p:panelGrid styleClass="no_border"
+						id="foreign_language_detail_display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputLabel value="Yabancı Dil :" />
+						<h:outputLabel value="#{showForeignLanguageView.selectedForeignLanguage.language.language}" />
+
+						<h:outputLabel value="Okuma Seviyesi :" />
+						<p:rating
+							value="#{showForeignLanguageView.selectedForeignLanguage.readingRank}"
+							stars="10"/>
+
+						<h:outputLabel value="Yazma Seviyesi :" />
+						<p:rating
+							value="#{showForeignLanguageView.selectedForeignLanguage.writingRank}"
+							stars="10"/>
+
+						<h:outputLabel value="Konuşma Seviyesi :" />
+						<p:rating
+							value="#{showForeignLanguageView.selectedForeignLanguage.speakingRank}"
+							stars="10"/>
+
+					</p:panelGrid>
+				</h:form>
+			</p:dialog>
+		</div>
+	</ui:define>
+</ui:composition>

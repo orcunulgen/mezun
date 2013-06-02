@@ -1,0 +1,71 @@
+<ui:composition
+	template="/templates/user/showcase/user_profile_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<ui:define name="bread_crumb_container">
+
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+			<p:menuitem
+				value="#{showcaseMainView.loggedUser.name} #{showcaseMainView.loggedUser.surname}"
+				url="/user_profile/showcase/index.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="Profil Detayları"
+				url="/user_profile/showcase/user_info.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="Kişi Listesi"
+				url="/user_profile/showcase/chat_list.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+		</p:breadCrumb>
+
+	</ui:define>
+	<ui:define name="main_container">
+		<h:outputStylesheet library="css" name="user_profile/chat_list.css" />
+		<div class="chat_list">
+
+			<p:fieldset legend="Kişi Listesi">
+				<h:form id="list_chat_group_form">
+					<p:accordionPanel rendered="#{showChatListView.chatList!=null}"
+						value="#{showChatListView.chatList.chatGroups}"
+						var="chatGroupList" id="chat_group_list_acc_panel">
+						<p:tab title="#{chatGroupList.groupName}">
+							<h:dataTable var="chatPersonList"
+								value="#{chatGroupList.chatPersons}">
+
+								<h:column>
+									<f:facet name="header">
+										<h:outputLabel value="Detaylar" />
+									</f:facet>
+									<p:commandButton id="showChatPersonButton"
+										action="#{showChatListView.showSelectedChatPerson(chatPersonList)}"
+										icon="ui-icon-search">
+									</p:commandButton>
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+										<h:outputLabel value="İsim" />
+									</f:facet>
+									<h:outputLabel value="#{chatPersonList.user.name}" />
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+										<h:outputLabel value="Soyisim" />
+									</f:facet>
+									<h:outputLabel value="#{chatPersonList.user.surname}" />
+								</h:column>
+
+							</h:dataTable>
+
+
+						</p:tab>
+					</p:accordionPanel>
+					<h:outputLabel rendered="#{showChatListView.chatList==null}"
+						value="Bu alan henüz kullanıcı tarafından güncellenmemiştir." />
+				</h:form>
+			</p:fieldset>
+		</div>
+	</ui:define>
+</ui:composition>

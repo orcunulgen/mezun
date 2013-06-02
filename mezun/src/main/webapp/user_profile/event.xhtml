@@ -25,8 +25,12 @@
 			<h:form id="list_event_form">
 				<p:growl id="list_event_messages" />
 				<p:fieldset legend="Etkinlik Listesi">
-					<p:dataTable var="eventList" value="#{eventView.events}"
-						paginator="true" rows="10">
+					<h:outputLabel rendered="#{eventView.events.size()==0}"
+						style="color: red; font-weight: bold;"
+						value="Herhangi bir kayıt bulunamamıştır." />
+					<p:dataTable rendered="#{eventView.events.size()!=0}"
+						var="eventList" value="#{eventView.events}" paginator="true"
+						rows="10">
 						<p:column width="110">
 							<f:facet name="header">
 								<h:outputLabel value="İşlemler" />
@@ -35,11 +39,17 @@
 								actionListener="#{eventView.initSelectedEvent(eventList)}"
 								update=":event_dialog_form"
 								oncomplete="eventUpdateDialog.show()" icon="ui-icon-search"
-								title="View">
+								title="Düzenle">
+							</p:commandButton>
+							<p:commandButton id="shareButton"
+								actionListener="#{eventView.initSelectedEvent(eventList)}"
+								update=":event_dialog_form"
+								oncomplete="eventPostHistoryDialog.show()"
+								icon="ui-icon-signal-diag" title="Paylaş">
 							</p:commandButton>
 							<p:commandButton id="deleteButton"
 								action="#{eventView.deleteSelectedEvent(eventList)}"
-								icon="ui-icon-close" title="Delete">
+								icon="ui-icon-close" title="Sil">
 							</p:commandButton>
 						</p:column>
 						<p:column>
@@ -92,9 +102,8 @@
 							<p:column>
 								<p:graphicImage value="#{eventView.selectedEvent.posterURL}"
 									width="250px" height="220px" />
-								<br/>
-								<p:selectBooleanButton
-									value="#{eventView.updatePoster}"
+								<br />
+								<p:selectBooleanButton value="#{eventView.updatePoster}"
 									onLabel="Düzenle" offLabel="Vazgeç" onIcon="ui-icon-check"
 									offIcon="ui-icon-close">
 									<p:ajax update="event_dialog_form" />
@@ -107,8 +116,7 @@
 									rendered="#{!eventView.updatePoster}" />
 							</p:column>
 							<p:column colspan="2">
-								<p:fileUpload
-									value="#{eventView.uploadedPoster}"
+								<p:fileUpload value="#{eventView.uploadedPoster}"
 									rendered="#{!eventView.updatePoster}" mode="simple"
 									update="selected_event_dialog_messages" uploadLabel="Yükle"
 									label="Seç" cancelLabel="İptal Et"
@@ -208,6 +216,26 @@
 						ajax="false" icon="ui-icon-disk" update=":list_event_form" />
 				</h:form>
 			</p:dialog>
+
+			<p:dialog header="Gönderi Notu Ekle"
+				widgetVar="eventPostHistoryDialog" resizable="false"
+				id="eventPostHistoryDlg" showEffect="fade" modal="true">
+				<h:form id="dialog_event_post_history_form"
+					enctype="multipart/form-data">
+					<p:growl id="event_post_history_messages" />
+					<p:panelGrid styleClass="no_border" id="event_post_history_display"
+						columns="2" cellpadding="4" style="margin:0 auto;">
+
+						<h:outputLabel value="Gönderi Notu :" />
+						<p:inputText value="#{eventView.postHistory.description}" />
+
+					</p:panelGrid>
+					<p:commandButton action="#{eventView.shareSelectedEvent}"
+						value="Paylaş" ajax="false" icon="ui-icon-disk"
+						update=":list_post_history_form" />
+				</h:form>
+			</p:dialog>
+
 		</div>
 
 	</ui:define>

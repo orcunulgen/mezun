@@ -158,6 +158,8 @@
 
 							<h:outputLabel value="Albüm Seçiniz :" />
 							<h:selectOneMenu validator="photoAlbumValidator"
+								required="true"
+								requiredMessage="Lütfen albüm seçiniz"
 								converter="photoAlbumConverter" id="form_add_photo_photo_album"
 								value="#{allPostView.photo.photoAlbum}">
 								<f:selectItem itemValue="0" itemLabel="Lütfen albüm seçiniz" />

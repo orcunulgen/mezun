@@ -29,9 +29,15 @@
 			<h:form id="list_foreign_language_form">
 				<p:growl id="list_foreign_language_messages" />
 				<p:fieldset legend="Yabancı Dil Bilgileri">
-					<p:dataTable var="foreignLanguageList"
-						value="#{showForeignLanguageView.foreignLanguages}" paginator="true"
-						rows="10">
+					<h:outputLabel
+						rendered="#{showForeignLanguageView.foreignLanguages.size()==0}"
+						style="color: red; font-weight: bold;"
+						value="Herhangi bir kayıt bulunamamıştır." />
+					<p:dataTable
+						rendered="#{showForeignLanguageView.foreignLanguages.size()!=0}"
+						var="foreignLanguageList"
+						value="#{showForeignLanguageView.foreignLanguages}"
+						paginator="true" rows="10">
 						<p:column width="110">
 							<f:facet name="header">
 								<h:outputLabel value="İşlemler" />
@@ -81,22 +87,23 @@
 						style="margin:0 auto;">
 
 						<h:outputLabel value="Yabancı Dil :" />
-						<h:outputLabel value="#{showForeignLanguageView.selectedForeignLanguage.language.language}" />
+						<h:outputLabel
+							value="#{showForeignLanguageView.selectedForeignLanguage.language.language}" />
 
 						<h:outputLabel value="Okuma Seviyesi :" />
 						<p:rating
 							value="#{showForeignLanguageView.selectedForeignLanguage.readingRank}"
-							stars="10"/>
+							stars="10" />
 
 						<h:outputLabel value="Yazma Seviyesi :" />
 						<p:rating
 							value="#{showForeignLanguageView.selectedForeignLanguage.writingRank}"
-							stars="10"/>
+							stars="10" />
 
 						<h:outputLabel value="Konuşma Seviyesi :" />
 						<p:rating
 							value="#{showForeignLanguageView.selectedForeignLanguage.speakingRank}"
-							stars="10"/>
+							stars="10" />
 
 					</p:panelGrid>
 				</h:form>

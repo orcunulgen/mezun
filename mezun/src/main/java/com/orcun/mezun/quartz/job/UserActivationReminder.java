@@ -1,5 +1,6 @@
 package com.orcun.mezun.quartz.job;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -17,12 +18,15 @@ import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.orcun.mezun.model.Role;
 import com.orcun.mezun.model.User;
+import com.orcun.mezun.service.SignUpService;
 import com.orcun.mezun.service.admin.InactiveUserService;
 
 public class UserActivationReminder implements StatefulJob {
 
 	private InactiveUserService inactiveUserService;
+	private SignUpService signUpService;
 
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 
@@ -31,6 +35,7 @@ public class UserActivationReminder implements StatefulJob {
 
 		inactiveUserService = (InactiveUserService) appContext
 				.getBean("inactiveUserService");
+		signUpService = (SignUpService) appContext.getBean("signUpService");
 
 		Date now = new Date();
 
@@ -39,49 +44,62 @@ public class UserActivationReminder implements StatefulJob {
 
 		if (inactiveUserList.size() != 0) {
 
-			// -------------------Email sending-----------------
+			List<Role> userRoles = new ArrayList<Role>();
 
-			final String username = "orcun.ulgen@gmail.com";
-			final String password = "1986105?cos\"";
+			Role defaultRole = new Role();
+			
+			defaultRole = signUpService.getRoleInfo("ROLE_ADMIN");
 
-			Properties props = new Properties();
-			props.put("mail.smtp.auth", "true");
-			props.put("mail.smtp.starttls.enable", "true");
-			props.put("mail.smtp.host", "smtp.gmail.com");
-			props.put("mail.smtp.port", "587");
+			userRoles.add(defaultRole);
 
-			Session session = Session.getInstance(props,
-					new javax.mail.Authenticator() {
-						protected PasswordAuthentication getPasswordAuthentication() {
-							return new PasswordAuthentication(username,
-									password);
-						}
-					});
+			List<User> admins = inactiveUserService.getAllAdmin(userRoles);
 
-			try {
+			for (int i = 0; i < admins.size(); i++) {
 
-				Message message = new MimeMessage(session);
-				message.setFrom(new InternetAddress("orcun.ulgen@gmail.com"));
-				message.setRecipients(Message.RecipientType.TO,
-						InternetAddress.parse("orcun_hacker@hotmail.com"));
-				message.setSubject("Bekleyen Kullanıcı Aktivasyonları");
+				// -------------------Email sending-----------------
 
-				String messageText = "Sayın Yönetici,\n\n"
-						+ "Aktivasyon için beklemekte olan "
-						+ inactiveUserList.size()
-						+ " kullanıcı bulunmaktadır.\n\n"
-						+ "Beklemekte Olan Kullanıcı Listesi :\n ";
-				for (int i = 0; i < inactiveUserList.size(); i++) {
-					messageText += inactiveUserList.get(i).getName() + " "
-							+ inactiveUserList.get(i).getSurname() + "\n";
+				final String username = "orcun.ulgen@gmail.com";
+				final String password = "1986105?cos\"";
+
+				Properties props = new Properties();
+				props.put("mail.smtp.auth", "true");
+				props.put("mail.smtp.starttls.enable", "true");
+				props.put("mail.smtp.host", "smtp.gmail.com");
+				props.put("mail.smtp.port", "587");
+
+				Session session = Session.getInstance(props,
+						new javax.mail.Authenticator() {
+							protected PasswordAuthentication getPasswordAuthentication() {
+								return new PasswordAuthentication(username,
+										password);
+							}
+						});
+
+				try {
+
+					Message message = new MimeMessage(session);
+					message.setFrom(new InternetAddress("orcun.ulgen@gmail.com"));
+					message.setRecipients(Message.RecipientType.TO,
+							InternetAddress.parse(admins.get(i).getEmail()));
+					message.setSubject("Bekleyen Kullanıcı Aktivasyonları");
+
+					String messageText = "Sayın Yönetici,\n\n"
+							+ "Aktivasyon için beklemekte olan "
+							+ inactiveUserList.size()
+							+ " kullanıcı bulunmaktadır.\n\n"
+							+ "Beklemekte Olan Kullanıcı Listesi :\n ";
+					for (int j = 0; j < inactiveUserList.size(); j++) {
+						messageText += inactiveUserList.get(j).getName() + " "
+								+ inactiveUserList.get(j).getSurname() + "\n";
+					}
+
+					message.setText(messageText);
+
+					Transport.send(message);
+
+				} catch (MessagingException e) {
+					throw new RuntimeException(e);
 				}
-
-				message.setText(messageText);
-
-				Transport.send(message);
-
-			} catch (MessagingException e) {
-				throw new RuntimeException(e);
 			}
 
 			// -------------------------------------------------
@@ -95,6 +113,14 @@ public class UserActivationReminder implements StatefulJob {
 
 	public void setInactiveUserService(InactiveUserService inactiveUserService) {
 		this.inactiveUserService = inactiveUserService;
+	}
+
+	public SignUpService getSignUpService() {
+		return signUpService;
+	}
+
+	public void setSignUpService(SignUpService signUpService) {
+		this.signUpService = signUpService;
 	}
 
 }

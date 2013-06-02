@@ -29,7 +29,13 @@
 			<h:form id="list_announcement_form">
 				<p:growl id="list_announcement_messages" />
 				<p:fieldset legend="Duyuru Listesi">
-					<p:dataTable var="announcementList"
+					<h:outputLabel
+						rendered="#{showAnnouncementView.announcements.size()==0}"
+						style="color: red; font-weight: bold;"
+						value="Herhangi bir kayıt bulunamamıştır." />
+					<p:dataTable
+						rendered="#{showAnnouncementView.announcements.size()!=0}"
+						var="announcementList"
 						value="#{showAnnouncementView.announcements}" paginator="true"
 						rows="10">
 						<p:column width="110">

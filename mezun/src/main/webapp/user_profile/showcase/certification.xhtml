@@ -30,7 +30,13 @@
 			<h:form id="list_certification_form">
 				<p:growl id="list_certification_messages" />
 				<p:fieldset legend="Sertifikalar">
-					<p:dataTable var="certificationList"
+					<h:outputLabel
+						rendered="#{showCertificationView.certifications.size()==0}"
+						style="color: red; font-weight: bold;"
+						value="Herhangi bir kayıt bulunamamıştır." />
+					<p:dataTable
+						rendered="#{showCertificationView.certifications.size()!=0}"
+						var="certificationList"
 						value="#{showCertificationView.certifications}" paginator="true"
 						rows="10">
 						<p:column width="110">

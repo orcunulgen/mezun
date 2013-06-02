@@ -6,6 +6,19 @@
 	xmlns:p="http://primefaces.org/ui">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
+	<ui:define name="bread_crumb_container">
+
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/admin_profile/index.xhtml" />
+			<p:menuitem value="Yönetim Paneli"
+				url="/admin_profile/index.xhtml?u=#{profileSettingsView.loggedUser.tcno}" />
+			<p:menuitem value="Yeni Kullanıcı Listesi"
+				url="/admin_profile/new_user.xhtml?u=#{profileSettingsView.loggedUser.tcno}" />
+		</p:breadCrumb>
+
+	</ui:define>
+
 	<ui:define name="main_container">
 		<h:outputStylesheet library="css" name="admin_profile/new_user.css" />
 		<div class="new_user">
@@ -14,7 +27,7 @@
 				<p:growl id="list_new_user_messages" />
 				<p:dataTable var="newUserList" value="#{newUserView.newUsers}"
 					paginator="true" rows="10">
-					<p:column style="width:15%">
+					<p:column width="110">
 						<f:facet name="header">
 							<h:outputLabel value="İşlemler" />
 						</f:facet>
@@ -81,10 +94,12 @@
 						<h:outputLabel value="#{newUserView.selectedNewUser.birthdayYear}" />
 
 						<h:outputLabel value="Doğduğu Ülke " />
-						<h:outputLabel value="#{newUserView.selectedNewUser.country.countryName}" />
+						<h:outputLabel
+							value="#{newUserView.selectedNewUser.country.countryName}" />
 
 						<h:outputLabel value="Doğduğu Şehir " />
-						<h:outputLabel value="#{newUserView.selectedNewUser.city.cityName}" />
+						<h:outputLabel
+							value="#{newUserView.selectedNewUser.city.cityName}" />
 
 					</p:panelGrid>
 					<p:commandButton action="#{newUserView.updateNewUser}"

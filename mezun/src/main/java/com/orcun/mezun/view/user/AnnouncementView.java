@@ -21,8 +21,11 @@ import org.springframework.security.core.context.SecurityContext;
 import com.orcun.mezun.commons.FileUploadService;
 import com.orcun.mezun.model.Announcement;
 import com.orcun.mezun.model.AnnouncementType;
+import com.orcun.mezun.model.PostHistory;
 import com.orcun.mezun.model.User;
+import com.orcun.mezun.model.enums.ContentType;
 import com.orcun.mezun.model.enums.UploadedFileDirectory;
+import com.orcun.mezun.service.user.AllPostService;
 import com.orcun.mezun.service.user.AnnouncementService;
 
 @ManagedBean
@@ -44,11 +47,16 @@ public class AnnouncementView implements Serializable {
 
 	private Boolean updatePoster = true;
 
+	private PostHistory postHistory;
+
 	@ManagedProperty(value = "#{announcementService}")
 	private AnnouncementService announcementService;
 
 	@ManagedProperty(value = "#{fileUploadService}")
 	private FileUploadService fileUploadService;
+
+	@ManagedProperty(value = "#{allPostService}")
+	private AllPostService allPostService;
 
 	@PostConstruct
 	public void init() {
@@ -59,10 +67,46 @@ public class AnnouncementView implements Serializable {
 			announcement = new Announcement();
 
 		}
+		if (this.postHistory == null) {
+			this.postHistory = new PostHistory();
+		}
 	}
 
 	public void initSelectedAnnouncement(Announcement selectedAnnouncement) {
 		this.selectedAnnouncement = selectedAnnouncement;
+	}
+
+	public String shareSelectedAnnouncement() {
+
+		Date publishedDate = new Date();
+
+		getPostHistory().setContentID(getSelectedAnnouncement().getId());
+		getPostHistory().setContentType(ContentType.ANNOUNCEMENT);
+		getPostHistory().setPublishedDate(publishedDate);
+		getPostHistory().setUser(getLoggedUser());
+
+		/*
+		 * PostHistory savedPostHistory = getAllPostService().savePostHistory(
+		 * getPostHistory());
+		 */
+		getAllPostService().savePostHistory(getPostHistory());
+
+		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Duyurunuz başarıyla paylaşılmıştır.", "");
+
+		FacesContext.getCurrentInstance().addMessage(null, fm);
+
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
+
+		// shareToAllList(savedPostHistory);
+
+		// getAllPostService().saveShareList(getShareList());
+
+		return "my_profile.xhtml?faces-redirect=true&u="
+				+ getLoggedUser().getTcno();
+
 	}
 
 	public String deleteSelectedAnnouncement(Announcement selectedAnnouncement)
@@ -155,6 +199,14 @@ public class AnnouncementView implements Serializable {
 		this.updatePoster = updatePoster;
 	}
 
+	public PostHistory getPostHistory() {
+		return postHistory;
+	}
+
+	public void setPostHistory(PostHistory postHistory) {
+		this.postHistory = postHistory;
+	}
+
 	public AnnouncementService getAnnouncementService() {
 		return announcementService;
 	}
@@ -169,6 +221,14 @@ public class AnnouncementView implements Serializable {
 
 	public void setFileUploadService(FileUploadService fileUploadService) {
 		this.fileUploadService = fileUploadService;
+	}
+
+	public AllPostService getAllPostService() {
+		return allPostService;
+	}
+
+	public void setAllPostService(AllPostService allPostService) {
+		this.allPostService = allPostService;
 	}
 
 	public void checkURL() throws IOException {

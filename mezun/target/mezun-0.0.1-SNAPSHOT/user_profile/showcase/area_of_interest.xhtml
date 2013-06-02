@@ -1,0 +1,89 @@
+<ui:composition template="/templates/user/showcase/user_profile_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<ui:define name="bread_crumb_container">
+
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+			<p:menuitem
+				value="#{showcaseMainView.loggedUser.name} #{showcaseMainView.loggedUser.surname}"
+				url="/user_profile/showcase/index.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="Profil Detayları"
+				url="/user_profile/showcase/user_info.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="İlgi Alanları"
+				url="/user_profile/showcase/area_of_interest.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+		</p:breadCrumb>
+
+	</ui:define>
+	<ui:define name="main_container">
+		<h:outputStylesheet library="css"
+			name="user_profile/area_of_interest.css" />
+		<div class="area_of_interest">
+
+			<h:form id="list_area_of_interest_form">
+				<p:growl id="list_area_of_interest_messages" />
+				<p:fieldset legend="İlgi Alanları">
+					<p:dataTable var="areaOfInterestList"
+						value="#{showAreaOfInterestView.areaOfInterests}" paginator="true"
+						rows="10">
+						<p:column width="110">
+							<f:facet name="header">
+								<h:outputLabel value="İşlemler" />
+							</f:facet>
+							<p:commandButton id="selectButton"
+								actionListener="#{showAreaOfInterestView.initSelectedAreaOfInterest(areaOfInterestList)}"
+								update=":area_of_interest_dialog_form"
+								oncomplete="areaOfInterestUpdateDialog.show()"
+								icon="ui-icon-search" title="View">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Başlık" />
+							</f:facet>
+							<h:outputLabel value="#{areaOfInterestList.areaOfInterestTitle}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Deneyim Seviyesi" />
+							</f:facet>
+							<p:rating value="#{areaOfInterestList.experienceLevel}"
+								stars="10" />
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
+			</h:form>
+
+			<p:dialog position="top" header="İlgi Alanı Ayrıntıları"
+				widgetVar="areaOfInterestUpdateDialog" resizable="false"
+				id="areaOfInterestUpdateDlg" showEffect="fade" modal="true">
+				<h:form id="area_of_interest_dialog_form">
+					<p:growl id="selected_area_of_interest_dialog_messages" />
+					<p:panelGrid styleClass="no_border"
+						id="area_of_interest_detail_display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputLabel value="Başlık :" />
+						<h:outputLabel value="#{showAreaOfInterestView.selectedAreaOfInterest.areaOfInterestTitle}" />
+
+						<h:outputLabel value="Açıklama :" />
+						<h:outputLabel value="#{showAreaOfInterestView.selectedAreaOfInterest.areaOfInterestName}" />
+
+						<h:outputLabel value="Deneyim Seviyesi :" />
+						<p:rating
+							value="#{showAreaOfInterestView.selectedAreaOfInterest.experienceLevel}"
+							stars="10" />
+
+					</p:panelGrid>
+				</h:form>
+			</p:dialog>
+		</div>
+
+	</ui:define>
+</ui:composition>

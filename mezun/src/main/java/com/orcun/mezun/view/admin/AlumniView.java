@@ -81,6 +81,14 @@ public class AlumniView implements Serializable {
 			selectedAlumni=new User();
 		}
 	}
+	
+	public void showSelectedAlumni(User selectedAlumni) throws IOException {
+		this.selectedAlumni=selectedAlumni;
+		
+		FacesContext.getCurrentInstance().getExternalContext()
+		.redirect("../user_profile/showcase/index.xhtml?u=" + this.selectedAlumni.getTcno());
+	}
+
 
 	public void initSelectedAlumni(User selectedAlumni) {
 		this.selectedAlumni = selectedAlumni;

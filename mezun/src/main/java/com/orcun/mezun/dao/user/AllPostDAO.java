@@ -85,9 +85,11 @@ public class AllPostDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<PostHistory> postHistoryList(User user) {
-
-		return getSession().createCriteria(PostHistory.class)
-				.add(Restrictions.eq("user", user)).list();
+		Criteria cr=getSession().createCriteria(PostHistory.class)
+				.add(Restrictions.eq("user", user));
+		cr.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		
+		return cr.list();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -110,6 +112,7 @@ public class AllPostDAO {
 		Criteria cr = getSession().createCriteria(PostHistory.class);
 		cr.add(Restrictions.eq("user", user));
 		cr.addOrder(Order.desc("publishedDate"));
+		cr.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
 		return cr.list();
 	}

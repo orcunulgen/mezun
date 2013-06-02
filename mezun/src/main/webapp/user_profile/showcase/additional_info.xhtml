@@ -35,9 +35,14 @@
 				<p:fieldset legend="Ek Bilgiler">
 					<p:panelGrid styleClass="no_border" id="addInfoPanelGrid"
 						columns="1">
-						
-						<h:outputLabel rendered="#{showAdditionalInfoView.additionalInfo.text!=null}" value="#{showAdditionalInfoView.additionalInfo.text}" />
-						<h:outputLabel rendered="#{showAdditionalInfoView.additionalInfo.text==null}" value="Bu alan kullanıcı tarafından henüz güncellenmemiştir." />
+
+						<h:outputLabel
+							rendered="#{showAdditionalInfoView.additionalInfo.text!=null}"
+							value="#{showAdditionalInfoView.additionalInfo.text}" />
+						<h:outputLabel
+							rendered="#{showAdditionalInfoView.additionalInfo.text==null}"
+							style="color: red; font-weight: bold;"
+							value="Bu alan kullanıcı tarafından henüz güncellenmemiştir." />
 					</p:panelGrid>
 				</p:fieldset>
 			</h:form>

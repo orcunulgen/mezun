@@ -108,7 +108,8 @@ public class AllPostView implements Serializable {
 		announcementTypes = announcementService.allAnnouncementTypes();
 		photoAlbumList = getPhotoService().allPhotoAlbum(getLoggedUser());
 
-		String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+		String viewId = FacesContext.getCurrentInstance().getViewRoot()
+				.getViewId();
 		if (viewId.equals("/user_profile/index.xhtml")) {
 			allPosts = getAllPostService().allPosts(getLoggedUser());
 		} else if (viewId.equals("/user_profile/my_profile.xhtml")) {
@@ -319,12 +320,15 @@ public class AllPostView implements Serializable {
 		getPostHistory().setUser(getLoggedUser());
 		getPostHistory().setPublishedDate(registeredDate);
 
-		PostHistory savedPostHistory = getAllPostService().savePostHistory(
-				getPostHistory());
+		/*
+		 * PostHistory savedPostHistory = getAllPostService().savePostHistory(
+		 * getPostHistory());
+		 */
+		getAllPostService().savePostHistory(getPostHistory());
 
-		shareToAllList(savedPostHistory);
+		// shareToAllList(savedPostHistory);
 
-		getAllPostService().saveShareList(getShareList());
+		// getAllPostService().saveShareList(getShareList());
 
 		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"Kaydınız başarıyla güncellendi.", "");
@@ -374,12 +378,15 @@ public class AllPostView implements Serializable {
 				getPostHistory().setPublishedDate(registeredDate);
 				getPostHistory().setUser(getLoggedUser());
 
-				PostHistory savedPostHistory = getAllPostService()
-						.savePostHistory(getPostHistory());
+				/*
+				 * PostHistory savedPostHistory = getAllPostService()
+				 * .savePostHistory(getPostHistory());
+				 */
+				getAllPostService().savePostHistory(getPostHistory());
 
-				shareToAllList(savedPostHistory);
+				// shareToAllList(savedPostHistory);
 
-				getAllPostService().saveShareList(getShareList());
+				// getAllPostService().saveShareList(getShareList());
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -425,12 +432,15 @@ public class AllPostView implements Serializable {
 			getPostHistory().setPublishedDate(registeredDate);
 			getPostHistory().setUser(getLoggedUser());
 
-			PostHistory savedPostHistory = getAllPostService().savePostHistory(
-					getPostHistory());
+			/*
+			 * PostHistory savedPostHistory =
+			 * getAllPostService().savePostHistory( getPostHistory());
+			 */
+			getAllPostService().savePostHistory(getPostHistory());
 
-			shareToAllList(savedPostHistory);
+			// shareToAllList(savedPostHistory);
 
-			getAllPostService().saveShareList(getShareList());
+			// getAllPostService().saveShareList(getShareList());
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -473,12 +483,15 @@ public class AllPostView implements Serializable {
 			getPostHistory().setPublishedDate(registerDate);
 			getPostHistory().setUser(getLoggedUser());
 
-			PostHistory savedPostHistory = getAllPostService().savePostHistory(
-					getPostHistory());
+			/*
+			 * PostHistory savedPostHistory =
+			 * getAllPostService().savePostHistory( getPostHistory());
+			 */
+			getAllPostService().savePostHistory(getPostHistory());
 
-			shareToAllList(savedPostHistory);
+			// shareToAllList(savedPostHistory);
 
-			getAllPostService().saveShareList(getShareList());
+			// getAllPostService().saveShareList(getShareList());
 
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Fotoğrafınız başarıyla yüklenmiştir.", "");

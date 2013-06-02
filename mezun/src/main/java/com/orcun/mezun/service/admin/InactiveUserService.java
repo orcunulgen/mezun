@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.orcun.mezun.dao.admin.InactiveUserDAO;
+import com.orcun.mezun.model.Role;
 import com.orcun.mezun.model.User;
 
 @Service
@@ -37,6 +38,10 @@ public class InactiveUserService {
 
 	public List<User> getInactiveUserList() {
 		return getInactiveUserDAO().getInactiveUserList();
+	}
+	
+	public List<User> getAllAdmin(List<Role> roles){
+		return getInactiveUserDAO().getAllAdmin(roles);
 	}
 
 }

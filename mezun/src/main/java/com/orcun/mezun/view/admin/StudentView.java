@@ -81,6 +81,14 @@ public class StudentView implements Serializable {
 			selectedStudent=new User();
 		}
 	}
+	
+	public void showSelectedStudent(User selectedStudent) throws IOException {
+		this.selectedStudent = selectedStudent;
+		
+		FacesContext.getCurrentInstance().getExternalContext()
+		.redirect("../user_profile/showcase/index.xhtml?u=" + this.selectedStudent.getTcno());
+	}
+
 
 	public void initSelectedStudent(User selectedStudent) {
 		this.selectedStudent = selectedStudent;

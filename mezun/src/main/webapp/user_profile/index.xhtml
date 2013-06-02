@@ -157,8 +157,7 @@
 							<p:inputText value="#{allPostView.photo.place}" />
 
 							<h:outputLabel value="Albüm Seçiniz :" />
-							<h:selectOneMenu validator="photoAlbumValidator"
-								required="true"
+							<h:selectOneMenu validator="photoAlbumValidator" required="true"
 								requiredMessage="Lütfen albüm seçiniz"
 								converter="photoAlbumConverter" id="form_add_photo_photo_album"
 								value="#{allPostView.photo.photoAlbum}">
@@ -194,162 +193,167 @@
 
 			</p:tabView>
 
-			<p:dataGrid value="#{allPostView.allPosts}" var="allPost"
+
+			<h:outputLabel rendered="#{allPostView.allPosts.size()==0}"
+				style="color: red; font-weight: bold;"
+				value="Herhangi bir kayıt bulunamamıştır." />
+
+			<p:dataGrid rendered="#{allPostView.allPosts.size()!=0}"
+				value="#{allPostView.allPosts}" var="allPost"
 				id="text_type_post_list_dgrid" paginator="true" rows="10"
 				columns="1" paginatorAlwaysVisible="false">
-				<p:panelGrid styleClass="no_border" id="text_type_post_pgrid"
-					columns="1" cellpadding="4" style="margin:0 auto; width:100%;">
-					<p:row>
-						<p:column>
-							<p:graphicImage
-								value="#{allPost.getTextTypePost().user.profilePicURL}"
-								width="30px" height="30px" />
-							<h:outputLink
-								value="#{facesContext.externalContext.requestContextPath}/user_profile/showcase/index.xhtml?u=#{allPost.getTextTypePost().user.tcno}">#{allPost.getTextTypePost().user.name} #{allPost.getTextTypePost().user.surname}</h:outputLink>
-							<h:outputLabel style="float:right;"
-								value="#{allPost.getTextTypePost().publishedDate}">
-								<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-							</h:outputLabel>
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column>
-							<h:outputLabel
-								value="#{allPost.getTextTypePost().description}" />
-						</p:column>
-					</p:row>
-					<p:row
-						rendered="#{allPost.getTextTypePost().contentType == 'PHOTO'}">
-						<p:column>
-							<p:panelGrid styleClass="no_border" style="width:100%;">
+				<div class="post_window">
+					<p:panelGrid styleClass="no_border" id="text_type_post_pgrid"
+						columns="1" cellpadding="4" style="margin:0 auto; width:100%;">
+						<p:row>
+							<p:column>
+								<p:graphicImage
+									value="#{allPost.getTextTypePost().user.profilePicURL}"
+									width="30px" height="30px" />
+								<h:outputLink style="margin-left:5px;"
+									value="#{facesContext.externalContext.requestContextPath}/user_profile/showcase/index.xhtml?u=#{allPost.getTextTypePost().user.tcno}">#{allPost.getTextTypePost().user.name} #{allPost.getTextTypePost().user.surname}</h:outputLink>
+								<h:outputLabel style="float:right;"
+									value="#{allPost.getTextTypePost().publishedDate}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputLabel>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel value="#{allPost.getTextTypePost().description}" />
+							</p:column>
+						</p:row>
+						<p:row
+							rendered="#{allPost.getTextTypePost().contentType == 'PHOTO'}">
+							<p:column>
+								<p:panelGrid styleClass="no_border" style="width:100%;">
 
-								<p:row>
-									<p:column rowspan="2" style="width:20%;">
-										<p:graphicImage
-											value="#{allPost.getPhotoPost().photo.photoURL}"
-											width="150px" height="150px" />
-									</p:column>
-									<p:column style="width:20%;">
-										<h:outputLabel style="font:bold;"
-											rendered="#{not empty allPost.getPhotoPost().photo.description}"
-											value="Not :" />
-									</p:column>
-									<p:column style="width:60%;">
-										<h:outputLabel
-											rendered="#{not empty allPost.getPhotoPost().photo.description}"
-											value="#{allPost.getPhotoPost().photo.description}" />
-									</p:column>
-								</p:row>
-								<p:row>
-									<p:column>
-										<h:outputLabel
-											rendered="#{not empty allPost.getPhotoPost().photo.place}"
-											value="Yer :" />
-									</p:column>
-									<p:column>
-										<h:outputLabel
-											rendered="#{not empty allPost.getPhotoPost().photo.place}"
-											value="#{allPost.getPhotoPost().photo.place}" />
-									</p:column>
-								</p:row>
-
-
-							</p:panelGrid>
-						</p:column>
-					</p:row>
-					<p:row
-						rendered="#{allPost.getTextTypePost().contentType == 'EVENT'}">
-						<p:column>
-							<p:panelGrid styleClass="no_border" style="width:100%;">
-
-								<p:row>
-									<p:column rowspan="4" style="width:20%;">
-										<p:graphicImage
-											value="#{allPost.getEventPost().event.posterURL}"
-											width="150px" height="150px" />
-									</p:column>
-									<p:column style="width:20%;">
-										<h:outputLabel style="font:bold;" value="Başlık :" />
-									</p:column>
-									<p:column style="width:60%;">
-										<h:outputLabel
-											value="#{allPost.getEventPost().event.title}" />
-									</p:column>
-								</p:row>
-								<p:row>
-									<p:column>
-										<h:outputLabel value="Açıklama :" />
-									</p:column>
-									<p:column>
-										<h:outputLabel
-											value="#{allPost.getEventPost().event.description}" />
-									</p:column>
-								</p:row>
-								<p:row>
-									<p:column>
-										<h:outputLabel value="Başlangıç Tarihi :" />
-									</p:column>
-									<p:column>
-										<h:outputLabel
-											value="#{allPost.getEventPost().event.startDate}">
-											<f:convertDateTime pattern="dd/MM/yyyy" />
-										</h:outputLabel>
-									</p:column>
-								</p:row>
-								<p:row>
-									<p:column>
-										<h:outputLabel value="Bitiş Tarihi :" />
-									</p:column>
-									<p:column>
-										<h:outputLabel
-											value="#{allPost.getEventPost().event.endDate}">
-											<f:convertDateTime pattern="dd/MM/yyyy" />
-										</h:outputLabel>
-									</p:column>
-								</p:row>
+									<p:row>
+										<p:column rowspan="2" style="width:20%;">
+											<p:graphicImage
+												value="#{allPost.getPhotoPost().photo.photoURL}"
+												width="150px" height="150px" />
+										</p:column>
+										<p:column style="width:20%;">
+											<h:outputLabel
+												rendered="#{not empty allPost.getPhotoPost().photo.description}"
+												value="Not :" />
+										</p:column>
+										<p:column style="width:60%;">
+											<h:outputLabel
+												rendered="#{not empty allPost.getPhotoPost().photo.description}"
+												value="#{allPost.getPhotoPost().photo.description}" />
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel
+												rendered="#{not empty allPost.getPhotoPost().photo.place}"
+												value="Yer :" />
+										</p:column>
+										<p:column>
+											<h:outputLabel
+												rendered="#{not empty allPost.getPhotoPost().photo.place}"
+												value="#{allPost.getPhotoPost().photo.place}" />
+										</p:column>
+									</p:row>
 
 
-							</p:panelGrid>
-						</p:column>
-					</p:row>
-					<p:row
-						rendered="#{allPost.getTextTypePost().contentType == 'ANNOUNCEMENT'}">
-						<p:column>
-							<p:panelGrid styleClass="no_border" style="width:100%;">
+								</p:panelGrid>
+							</p:column>
+						</p:row>
+						<p:row
+							rendered="#{allPost.getTextTypePost().contentType == 'EVENT'}">
+							<p:column>
+								<p:panelGrid styleClass="no_border" style="width:100%;">
 
-								<p:row>
-									<p:column rowspan="2" style="width:20%;">
-										<p:graphicImage
-											value="#{allPost.getAnnouncementPost().announcement.posterURL}"
-											width="150px" height="150px" />
-									</p:column>
-									<p:column style="width:20%;">
-										<h:outputLabel style="font:bold;" value="Başlık :" />
-									</p:column>
-									<p:column style="width:60%;">
-										<h:outputLabel
-											value="#{allPost.getAnnouncementPost().announcement.title}" />
-									</p:column>
-								</p:row>
-								<p:row>
-									<p:column>
-										<h:outputLabel value="Açıklama :" />
-									</p:column>
-									<p:column>
-										<h:outputLabel
-											value="#{allPost.getAnnouncementPost().announcement.description}" />
-									</p:column>
-								</p:row>
-							</p:panelGrid>
-						</p:column>
-					</p:row>
-					
+									<p:row>
+										<p:column rowspan="4" style="width:20%;">
+											<p:graphicImage
+												value="#{allPost.getEventPost().event.posterURL}"
+												width="150px" height="150px" />
+										</p:column>
+										<p:column style="width:20%;">
+											<h:outputLabel value="Başlık :" />
+										</p:column>
+										<p:column style="width:60%;">
+											<h:outputLabel value="#{allPost.getEventPost().event.title}" />
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="Açıklama :" />
+										</p:column>
+										<p:column>
+											<h:outputLabel
+												value="#{allPost.getEventPost().event.description}" />
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="Başlangıç Tarihi :" />
+										</p:column>
+										<p:column>
+											<h:outputLabel
+												value="#{allPost.getEventPost().event.startDate}">
+												<f:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputLabel>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="Bitiş Tarihi :" />
+										</p:column>
+										<p:column>
+											<h:outputLabel
+												value="#{allPost.getEventPost().event.endDate}">
+												<f:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputLabel>
+										</p:column>
+									</p:row>
+
+
+								</p:panelGrid>
+							</p:column>
+						</p:row>
+						<p:row
+							rendered="#{allPost.getTextTypePost().contentType == 'ANNOUNCEMENT'}">
+							<p:column>
+								<p:panelGrid styleClass="no_border" style="width:100%;">
+
+									<p:row>
+										<p:column rowspan="2" style="width:20%;">
+											<p:graphicImage
+												value="#{allPost.getAnnouncementPost().announcement.posterURL}"
+												width="150px" height="150px" />
+										</p:column>
+										<p:column style="width:20%;">
+											<h:outputLabel value="Başlık :" />
+										</p:column>
+										<p:column style="width:60%;">
+											<h:outputLabel
+												value="#{allPost.getAnnouncementPost().announcement.title}" />
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="Açıklama :" />
+										</p:column>
+										<p:column>
+											<h:outputLabel
+												value="#{allPost.getAnnouncementPost().announcement.description}" />
+										</p:column>
+									</p:row>
+								</p:panelGrid>
+							</p:column>
+						</p:row>
 
 
 
-				</p:panelGrid>
 
+					</p:panelGrid>
 
+				</div>
 			</p:dataGrid>
 			<h:form>
 				<!-- <p:poll interval="3" update=":text_type_post_list_dgrid" /> -->

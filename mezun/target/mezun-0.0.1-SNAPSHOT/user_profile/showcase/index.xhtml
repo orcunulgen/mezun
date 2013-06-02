@@ -1,4 +1,5 @@
-<ui:composition template="/templates/user/user_profile_template.xhtml"
+<ui:composition
+	template="/templates/user/showcase/user_profile_template.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
@@ -6,7 +7,178 @@
 	xmlns:p="http://primefaces.org/ui">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-	<ui:define name="main_container">
-	
+	<ui:define name="bread_crumb_container">
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+			<p:menuitem
+				value="#{showcaseMainView.loggedUser.name} #{showcaseMainView.loggedUser.surname}"
+				url="/user_profile/showcase/index.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+		</p:breadCrumb>
+
 	</ui:define>
+	<ui:define name="main_container">
+
+		<h:outputStylesheet library="css" name="user_profile/my_profile.css" />
+		<div class="my_profile">
+
+			<p:dataGrid value="#{showcaseMainView.myPosts}" var="myPost"
+				id="text_type_post_list_dgrid" paginator="true" rows="10"
+				columns="1" paginatorAlwaysVisible="false">
+				<p:panelGrid styleClass="no_border" id="text_type_post_pgrid"
+					columns="1" cellpadding="4" style="margin:0 auto; width:100%;">
+					<p:row>
+						<p:column>
+							<p:graphicImage
+								value="#{myPost.getTextTypePost().user.profilePicURL}"
+								width="30px" height="30px" />
+							<h:outputLink
+								value="#{facesContext.externalContext.requestContextPath}/user_profile/showcase/index.xhtml?u=#{myPost.getTextTypePost().user.tcno}">#{myPost.getTextTypePost().user.name} #{myPost.getTextTypePost().user.surname}</h:outputLink>
+							<h:outputLabel style="float:right;"
+								value="#{myPost.getTextTypePost().publishedDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+							</h:outputLabel>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel value="#{myPost.getTextTypePost().description}" />
+						</p:column>
+					</p:row>
+					<p:row
+						rendered="#{myPost.getTextTypePost().contentType == 'PHOTO'}">
+						<p:column>
+							<p:panelGrid styleClass="no_border" style="width:100%;">
+
+								<p:row>
+									<p:column rowspan="2" style="width:20%;">
+										<p:graphicImage
+											value="#{myPost.getPhotoPost().photo.photoURL}" width="150px"
+											height="150px" />
+									</p:column>
+									<p:column style="width:20%;">
+										<h:outputLabel style="font:bold;"
+											rendered="#{not empty myPost.getPhotoPost().photo.description}"
+											value="Not :" />
+									</p:column>
+									<p:column style="width:60%;">
+										<h:outputLabel
+											rendered="#{not empty myPost.getPhotoPost().photo.description}"
+											value="#{myPost.getPhotoPost().photo.description}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel
+											rendered="#{not empty myPost.getPhotoPost().photo.place}"
+											value="Yer :" />
+									</p:column>
+									<p:column>
+										<h:outputLabel
+											rendered="#{not empty myPost.getPhotoPost().photo.place}"
+											value="#{myPost.getPhotoPost().photo.place}" />
+									</p:column>
+								</p:row>
+
+
+							</p:panelGrid>
+						</p:column>
+					</p:row>
+					<p:row
+						rendered="#{myPost.getTextTypePost().contentType == 'EVENT'}">
+						<p:column>
+							<p:panelGrid styleClass="no_border" style="width:100%;">
+
+								<p:row>
+									<p:column rowspan="4" style="width:20%;">
+										<p:graphicImage
+											value="#{myPost.getEventPost().event.posterURL}"
+											width="150px" height="150px" />
+									</p:column>
+									<p:column style="width:20%;">
+										<h:outputLabel style="font:bold;" value="Başlık :" />
+									</p:column>
+									<p:column style="width:60%;">
+										<h:outputLabel value="#{myPost.getEventPost().event.title}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="Açıklama :" />
+									</p:column>
+									<p:column>
+										<h:outputLabel
+											value="#{myPost.getEventPost().event.description}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="Başlangıç Tarihi :" />
+									</p:column>
+									<p:column>
+										<h:outputLabel
+											value="#{myPost.getEventPost().event.startDate}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputLabel>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="Bitiş Tarihi :" />
+									</p:column>
+									<p:column>
+										<h:outputLabel value="#{myPost.getEventPost().event.endDate}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputLabel>
+									</p:column>
+								</p:row>
+
+
+							</p:panelGrid>
+						</p:column>
+					</p:row>
+					<p:row
+						rendered="#{myPost.getTextTypePost().contentType == 'ANNOUNCEMENT'}">
+						<p:column>
+							<p:panelGrid styleClass="no_border" style="width:100%;">
+
+								<p:row>
+									<p:column rowspan="2" style="width:20%;">
+										<p:graphicImage
+											value="#{myPost.getAnnouncementPost().announcement.posterURL}"
+											width="150px" height="150px" />
+									</p:column>
+									<p:column style="width:20%;">
+										<h:outputLabel style="font:bold;" value="Başlık :" />
+									</p:column>
+									<p:column style="width:60%;">
+										<h:outputLabel
+											value="#{myPost.getAnnouncementPost().announcement.title}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="Açıklama :" />
+									</p:column>
+									<p:column>
+										<h:outputLabel
+											value="#{myPost.getAnnouncementPost().announcement.description}" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:column>
+					</p:row>
+
+
+
+				</p:panelGrid>
+
+
+			</p:dataGrid>
+			<h:form>
+				<!-- <p:poll interval="3" update=":text_type_post_list_dgrid"/> -->
+			</h:form>
+		</div>
+	</ui:define>
+
 </ui:composition>

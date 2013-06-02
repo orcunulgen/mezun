@@ -32,13 +32,14 @@
 						onclick="photoAlbumAddDialog.show()" icon="ui-icon-plus" />
 
 					<div style="margin: 20px auto;">
-						<p:panelGrid  styleClass="no_border" cellpadding="4" style="margin:0 auto; width:100%;">
+						<p:panelGrid styleClass="no_border" cellpadding="4"
+							style="margin:0 auto; width:100%;">
 
 							<p:row>
 								<p:column>
 									<h:outputLabel value="Albüm Adı :" />
 									<h:outputLabel
-										value="#{photoView.selectedPhotoAlbum.albumName}"/>
+										value="#{photoView.selectedPhotoAlbum.albumName}" />
 								</p:column>
 								<p:column style="float:right;">
 									<h:outputLabel value="Tarih :" />
@@ -50,7 +51,12 @@
 
 						</p:panelGrid>
 					</div>
-					<p:galleria value="#{photoView.currentPhotos}" var="currentPhoto"
+
+					<h:outputLabel rendered="#{photoView.currentPhotos.size()==0}"
+						style="color: red; font-weight: bold;"
+						value="Herhangi bir kayıt bulunamamıştır." />
+					<p:galleria rendered="#{photoView.currentPhotos.size()!=0}"
+						value="#{photoView.currentPhotos}" var="currentPhoto"
 						panelWidth="550" panelHeight="350">
 						<p:graphicImage value="#{currentPhoto.photoURL}"
 							title="#{currentPhoto.description}" width="500px" height="330px" />
@@ -69,10 +75,13 @@
 					</div>
 
 					<p:panel header="Albümler" style="text-align:center">
-						<p:dataGrid value="#{photoView.photoAlbumList}"
-							var="photoAlbumList" id="photo_album_list_acc_panel"
-							paginator="true" rows="10" columns="2"
-							paginatorAlwaysVisible="false">
+						<h:outputLabel rendered="#{photoView.photoAlbumList.size()==0}"
+							style="color: red; font-weight: bold;"
+							value="Herhangi bir kayıt bulunamamıştır." />
+						<p:dataGrid rendered="#{photoView.photoAlbumList.size()!=0}"
+							value="#{photoView.photoAlbumList}" var="photoAlbumList"
+							id="photo_album_list_acc_panel" paginator="true" rows="10"
+							columns="2" paginatorAlwaysVisible="false">
 							<p:panelGrid styleClass="no_border" id="photo_album_grid"
 								columns="2" cellpadding="4">
 

@@ -21,8 +21,11 @@ import org.springframework.security.core.context.SecurityContext;
 
 import com.orcun.mezun.commons.FileUploadService;
 import com.orcun.mezun.model.Event;
+import com.orcun.mezun.model.PostHistory;
 import com.orcun.mezun.model.User;
+import com.orcun.mezun.model.enums.ContentType;
 import com.orcun.mezun.model.enums.UploadedFileDirectory;
+import com.orcun.mezun.service.user.AllPostService;
 import com.orcun.mezun.service.user.EventService;
 
 @ManagedBean
@@ -37,16 +40,21 @@ public class EventView implements Serializable {
 
 	private List<Event> events = new ArrayList<Event>();
 	private Event selectedEvent;
-	
+
 	private UploadedFile uploadedPoster;
-	
+
 	private Boolean updatePoster = true;
+
+	private PostHistory postHistory;
 
 	@ManagedProperty(value = "#{eventService}")
 	private EventService eventService;
-	
+
 	@ManagedProperty(value = "#{fileUploadService}")
 	private FileUploadService fileUploadService;
+
+	@ManagedProperty(value = "#{allPostService}")
+	private AllPostService allPostService;
 
 	@PostConstruct
 	public void init() {
@@ -57,10 +65,47 @@ public class EventView implements Serializable {
 			event = new Event();
 
 		}
+
+		if (this.postHistory == null) {
+			this.postHistory = new PostHistory();
+		}
 	}
 
 	public void initSelectedEvent(Event selectedEvent) {
 		this.selectedEvent = selectedEvent;
+	}
+
+	public String shareSelectedEvent() {
+
+		Date publishedDate = new Date();
+
+		getPostHistory().setContentID(getSelectedEvent().getId());
+		getPostHistory().setContentType(ContentType.EVENT);
+		getPostHistory().setPublishedDate(publishedDate);
+		getPostHistory().setUser(getLoggedUser());
+
+		/*
+		 * PostHistory savedPostHistory = getAllPostService().savePostHistory(
+		 * getPostHistory());
+		 */
+		getAllPostService().savePostHistory(getPostHistory());
+
+		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Etkinliğiniz başarıyla paylaşılmıştır.", "");
+
+		FacesContext.getCurrentInstance().addMessage(null, fm);
+
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
+				.getFlash();
+		flash.setKeepMessages(true);
+
+		// shareToAllList(savedPostHistory);
+
+		// getAllPostService().saveShareList(getShareList());
+
+		return "my_profile.xhtml?faces-redirect=true&u="
+				+ getLoggedUser().getTcno();
+
 	}
 
 	public String deleteSelectedEvent(Event selectedEvent) throws IOException {
@@ -69,18 +114,18 @@ public class EventView implements Serializable {
 		Flash flash = FacesContext.getCurrentInstance().getExternalContext()
 				.getFlash();
 		flash.setKeepMessages(true);
-		
-		if(getFileUploadService().deleteFile(
+
+		if (getFileUploadService().deleteFile(
 				UploadedFileDirectory.EVENT_POSTER_PATH.getPath() + "/"
-						+ selectedEvent.getPosterPath())){
-			
+						+ selectedEvent.getPosterPath())) {
+
 			getEventService().deleteEvent(getSelectedEvent());
-			
+
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Etkinlik başarıyla silindi.", "");
 
 			FacesContext.getCurrentInstance().addMessage(null, fm);
-		}else{
+		} else {
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Etkinlik silinemedi.", "");
 
@@ -88,9 +133,7 @@ public class EventView implements Serializable {
 
 		}
 
-		return "event.xhtml?faces-redirect=true&u="
-		+ getLoggedUser().getTcno();
-
+		return "event.xhtml?faces-redirect=true&u=" + getLoggedUser().getTcno();
 
 	}
 
@@ -146,6 +189,14 @@ public class EventView implements Serializable {
 		this.updatePoster = updatePoster;
 	}
 
+	public PostHistory getPostHistory() {
+		return postHistory;
+	}
+
+	public void setPostHistory(PostHistory postHistory) {
+		this.postHistory = postHistory;
+	}
+
 	public EventService getEventService() {
 		return eventService;
 	}
@@ -160,6 +211,14 @@ public class EventView implements Serializable {
 
 	public void setFileUploadService(FileUploadService fileUploadService) {
 		this.fileUploadService = fileUploadService;
+	}
+
+	public AllPostService getAllPostService() {
+		return allPostService;
+	}
+
+	public void setAllPostService(AllPostService allPostService) {
+		this.allPostService = allPostService;
 	}
 
 	public String addEvent() {
@@ -182,16 +241,14 @@ public class EventView implements Serializable {
 
 			getEvent().setUser(getLoggedUser());
 			getEvent().setRegisteredDate(registeredDate);
-			
-			
+
 			try {
 				getFileUploadService().saveFile(
 						UploadedFileDirectory.EVENT_POSTER_PATH.getPath(),
 						getUploadedPoster());
 
-				getEvent().setPosterPath(
-						getFileUploadService().getFileName());
-				
+				getEvent().setPosterPath(getFileUploadService().getFileName());
+
 				getEventService().addEvent(getEvent());
 
 			} catch (IOException e) {
@@ -212,8 +269,7 @@ public class EventView implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, fm);
 
 		}
-		return "event.xhtml?faces-redirect=true&u="
-				+ getLoggedUser().getTcno();
+		return "event.xhtml?faces-redirect=true&u=" + getLoggedUser().getTcno();
 	}
 
 	public String updateEvent() {
@@ -233,15 +289,13 @@ public class EventView implements Serializable {
 				new DateTime(registeredDate)).getDays();
 
 		if (differenceStartEnd > 0 && differenceStartRegister <= 0) {
-		
+
 			if (!updatePoster && uploadedPoster != null) {
 				try {
 
 					if (getFileUploadService().deleteFile(
 							UploadedFileDirectory.EVENT_POSTER_PATH.getPath()
-									+ "/"
-									+ getSelectedEvent()
-											.getPosterPath())) {
+									+ "/" + getSelectedEvent().getPosterPath())) {
 
 						getFileUploadService()
 								.saveFile(
@@ -254,19 +308,18 @@ public class EventView implements Serializable {
 
 						getEventService().updateEvent(getSelectedEvent());
 
-						FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						FacesMessage fm = new FacesMessage(
+								FacesMessage.SEVERITY_INFO,
 								"Kaydınız başarıyla güncellendi.", "");
 
 						FacesContext.getCurrentInstance().addMessage(null, fm);
-
 
 					} else {
 						FacesMessage fm = new FacesMessage(
 								FacesMessage.SEVERITY_INFO,
 								"Kaydınız güncellenemedi.", "");
 
-						FacesContext.getCurrentInstance().addMessage(null,
-								fm);
+						FacesContext.getCurrentInstance().addMessage(null, fm);
 
 					}
 
@@ -275,7 +328,7 @@ public class EventView implements Serializable {
 					e.printStackTrace();
 				}
 
-			} else{
+			} else {
 				getEventService().updateEvent(getSelectedEvent());
 
 				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -292,8 +345,7 @@ public class EventView implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, fm);
 
 		}
-		return "event.xhtml?faces-redirect=true&u="
-				+ getLoggedUser().getTcno();
+		return "event.xhtml?faces-redirect=true&u=" + getLoggedUser().getTcno();
 	}
 
 }

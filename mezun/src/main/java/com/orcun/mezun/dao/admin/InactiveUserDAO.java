@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.orcun.mezun.model.Role;
 import com.orcun.mezun.model.User;
 
 @Repository
@@ -66,5 +67,15 @@ public class InactiveUserDAO {
 		cr.addOrder(Order.desc("registeredDate"));
 		
 		return cr.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<User> getAllAdmin(List<Role> roles) {
+		
+		return getSession().createCriteria(User.class)
+		        .createAlias("roles", "row")
+		        .add(Restrictions.conjunction()
+		            .add(Restrictions.eq("row.role", roles.get(0).getRole())))
+		        .list();
 	}
 }

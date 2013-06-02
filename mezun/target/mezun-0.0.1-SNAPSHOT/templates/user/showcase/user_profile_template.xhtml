@@ -1,0 +1,84 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:view encoding="UTF-8" contentType="text/html">
+	<h:head>
+		<title>Mezun Bilgi Sistemi</title>
+		<h:outputStylesheet library="css" name="style.css" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	</h:head>
+
+	<h:body>
+		<div class="body_panel">
+
+			<div class="header_panel">
+				<div class="logo"></div>
+				<div class="menu">
+					<p:menubar>
+						<p:menuitem value="Anasayfa" url="/user_profile/index.xhtml"
+							icon="ui-icon-home" />
+						<p:menuitem value="Profilim"
+							url="/user_profile/my_profile.xhtml?u=#{profileSettingsView.loggedUser.tcno}"
+							icon="ui-icon-person" />
+						<p:menuitem value="Yönetici Girişi"
+							url="/admin_profile/index.xhtml" icon="ui-icon-key"
+							rendered="#{adminPanelView.isAdmin}" />
+						<p:menuitem value="Çıkış" url="/logout" icon="ui-icon-close" />
+
+					</p:menubar>
+				</div>
+				<div class="welcome">
+					<h:outputLabel style="float:right;"
+						rendered="#{profileSettingsView.isAlumni}"
+						value="Hoşgeldiniz değerli mezunumuz, #{profileSettingsView.loggedUser.name} #{profileSettingsView.loggedUser.surname} ">
+						<!-- <h:outputLink value="#{facesContext.externalContext.requestContextPath}/logout">Çıkış</h:outputLink> -->
+					</h:outputLabel>
+					<h:outputLabel style="float:right;"
+						rendered="#{!profileSettingsView.isAlumni}"
+						value="Hoşgeldiniz değerli öğrencimiz, #{profileSettingsView.loggedUser.name} #{profileSettingsView.loggedUser.surname} ">
+						<!-- <h:outputLink value="#{facesContext.externalContext.requestContextPath}/logout">Çıkış</h:outputLink> -->
+					</h:outputLabel>
+				</div>
+				<div class="bread_crumb">
+					<ui:insert name="bread_crumb_container" />
+				</div>
+
+			</div>
+
+			<div class="main_panel">
+				<div class="main_panel_left">
+					<div class="profile_card">
+						<p:fieldset legend="Kullanıcı Bilgileri">
+							<div class="profile_picture">
+								<p:graphicImage
+									value="#{showcaseMainView.loggedUser.profilePicURL}"
+									width="150px" height="150px" />
+							</div>
+							<div class="profile_info">
+								<h:outputLabel
+									value="#{showcaseMainView.loggedUser.name} #{showcaseMainView.loggedUser.surname} ">
+								</h:outputLabel>
+							</div>
+							<div class="edit_profile">
+								<h:outputLink
+									value="#{facesContext.externalContext.requestContextPath}/user_profile/showcase/user_info.xhtml?u=#{showcaseMainView.loggedUser.tcno}">Profili İncele</h:outputLink>
+							</div>
+						</p:fieldset>
+					</div>
+				</div>
+				<div class="main_panel_middle">
+					<ui:insert name="main_container" />
+				</div>
+				<div class="main_panel_right"></div>
+
+			</div>
+
+			<div class="footer_panel"></div>
+
+		</div>
+	</h:body>
+</f:view>
+</html>
