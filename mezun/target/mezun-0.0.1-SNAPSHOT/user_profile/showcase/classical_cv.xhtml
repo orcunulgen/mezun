@@ -38,7 +38,9 @@
 						<h:outputLink rendered="#{showClassicalCvView.classicalCV!=null}"
 							value="#{showClassicalCvView.classicalCV.cvURL}">İndir</h:outputLink>
 
+
 						<h:outputLabel rendered="#{showClassicalCvView.classicalCV==null}"
+							style="color: red; font-weight: bold;"
 							value="Bu alan kullanıcı tarafından henüz güncellenmemiştir." />
 
 					</p:panelGrid>

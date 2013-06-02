@@ -28,8 +28,12 @@
 			<h:form id="list_event_form">
 				<p:growl id="list_event_messages" />
 				<p:fieldset legend="Etkinlik Listesi">
-					<p:dataTable var="eventList" value="#{showEventView.events}"
-						paginator="true" rows="10">
+					<h:outputLabel rendered="#{showEventView.events.size()==0}"
+						style="color: red; font-weight: bold;"
+						value="Herhangi bir kayıt bulunamamıştır." />
+					<p:dataTable rendered="#{showEventView.events.size()!=0}"
+						var="eventList" value="#{showEventView.events}" paginator="true"
+						rows="10">
 						<p:column width="110">
 							<f:facet name="header">
 								<h:outputLabel value="İşlemler" />
@@ -108,7 +112,8 @@
 								<h:outputLabel value="Açıklama :" />
 							</p:column>
 							<p:column>
-								<h:outputLabel value="#{showEventView.selectedEvent.description}" />
+								<h:outputLabel
+									value="#{showEventView.selectedEvent.description}" />
 							</p:column>
 						</p:row>
 

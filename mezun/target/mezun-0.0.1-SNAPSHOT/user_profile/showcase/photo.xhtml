@@ -28,11 +28,8 @@
 
 				<p:growl id="form_photo_messages" />
 				<p:fieldset legend="Fotoğraflar">
-					<h:outputLabel rendered="#{showPhotoView.photoAlbumList.size()==0}"
-						value="Bu alan kullanıcı tarafından henüz güncellenmemiştir." />
 					<div style="margin: 20px auto;">
-						<p:panelGrid rendered="#{showPhotoView.photoAlbumList.size()!=0}"
-							styleClass="no_border" cellpadding="4"
+						<p:panelGrid styleClass="no_border" cellpadding="4"
 							style="margin:0 auto; width:100%;">
 
 							<p:row>
@@ -51,7 +48,10 @@
 
 						</p:panelGrid>
 					</div>
-					<p:galleria rendered="#{showPhotoView.photoAlbumList.size()!=0}"
+					<h:outputLabel style="color: red; font-weight: bold;"
+						rendered="#{showPhotoView.currentPhotos.size()==0}"
+						value="Bu alan kullanıcı tarafından henüz güncellenmemiştir." />
+					<p:galleria rendered="#{showPhotoView.currentPhotos.size()!=0}"
 						value="#{showPhotoView.currentPhotos}" var="currentPhoto"
 						panelWidth="550" panelHeight="350">
 						<p:graphicImage value="#{currentPhoto.photoURL}"
@@ -70,12 +70,15 @@
 							style="float:left;" />
 					</div>
 
-					<p:panel rendered="#{showPhotoView.photoAlbumList.size()!=0}"
-						header="Albümler" style="text-align:center">
-						<p:dataGrid value="#{showPhotoView.photoAlbumList}"
-							var="photoAlbumList" id="photo_album_list_acc_panel"
-							paginator="true" rows="10" columns="2"
-							paginatorAlwaysVisible="false">
+					<p:panel header="Albümler" style="text-align:center">
+						<h:outputLabel
+							rendered="#{showPhotoView.photoAlbumList.size()==0}"
+							style="color: red; font-weight: bold;"
+							value="Herhangi bir kayıt bulunamamıştır." />
+						<p:dataGrid rendered="#{showPhotoView.photoAlbumList.size()!=0}"
+							value="#{showPhotoView.photoAlbumList}" var="photoAlbumList"
+							id="photo_album_list_acc_panel" paginator="true" rows="10"
+							columns="2" paginatorAlwaysVisible="false">
 							<p:panelGrid styleClass="no_border" id="photo_album_grid"
 								columns="2" cellpadding="4">
 

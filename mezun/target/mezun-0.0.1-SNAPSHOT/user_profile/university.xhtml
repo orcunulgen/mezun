@@ -25,7 +25,11 @@
 			<h:form id="list_university_form">
 				<p:growl id="list_university_messages" />
 				<p:fieldset legend="Üniversite Bilgileri">
-					<p:dataTable id="education_info_list" var="educationInfoList"
+					<h:outputLabel rendered="#{educationInfoView.educations.size()==0}"
+						style="color: red; font-weight: bold;"
+						value="Herhangi bir kayıt bulunamamıştır." />
+					<p:dataTable rendered="#{educationInfoView.educations.size()!=0}"
+						id="education_info_list" var="educationInfoList"
 						value="#{educationInfoView.educations}" paginator="true" rows="10">
 						<p:column width="110">
 							<f:facet name="header">
@@ -41,7 +45,8 @@
 								action="#{educationInfoView.deleteSelectedEducationInfo(educationInfoList)}"
 								icon="ui-icon-close" title="Delete">
 							</p:commandButton>
-							<p:commandButton id="addEduFeedbackButton" rendered="#{educationInfoList.endYear!=null}"
+							<p:commandButton id="addEduFeedbackButton"
+								rendered="#{educationInfoList.endYear!=null}"
 								actionListener="#{educationInfoView.initFeedbackSelectedEducation(educationInfoList)}"
 								update=":add_feedback_dialog_form"
 								oncomplete="addFeedBackDialog.show()" icon="ui-icon-pencil"
@@ -348,14 +353,16 @@
 						id="university_feedback_display" columns="1" cellpadding="4"
 						style="margin:0 auto;">
 
-						<h:outputLabel value="Aldığınız eğitim hakkındaki kişisel görüşlerinizi belirtiniz." />
+						<h:outputLabel
+							value="Aldığınız eğitim hakkındaki kişisel görüşlerinizi belirtiniz." />
 						<p:inputTextarea id="add_feedback_info"
-							value="#{educationInfoView.educationFeedback.feedbackText}" rows="5"
-							cols="50" maxlength="100" autoResize="false" />
+							value="#{educationInfoView.educationFeedback.feedbackText}"
+							rows="5" cols="50" maxlength="100" autoResize="false" />
 
 
 					</p:panelGrid>
-					<p:commandButton action="#{educationInfoView.addFeedBackSelectedEducationInfo}"
+					<p:commandButton
+						action="#{educationInfoView.addFeedBackSelectedEducationInfo}"
 						value="Kaydet" ajax="true" icon="ui-icon-disk"
 						update=":add_feedback_dialog_form" />
 				</h:form>

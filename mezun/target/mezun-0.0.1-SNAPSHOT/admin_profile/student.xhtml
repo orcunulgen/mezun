@@ -28,50 +28,61 @@
 
 			<h:form id="list_student_form">
 				<p:growl id="list_student_messages" />
-				<p:dataTable var="studentList" value="#{studentView.students}"
-					paginator="true" rows="10">
-					<p:column width="110">
-						<f:facet name="header">
-							<h:outputLabel value="İşlemler" />
-						</f:facet>
-						<p:commandButton id="selectButton"
-							actionListener="#{studentView.initSelectedStudent(studentList)}"
-							update=":student_dialog_form"
-							oncomplete="studentUpdateDialog.show()" icon="ui-icon-search"
-							title="View">
-						</p:commandButton>
-						<p:commandButton id="deleteButton"
-							action="#{studentView.deleteSelectedStudent(studentList)}"
-							icon="ui-icon-close" title="Delete">
-						</p:commandButton>
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="TC Kimlik" />
-						</f:facet>
-						<h:outputLabel value="#{studentList.tcno}" />
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="İsim" />
-						</f:facet>
-						<h:outputLabel value="#{studentList.name}" />
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Soyisim" />
-						</f:facet>
-						<h:outputLabel value="#{studentList.surname}" />
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Email" />
-						</f:facet>
-						<h:outputLabel value="#{studentList.email}" />
-					</p:column>
+				<p:fieldset legend="Öğrenci Listesi">
+					<h:outputLabel rendered="#{studentView.students.size()==0}"
+						style="color: red; font-weight: bold;"
+						value="Herhangi bir kayıt bulunamamıştır." />
+					<p:dataTable rendered="#{studentView.students.size()!=0}"
+						var="studentList" value="#{studentView.students}" paginator="true"
+						rows="10">
+						<p:column width="110">
+							<f:facet name="header">
+								<h:outputLabel value="İşlemler" />
+							</f:facet>
+							<p:commandButton id="showButton"
+								actionListener="#{studentView.showSelectedStudent(studentList)}"
+								update=":student_dialog_form" icon="ui-icon-search"
+								title="Göster">
+							</p:commandButton>
+							<p:commandButton id="selectButton"
+								actionListener="#{studentView.initSelectedStudent(studentList)}"
+								update=":student_dialog_form"
+								oncomplete="studentUpdateDialog.show()" icon="ui-icon-pencil"
+								title="Düzenle">
+							</p:commandButton>
+							<p:commandButton id="deleteButton"
+								action="#{studentView.deleteSelectedStudent(studentList)}"
+								icon="ui-icon-close" title="Sil">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="TC Kimlik" />
+							</f:facet>
+							<h:outputLabel value="#{studentList.tcno}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="İsim" />
+							</f:facet>
+							<h:outputLabel value="#{studentList.name}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Soyisim" />
+							</f:facet>
+							<h:outputLabel value="#{studentList.surname}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Email" />
+							</f:facet>
+							<h:outputLabel value="#{studentList.email}" />
+						</p:column>
 
 
-				</p:dataTable>
+					</p:dataTable>
+				</p:fieldset>
 			</h:form>
 
 			<p:dialog header="Öğrenci Ayrıntıları"

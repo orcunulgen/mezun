@@ -26,7 +26,13 @@
 			<h:form id="list_certification_form">
 				<p:growl id="list_certification_messages" />
 				<p:fieldset legend="Sertifikalar">
-					<p:dataTable var="certificationList"
+					<h:outputLabel
+						rendered="#{certificationView.certifications.size()==0}"
+						style="color: red; font-weight: bold;"
+						value="Herhangi bir kayıt bulunamamıştır." />
+					<p:dataTable
+						rendered="#{certificationView.certifications.size()!=0}"
+						var="certificationList"
 						value="#{certificationView.certifications}" paginator="true"
 						rows="10">
 						<p:column width="110">
@@ -95,10 +101,11 @@
 								</p:selectBooleanButton>
 							</p:column>
 						</p:row>
-						
+
 						<p:row>
 							<p:column>
-								<h:outputLabel value="Lütfen yeni sertifika dosyasını yükleyiniz."
+								<h:outputLabel
+									value="Lütfen yeni sertifika dosyasını yükleyiniz."
 									rendered="#{!certificationView.updateFile}" />
 							</p:column>
 							<p:column colspan="2">

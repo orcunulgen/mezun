@@ -25,46 +25,52 @@
 
 			<h:form id="list_new_user_form">
 				<p:growl id="list_new_user_messages" />
-				<p:dataTable var="newUserList" value="#{newUserView.newUsers}"
-					paginator="true" rows="10">
-					<p:column width="110">
-						<f:facet name="header">
-							<h:outputLabel value="İşlemler" />
-						</f:facet>
-						<p:commandButton id="selectButton"
-							actionListener="#{newUserView.initSelectedNewUser(newUserList)}"
-							update=":new_user_dialog_form"
-							oncomplete="newUserUpdateDialog.show()" icon="ui-icon-search"
-							title="View">
-						</p:commandButton>
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="TC Kimlik" />
-						</f:facet>
-						<h:outputLabel value="#{newUserList.tcno}" />
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="İsim" />
-						</f:facet>
-						<h:outputLabel value="#{newUserList.name}" />
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Soyisim" />
-						</f:facet>
-						<h:outputLabel value="#{newUserList.surname}" />
-					</p:column>
-					<p:column>
-						<f:facet name="header">
-							<h:outputLabel value="Email" />
-						</f:facet>
-						<h:outputLabel value="#{newUserList.email}" />
-					</p:column>
+				<p:fieldset legend="Yeni Kullanıcı Listesi">
+					<h:outputLabel rendered="#{newUserView.newUsers.size()==0}"
+						style="color: red; font-weight: bold;"
+						value="Herhangi bir kayıt bulunamamıştır." />
+					<p:dataTable rendered="#{newUserView.newUsers.size()!=0}"
+						var="newUserList" value="#{newUserView.newUsers}" paginator="true"
+						rows="10">
+						<p:column width="110">
+							<f:facet name="header">
+								<h:outputLabel value="İşlemler" />
+							</f:facet>
+							<p:commandButton id="selectButton"
+								actionListener="#{newUserView.initSelectedNewUser(newUserList)}"
+								update=":new_user_dialog_form"
+								oncomplete="newUserUpdateDialog.show()" icon="ui-icon-search"
+								title="View">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="TC Kimlik" />
+							</f:facet>
+							<h:outputLabel value="#{newUserList.tcno}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="İsim" />
+							</f:facet>
+							<h:outputLabel value="#{newUserList.name}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Soyisim" />
+							</f:facet>
+							<h:outputLabel value="#{newUserList.surname}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Email" />
+							</f:facet>
+							<h:outputLabel value="#{newUserList.email}" />
+						</p:column>
 
 
-				</p:dataTable>
+					</p:dataTable>
+				</p:fieldset>
 			</h:form>
 
 			<p:dialog header="Kullanıcı Ayrıntıları"

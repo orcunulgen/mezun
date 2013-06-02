@@ -25,9 +25,13 @@
 			<h:form id="list_announcement_form">
 				<p:growl id="list_announcement_messages" />
 				<p:fieldset legend="Duyuru Listesi">
-					<p:dataTable var="announcementList"
-						value="#{announcementView.announcements}" paginator="true"
-						rows="10">
+					<h:outputLabel
+						rendered="#{announcementView.announcements.size()==0}"
+						style="color: red; font-weight: bold;"
+						value="Herhangi bir kayıt bulunamamıştır." />
+					<p:dataTable rendered="#{announcementView.announcements.size()!=0}"
+						var="announcementList" value="#{announcementView.announcements}"
+						paginator="true" rows="10">
 						<p:column width="110">
 							<f:facet name="header">
 								<h:outputLabel value="İşlemler" />
@@ -36,11 +40,17 @@
 								actionListener="#{announcementView.initSelectedAnnouncement(announcementList)}"
 								update=":announcement_dialog_form"
 								oncomplete="announcementUpdateDialog.show()"
-								icon="ui-icon-search" title="View">
+								icon="ui-icon-search" title="Düzenle">
+							</p:commandButton>
+							<p:commandButton id="shareButton"
+								actionListener="#{announcementView.initSelectedAnnouncement(announcementList)}"
+								update=":announcement_dialog_form"
+								oncomplete="announcementPostHistoryDialog.show()"
+								icon="ui-icon-signal-diag" title="Paylaş">
 							</p:commandButton>
 							<p:commandButton id="deleteButton"
 								action="#{announcementView.deleteSelectedAnnouncement(announcementList)}"
-								icon="ui-icon-close" title="Delete">
+								icon="ui-icon-close" title="Sil">
 							</p:commandButton>
 						</p:column>
 						<p:column>
@@ -211,6 +221,28 @@
 						update=":list_announcement_form" />
 				</h:form>
 			</p:dialog>
+
+			<p:dialog header="Gönderi Notu Ekle"
+				widgetVar="announcementPostHistoryDialog" resizable="false"
+				id="announcementPostHistoryDlg" showEffect="fade" modal="true">
+				<h:form id="dialog_announcement_post_history_form"
+					enctype="multipart/form-data">
+					<p:growl id="announcement_post_history_messages" />
+					<p:panelGrid styleClass="no_border"
+						id="announcement_post_history_display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputLabel value="Gönderi Notu :" />
+						<p:inputText value="#{announcementView.postHistory.description}" />
+
+					</p:panelGrid>
+					<p:commandButton
+						action="#{announcementView.shareSelectedAnnouncement}"
+						value="Paylaş" ajax="false" icon="ui-icon-disk"
+						update=":list_post_history_form" />
+				</h:form>
+			</p:dialog>
+
 		</div>
 
 	</ui:define>

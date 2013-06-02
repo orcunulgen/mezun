@@ -27,8 +27,15 @@
 			<h:form id="list_university_form">
 				<p:growl id="list_university_messages" />
 				<p:fieldset legend="Üniversite Bilgileri">
-					<p:dataTable id="education_info_list" var="educationInfoList"
-						value="#{showEducationInfoView.educations}" paginator="true" rows="10">
+					<h:outputLabel
+						rendered="#{showEducationInfoView.educations.size()==0}"
+						style="color: red; font-weight: bold;"
+						value="Herhangi bir kayıt bulunamamıştır." />
+					<p:dataTable
+						rendered="#{showEducationInfoView.educations.size()!=0}"
+						id="education_info_list" var="educationInfoList"
+						value="#{showEducationInfoView.educations}" paginator="true"
+						rows="10">
 						<p:column width="110">
 							<f:facet name="header">
 								<h:outputLabel value="İşlemler" />
@@ -230,7 +237,8 @@
 									rendered="#{showEducationInfoView.isThereTranscript}" />
 							</p:column>
 							<p:column>
-								<h:outputLink rendered="#{showEducationInfoView.isThereTranscript}"
+								<h:outputLink
+									rendered="#{showEducationInfoView.isThereTranscript}"
 									value="#{showEducationInfoView.selectedEducationInfo.transcriptFileURL}">İndir</h:outputLink>
 							</p:column>
 						</p:row>

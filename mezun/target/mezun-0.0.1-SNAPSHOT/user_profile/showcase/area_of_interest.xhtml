@@ -1,4 +1,5 @@
-<ui:composition template="/templates/user/showcase/user_profile_template.xhtml"
+<ui:composition
+	template="/templates/user/showcase/user_profile_template.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
@@ -29,7 +30,13 @@
 			<h:form id="list_area_of_interest_form">
 				<p:growl id="list_area_of_interest_messages" />
 				<p:fieldset legend="İlgi Alanları">
-					<p:dataTable var="areaOfInterestList"
+					<h:outputLabel
+						rendered="#{showAreaOfInterestView.areaOfInterests.size()==0}"
+						style="color: red; font-weight: bold;"
+						value="Herhangi bir kayıt bulunamamıştır." />
+					<p:dataTable
+						rendered="#{showAreaOfInterestView.areaOfInterests.size()!=0}"
+						var="areaOfInterestList"
 						value="#{showAreaOfInterestView.areaOfInterests}" paginator="true"
 						rows="10">
 						<p:column width="110">
@@ -70,10 +77,12 @@
 						style="margin:0 auto;">
 
 						<h:outputLabel value="Başlık :" />
-						<h:outputLabel value="#{showAreaOfInterestView.selectedAreaOfInterest.areaOfInterestTitle}" />
+						<h:outputLabel
+							value="#{showAreaOfInterestView.selectedAreaOfInterest.areaOfInterestTitle}" />
 
 						<h:outputLabel value="Açıklama :" />
-						<h:outputLabel value="#{showAreaOfInterestView.selectedAreaOfInterest.areaOfInterestName}" />
+						<h:outputLabel
+							value="#{showAreaOfInterestView.selectedAreaOfInterest.areaOfInterestName}" />
 
 						<h:outputLabel value="Deneyim Seviyesi :" />
 						<p:rating
