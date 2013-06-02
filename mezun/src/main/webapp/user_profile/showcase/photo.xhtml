@@ -1,4 +1,5 @@
-<ui:composition template="/templates/user/user_profile_template.xhtml"
+<ui:composition
+	template="/templates/user/showcase/user_profile_template.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
@@ -8,15 +9,16 @@
 
 	<ui:define name="bread_crumb_container">
 
-
 		<p:breadCrumb>
 			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
-			<p:menuitem value="Hesap Ayarları"
-				url="profile_settings.xhtml?u=#{profileSettingsView.loggedUser.tcno}" />
+			<p:menuitem
+				value="#{showcaseMainView.loggedUser.name} #{showcaseMainView.loggedUser.surname}"
+				url="/user_profile/showcase/index.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="Profil Detayları"
+				url="/user_profile/showcase/user_info.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
 			<p:menuitem value="Fotoğraflar"
-				url="photo.xhtml?u=#{profileSettingsView.loggedUser.tcno}" />
+				url="/user_profile/showcase/photo.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
 		</p:breadCrumb>
-
 	</ui:define>
 
 	<ui:define name="main_container">
@@ -26,23 +28,22 @@
 
 				<p:growl id="form_photo_messages" />
 				<p:fieldset legend="Fotoğraflar">
-					<p:commandButton value="Yeni Fotoğraf Ekle" type="button"
-						onclick="photoAddDialog.show()" icon="ui-icon-plus" />
-					<p:commandButton value="Yeni Albüm Oluştur" type="button"
-						onclick="photoAlbumAddDialog.show()" icon="ui-icon-plus" />
-
+					<h:outputLabel rendered="#{showPhotoView.photoAlbumList.size()==0}"
+						value="Bu alan kullanıcı tarafından henüz güncellenmemiştir." />
 					<div style="margin: 20px auto;">
-						<p:panelGrid  styleClass="no_border" cellpadding="4" style="margin:0 auto; width:100%;">
+						<p:panelGrid rendered="#{showPhotoView.photoAlbumList.size()!=0}"
+							styleClass="no_border" cellpadding="4"
+							style="margin:0 auto; width:100%;">
 
 							<p:row>
 								<p:column>
 									<h:outputLabel value="Albüm Adı :" />
 									<h:outputLabel
-										value="#{photoView.selectedPhotoAlbum.albumName}"/>
+										value="#{showPhotoView.selectedPhotoAlbum.albumName}" />
 								</p:column>
 								<p:column style="float:right;">
 									<h:outputLabel value="Tarih :" />
-									<h:outputLabel value="#{photoView.selectedPhotoAlbum.date}">
+									<h:outputLabel value="#{showPhotoView.selectedPhotoAlbum.date}">
 										<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
 									</h:outputLabel>
 								</p:column>
@@ -50,7 +51,8 @@
 
 						</p:panelGrid>
 					</div>
-					<p:galleria value="#{photoView.currentPhotos}" var="currentPhoto"
+					<p:galleria rendered="#{showPhotoView.photoAlbumList.size()!=0}"
+						value="#{showPhotoView.currentPhotos}" var="currentPhoto"
 						panelWidth="550" panelHeight="350">
 						<p:graphicImage value="#{currentPhoto.photoURL}"
 							title="#{currentPhoto.description}" width="500px" height="330px" />
@@ -58,18 +60,19 @@
 					</p:galleria>
 					<div style="margin: 20px auto;">
 						<h:outputLabel
-							rendered="#{not empty photoView.selectedPhotoAlbum.description}"
-							value="Albüm Açıklaması : #{photoView.selectedPhotoAlbum.description}"
+							rendered="#{not empty showPhotoView.selectedPhotoAlbum.description}"
+							value="Albüm Açıklaması : #{showPhotoView.selectedPhotoAlbum.description}"
 							style="float:left;" />
 						<br />
 						<h:outputLabel
-							rendered="#{not empty photoView.selectedPhotoAlbum.place}"
-							value="Fotoğrafın Çekildiği Yer : #{photoView.selectedPhotoAlbum.place}"
+							rendered="#{not empty showPhotoView.selectedPhotoAlbum.place}"
+							value="Fotoğrafın Çekildiği Yer : #{showPhotoView.selectedPhotoAlbum.place}"
 							style="float:left;" />
 					</div>
 
-					<p:panel header="Albümler" style="text-align:center">
-						<p:dataGrid value="#{photoView.photoAlbumList}"
+					<p:panel rendered="#{showPhotoView.photoAlbumList.size()!=0}"
+						header="Albümler" style="text-align:center">
+						<p:dataGrid value="#{showPhotoView.photoAlbumList}"
 							var="photoAlbumList" id="photo_album_list_acc_panel"
 							paginator="true" rows="10" columns="2"
 							paginatorAlwaysVisible="false">
@@ -77,7 +80,7 @@
 								columns="2" cellpadding="4">
 
 								<p:commandButton id="selectPhotoAlbumButton"
-									actionListener="#{photoView.initSelectedPhotoAlbum(photoAlbumList)}"
+									actionListener="#{showPhotoView.initSelectedPhotoAlbum(photoAlbumList)}"
 									update=":form_photo_panel" icon="ui-icon-search" />
 
 								<h:outputLabel value="#{photoAlbumList.albumName}" />
@@ -89,72 +92,5 @@
 				</p:fieldset>
 			</h:form>
 		</div>
-
-
-		<p:dialog header="Fotoğraf Ekle" widgetVar="photoAddDialog"
-			resizable="false" id="photoAddDlg" showEffect="fade" modal="true">
-			<h:form id="dialog_photo_add_form" enctype="multipart/form-data">
-				<p:growl id="photo_add_messages" />
-				<p:panelGrid styleClass="no_border" id="photo_add_display"
-					columns="2" cellpadding="4" style="margin:0 auto;">
-
-					<h:outputLabel value="Açıklama :" />
-					<p:inputText value="#{photoView.photo.description}" />
-
-					<h:outputLabel value="Fotoğrafın çekildiği yer :" />
-					<p:inputText value="#{photoView.photo.place}" />
-
-					<h:outputLabel value="Albüm Seçiniz :" />
-					<p:selectOneMenu validator="photoAlbumValidator"
-						converter="photoAlbumConverter" id="form_add_photo_photo_album"
-						value="#{photoView.photo.photoAlbum}">
-						<f:selectItem itemValue="0" itemLabel="Lütfen albüm seçiniz" />
-						<f:selectItems value="#{photoView.photoAlbumList}"
-							var="photoAlbum" itemValue="#{photoAlbum}"
-							itemLabel="#{photoAlbum.albumName}" />
-					</p:selectOneMenu>
-
-					<h:outputLabel value="Lütfen fotoğraf seçiniz." />
-					<p:fileUpload required="true"
-						requiredMessage="Lütfen dosya seçiniz"
-						value="#{photoView.uploadedPhoto}" mode="simple"
-						update="photo_add_messages" uploadLabel="Yükle" label="Seç"
-						cancelLabel="İptal Et"
-						invalidFileMessage="Geçersiz dosya uzantısı."
-						fileLimitMessage="Yüklenecek olan dosya 2 MB dan küçük olması gerekmektedir."
-						sizeLimit="2000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
-
-				</p:panelGrid>
-				<p:commandButton action="#{photoView.addPhoto}" value="Kaydet"
-					ajax="false" icon="ui-icon-disk" update=":dialog_photo_add_form" />
-			</h:form>
-		</p:dialog>
-
-		<p:dialog header="Albüm Oluştur" widgetVar="photoAlbumAddDialog"
-			resizable="false" id="photoAlbumAddDlg" showEffect="fade"
-			modal="true">
-			<h:form id="dialog_photo_album_add_form">
-				<p:growl id="photo_album_add_messages" />
-				<p:panelGrid styleClass="no_border" id="photo_album_add_display"
-					columns="2" cellpadding="4" style="margin:0 auto;">
-
-					<h:outputLabel value="Albüm Adı *:" />
-					<p:inputText value="#{photoView.photoAlbum.albumName}"
-						required="true"
-						requiredMessage="Lütfen bir albüm ismi belirleyiniz." />
-
-					<h:outputLabel value="Açıklama :" />
-					<p:inputText value="#{photoView.photoAlbum.description}" />
-
-					<h:outputLabel value="Fotoğrafların çekildiği yer/yerler :" />
-					<p:inputText value="#{photoView.photoAlbum.place}" />
-
-				</p:panelGrid>
-				<p:commandButton action="#{photoView.addPhotoAlbum}" value="Kaydet"
-					ajax="true" icon="ui-icon-disk"
-					update=":dialog_photo_album_add_form" />
-			</h:form>
-		</p:dialog>
-
 	</ui:define>
 </ui:composition>

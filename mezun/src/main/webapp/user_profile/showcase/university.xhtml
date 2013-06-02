@@ -1,0 +1,261 @@
+<ui:composition
+	template="/templates/user/showcase/user_profile_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<ui:define name="bread_crumb_container">
+
+		<p:breadCrumb>
+			<p:menuitem label="Anasayfa" url="/user_profile/index.xhtml" />
+			<p:menuitem
+				value="#{showcaseMainView.loggedUser.name} #{showcaseMainView.loggedUser.surname}"
+				url="/user_profile/showcase/index.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="Profil Detayları"
+				url="/user_profile/showcase/user_info.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+			<p:menuitem value="Üniversite Bilgileri"
+				url="/user_profile/showcase/university.xhtml?u=#{showcaseMainView.loggedUser.tcno}" />
+		</p:breadCrumb>
+	</ui:define>
+	<ui:define name="main_container">
+		<h:outputStylesheet library="css" name="user_profile/university.css" />
+		<div class="university">
+
+			<h:form id="list_university_form">
+				<p:growl id="list_university_messages" />
+				<p:fieldset legend="Üniversite Bilgileri">
+					<p:dataTable id="education_info_list" var="educationInfoList"
+						value="#{showEducationInfoView.educations}" paginator="true" rows="10">
+						<p:column width="110">
+							<f:facet name="header">
+								<h:outputLabel value="İşlemler" />
+							</f:facet>
+							<p:commandButton id="selectButton"
+								actionListener="#{showEducationInfoView.initSelectedEducationInfo(educationInfoList)}"
+								update=":university_dialog_form"
+								oncomplete="universityUpdateDialog.show()" icon="ui-icon-search"
+								title="View">
+							</p:commandButton>
+							<p:commandButton id="addEduFeedbackButton"
+								rendered="#{educationInfoList.endYear!=null}"
+								actionListener="#{showEducationInfoView.initFeedbackSelectedEducation(educationInfoList)}"
+								update=":add_feedback_dialog_form"
+								oncomplete="addFeedBackDialog.show()" icon="ui-icon-pencil"
+								title="Feedback">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Üniversitenin İsmi" />
+							</f:facet>
+							<h:outputLabel
+								value="#{educationInfoList.university.universityName}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Bölüm" />
+							</f:facet>
+							<h:outputLabel
+								value="#{educationInfoList.department.departmentName}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Başlangıç Yılı" />
+							</f:facet>
+							<h:outputLabel value="#{educationInfoList.startYear}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Bitiş Yılı" />
+							</f:facet>
+							<h:outputLabel value="#{educationInfoList.endYear}"
+								rendered="#{educationInfoList.endYear!=null}" />
+
+							<h:outputLabel value="Devam Ediyor"
+								rendered="#{educationInfoList.endYear==null}">
+							</h:outputLabel>
+
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="Eğitim Programı" />
+							</f:facet>
+							<h:outputLabel
+								value="#{educationInfoList.educationLevel.educationLevel}" />
+						</p:column>
+
+
+					</p:dataTable>
+				</p:fieldset>
+			</h:form>
+
+			<p:dialog header="Eğitim Ayrıntıları"
+				widgetVar="universityUpdateDialog" resizable="false"
+				id="universityUpdateDlg" showEffect="fade" modal="true">
+				<h:form id="university_dialog_form" enctype="multipart/form-data">
+					<p:growl id="selected_university_dialog_messages" />
+					<p:panelGrid styleClass="no_border" id="university_detail_display"
+						cellpadding="4" style="margin:0 auto;">
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Üniversite :" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{showEducationInfoView.selectedEducationInfo.university.universityName}" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Fakülte :" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{showEducationInfoView.selectedEducationInfo.faculty.facultyName}" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Bölüm :" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{showEducationInfoView.selectedEducationInfo.department.departmentName}" />
+							</p:column>
+						</p:row>
+
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Başlangıç Yılı :" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{showEducationInfoView.selectedEducationInfo.startYear}" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel
+									rendered="#{showEducationInfoView.selectedEduInfoIsStudent}"
+									value="Devam Durumu :" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									rendered="#{showEducationInfoView.selectedEduInfoIsStudent}"
+									value="Devam Ediyor" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Mezuniyet Yılı :"
+									rendered="#{!showEducationInfoView.selectedEduInfoIsStudent}" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{showEducationInfoView.selectedEducationInfo.endYear}"
+									rendered="#{!showEducationInfoView.selectedEduInfoIsStudent}" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Eğitim Programı :" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{showEducationInfoView.selectedEducationInfo.educationLevel.educationLevel}" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Diploma Not Sistemi" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{showEducationInfoView.selectedEducationInfo.gradingSystem.grade}" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Mezuniyet Not Ortalaması"
+									rendered="#{!showEducationInfoView.selectedEduInfoIsStudent}" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{showEducationInfoView.selectedEducationInfo.graduationDegree}"
+									rendered="#{!showEducationInfoView.selectedEduInfoIsStudent}" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel
+									rendered="#{showEducationInfoView.selectedEduInfoIsStudent}"
+									value="Sınıf Bilgisi :" id="form_class_info_label" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									rendered="#{showEducationInfoView.selectedEduInfoIsStudent}"
+									value="#{showEducationInfoView.selectedEducationInfo.classInfo}" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Ağırlıklı Ortalama"
+									rendered="#{showEducationInfoView.selectedEduInfoIsStudent}" />
+							</p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{showEducationInfoView.selectedEducationInfo.graduationDegree}"
+									rendered="#{showEducationInfoView.selectedEduInfoIsStudent}" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Transcript Dosyası :"
+									rendered="#{showEducationInfoView.isThereTranscript}" />
+							</p:column>
+							<p:column>
+								<h:outputLink rendered="#{showEducationInfoView.isThereTranscript}"
+									value="#{showEducationInfoView.selectedEducationInfo.transcriptFileURL}">İndir</h:outputLink>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</h:form>
+			</p:dialog>
+
+			<p:dialog header="Alınan Eğitim Hakkındaki Geri Beslemeler "
+				widgetVar="addFeedBackDialog" resizable="false" id="addFeedbackDlg"
+				showEffect="fade" modal="true">
+				<h:form id="add_feedback_dialog_form">
+					<p:growl id="selected_university_add_feedback_messages" />
+					<p:panelGrid styleClass="no_border"
+						id="university_feedback_display" columns="1" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputLabel
+							value="#{showEducationInfoView.educationFeedback.feedbackText}" />
+
+					</p:panelGrid>
+				</h:form>
+			</p:dialog>
+
+		</div>
+
+
+	</ui:define>
+</ui:composition>
