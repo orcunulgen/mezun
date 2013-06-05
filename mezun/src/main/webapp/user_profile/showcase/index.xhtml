@@ -38,7 +38,7 @@
 									<p:graphicImage
 										value="#{myPost.getTextTypePost().user.profilePicURL}"
 										width="30px" height="30px" />
-									<h:outputLink
+									<h:outputLink style="margin-left:10px;"
 										value="#{facesContext.externalContext.requestContextPath}/user_profile/showcase/index.xhtml?u=#{myPost.getTextTypePost().user.tcno}">#{myPost.getTextTypePost().user.name} #{myPost.getTextTypePost().user.surname}</h:outputLink>
 									<h:outputLabel style="float:right;"
 										value="#{myPost.getTextTypePost().publishedDate}">
